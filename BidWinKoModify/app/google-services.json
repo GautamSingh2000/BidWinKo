@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "276302943649",
+    "firebase_url": "https://bidwinko.firebaseio.com",
+    "project_id": "bidwinko",
+    "storage_bucket": "bidwinko.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:276302943649:android:e90613545ab602c93467e0",
+        "android_client_info": {
+          "package_name": "com.bidwinko"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "276302943649-vhkc6de4jvet5v8p8rglq6k60uoaie4s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bidwinko",
+            "certificate_hash": "44ade602612258ba2575615f0c7c592222d2114e"
+          }
+        },
+        {
+          "client_id": "276302943649-ce98hsrs7vl775dch6gjd06o1rplvvu6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOSMYHXIXqMoJDOAsgvlQCNHbzwYSQ7Tk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "276302943649-ce98hsrs7vl775dch6gjd06o1rplvvu6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

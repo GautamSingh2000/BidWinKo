@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/action_home"
+        android:title="@string/text_auction"
+        android:icon="@drawable/ic_home_active" />
+
+    <item android:id="@+id/action_buy_bid"
+        android:title="@string/text_buybid"
+        android:icon="@drawable/ic_rupee_active" />
+
+    <item android:id="@+id/action_winner"
+        android:title="@string/text_winner"
+        android:icon="@drawable/ic_award_active" />
+
+    <item android:id="@+id/action_myprofile"
+        android:title="@string/text_profile"
+        android:icon="@drawable/ic_account_circle_black" />
+
+    <item android:id="@+id/action_menu"
+        android:title="@string/text_menu"
+        android:icon="@drawable/ic_menu_black" />
+</menu>

@@ -1,0 +1,79 @@
+<resources>
+    <string name="app_name">BidWinKo</string>
+    <string name="order_bidwinko">BDWK</string>
+    <string name="app_namebidwin">BidWinKoApp</string>
+    <string name="text_home">Home</string>
+    <string name="text_buybid">Buy Bid</string>
+    <string name="text_winner">Winner</string>
+    <string name="text_profile">MyProfile</string>
+    <string name="text_menu">Menu</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="FACEBOOK_APP_ID">508520063244931</string>
+    <string name="ACCOUNT_KIT_CLIENT_TOKEN">e3f2a5a47016180de2df58d19a80f648</string>
+
+    // if your Facebook App ID is 1234567, you should use ak1234567
+    <string name="ak_login_protocol_scheme">ak508520063244931</string>
+    <string name="product_desc">Free android tutorials and examples for beginners and expert.</string>
+    <string name="loadingwait">Loading Please Wait</string>
+    <string name="auction">Auctions</string>
+    <string name="home">Home</string>
+    <string name="current_auction">Current Auctions</string>
+    <string name="buybid">Buy Bids</string>
+    <string name="winner">Winners</string>
+    <string name="profile">Profile</string>
+    <string name="menu">Menu</string>
+    <string name="myprofile">My Profile</string>
+    <string name="Auction">Auctions</string>
+    <string name="productdetails">Product Detail</string>
+    <string name="payment">Payment</string>
+    <string name="bidhistory">Bid History</string>
+    <string name="systemmessage">System Message </string>
+    <string name="inviteearn">Invite &amp; Earn</string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="sharenow">Share Now</string>
+
+    <string name="termofservices"><u>Terms of Services</u></string>
+    <string name="termservices">Terms of Services</string>
+    <string name="privacypolicy"><u>Privacy Policy</u></string>
+    <string name="textprviacy">By Continuing You Indicate that You have Read and Agree to our Privacy Policy and Terms Of Services. </string>
+    <string name="likefb">Like Us On Facebook</string>
+    <string name="liketwitter">Like Us OnTwitter</string>
+    <string name="liketelegram">Like Us On Telegram</string>
+
+    <string name="store_name" translatable="false">My Online Store</string>
+    <string name="googlepay_status_unavailable" translatable="false">Unfortunately, Google Pay is not available on this phone.</string>
+    <string name="googlepay_status_checking" translatable="false">Checking if Google Pay is available...</string>
+    <string name="payments_show_name" translatable="false">Successfully received payment data for %s!</string>
+    <string name="googlepay_button_content_description" translatable="false">Google Pay</string>
+    <string name="buy_with_googlepay_button_content_description" translatable="false">Buy with Google Pay</string>
+    <string name="save_to_googlepay_button_content_description" translatable="false">Save to Google Pay</string>
+    <string name="add_to_googlepay_button_content_description" translatable="false">Add to Google Pay</string>
+    <string name="channel_id" translatable="false">channel id</string>
+    <string name="default_notification_channel_id" translatable="false">default_notification_channel_id</string>
+    <string name="aboutus"><u>About Us</u></string>
+    <string name="productservices"><u>Product / Services Catalog</u></string>
+    <string name="contactus"><u>Contact Us</u></string>
+    <string name="returnrefnds"><u><![CDATA[Refund & Cancellation]]></u></string>
+    <string name="workflow"><u>How It Works</u></string>
+    <string name="buy_string">Buy Now</string>
+    <string name="text_auction">Auctions</string>
+    <string name="text_invite">Invite</string>
+    <string name="mytransaction">Transactions</string>
+    <string name="text_trans_name">Transaction Name</string>
+    <string name="rupee">\u20B9 </string>
+    <string name="howbidworks">How Bid Works</string>
+    <string name="pub_key">MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmlwwg3RdW7mIXE3OdpeDrDeNq4R+HQfBL0lx4eovf87JBYNEfTqyOpz5O38vDy9H3jw9/rfX93o6+FA+ElkCv35rnZjtvdpoBFxRIpjljC9Xrsuqd26MOvV97L1H4kBYgH1HSXGxp3zTwbky4Tutf9+xFem4LpmvZiHgMgnQROggM14aKNLnxcQgeosk1sJG1VWsOXLxIEAfcwgL92hLerYajoViQYW6tknp984jjN8AfIdszlQKR3676K8Emq6NbtNncT3w2enk7OqXQ5owkgoQ5rCZH0axKfRUGVuPfoY13ZxZKJYooOX5V5/Rvr69y9VuT7zegokXkj38ItWU5QIDAQAB</string>
+    <string name="singlebidtext">Enter a price to bid on. Each price counts as a bid.</string>
+    <string name="paymentstatus">Payment Status: </string>
+
+</resources>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#f44236</color>
+    <color name="colorPrimaryDark">#E4363636</color>  <!--for status bar color-->
+    <color name="colorAccent">#f44236</color>
+
+
+    <color name="transparent">#00000000</color>
+    <color name="black">#000000</color>
+    <color name="white">#ffffff</color>
+    <color name="green">#1D611F</color>
+    <color name="semiorange">#B32114</color>
+    <color name="blue">#5EA6F3</color>
+    <color name="btn_bid_color">#D0F55245</color>
+    <color name="gray">#cecece</color>
+    <color name="background_gray">#EFEEEE</color>
+    <color name="darkgray">#918F8F</color>
+    <color name="customcardview">#cecece</color>
+    <color name="yellow">#FFE600</color>
+</resources>

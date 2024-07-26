@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:padding="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:orientation="horizontal">
+
+        <TextView
+            android:gravity="left"
+            android:layout_weight="1"
+            android:textStyle="normal"
+            android:textColor="@color/black"
+            android:id="@+id/biddate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="23 Aug 2019" />
+
+        <TextView
+            android:gravity="center"
+            android:layout_weight="1"
+            android:id="@+id/bidvalue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingBottom="1dp"
+            android:text="55.00"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            />
+
+        <TextView
+            android:gravity="center"
+            android:layout_weight="1"
+            android:id="@+id/bidstatus"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingBottom="1dp"
+            android:text="status"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            />
+
+
+
+
+    </LinearLayout>
+
+    <View
+        android:background="@color/gray"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+
+
+</LinearLayout>
