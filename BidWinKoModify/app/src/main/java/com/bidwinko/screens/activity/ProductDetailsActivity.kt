@@ -128,6 +128,7 @@ class ProductDetailsActivity : AppCompatActivity(), View.OnClickListener {
                 override fun onAnimationRepeat(animation: Animator) {}
             })
         }
+        btn_plceBid?.setOnClickListener(this)
         //        getPrdocutDetails(bidofferId);
     }
 
@@ -151,46 +152,48 @@ class ProductDetailsActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             R.id.place_bid -> {
-//                bidValue = et_placebid!!.getText().toString()
-                if (bidValue!!.isEmpty() || bidValue!!.length == 0 || bidValue == "" || bidValue == null) {
-                    et_placebid!!.error = "Enter bid value"
-                } else {
-                    if (bidValue!!.contains(".")) {
-                        val first = bidValue!![0].toString()
-                        val second = bidValue!!.substring(bidValue!!.length - 1)
-                        //                         Log.d("testing", "onClick:: "+first+"\n:"+second);
-                        if (first == "." || second == ".") {
-                            Toast.makeText(
-                                context,
-                                "Entered bid price is not correct, Valid bid price ex 01.25",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } else {
-                            if (Constants.getSharedPreferenceString(
-                                    this@ProductDetailsActivity,
-                                    "bidBalance",
-                                    ""
-                                ).toInt() > 0
-                            ) {
-                                hideKeyboard(this@ProductDetailsActivity)
-                                //                                 submitSingleBid(bidofferId, bidValue);
-                            } else {
-                                Toast.makeText(
-                                    context,
-                                    getString(R.string.systemmessage) + "Not sufficient bids",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        }
-                    } else {
-                        Toast.makeText(
-                            context,
-                            "Entered bid price is not correct, Valid bid price ex 01.25",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        et_placebid!!.isFocusable = true
-                    }
-                }
+                val intent = Intent(this,SelectBidActivity::class.java)
+                startActivity(intent)
+            //                bidValue = et_placebid!!.getText().toString()
+//                if (bidValue!!.isEmpty() || bidValue!!.length == 0 || bidValue == "" || bidValue == null) {
+//                    et_placebid!!.error = "Enter bid value"
+//                } else {
+//                    if (bidValue!!.contains(".")) {
+//                        val first = bidValue!![0].toString()
+//                        val second = bidValue!!.substring(bidValue!!.length - 1)
+//                        //                         Log.d("testing", "onClick:: "+first+"\n:"+second);
+//                        if (first == "." || second == ".") {
+//                            Toast.makeText(
+//                                context,
+//                                "Entered bid price is not correct, Valid bid price ex 01.25",
+//                                Toast.LENGTH_SHORT
+//                            ).show()
+//                        } else {
+//                            if (Constants.getSharedPreferenceString(
+//                                    this@ProductDetailsActivity,
+//                                    "bidBalance",
+//                                    ""
+//                                ).toInt() > 0
+//                            ) {
+//                                hideKeyboard(this@ProductDetailsActivity)
+//                                //                                 submitSingleBid(bidofferId, bidValue);
+//                            } else {
+//                                Toast.makeText(
+//                                    context,
+//                                    getString(R.string.systemmessage) + "Not sufficient bids",
+//                                    Toast.LENGTH_SHORT
+//                                ).show()
+//                            }
+//                        }
+//                    } else {
+//                        Toast.makeText(
+//                            context,
+//                            "Entered bid price is not correct, Valid bid price ex 01.25",
+//                            Toast.LENGTH_SHORT
+//                        ).show()
+//                        et_placebid!!.isFocusable = true
+//                    }
+//                }
             }
 
 //            R.id.tv_placebid_range -> {

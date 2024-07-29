@@ -9,7 +9,6 @@
     </style>
 
     <style name="AppThemeActivity" parent="Theme.MaterialComponents.DayNight">
-        <item name="android:actionMenuTextAppearance">@style/menu_text_style</item>
     </style>
 
     <style name="menu_text_style" parent="@android:style/TextAppearance.DeviceDefault.Widget.ActionBar.Menu">

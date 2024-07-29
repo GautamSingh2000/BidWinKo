@@ -9,6 +9,7 @@
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
     <color name="green">#1D611F</color>
+    <color name="lightgreen">#BEF8C0</color>
     <color name="semiorange">#B32114</color>
     <color name="blue">#5EA6F3</color>
     <color name="btn_bid_color">#D0F55245</color>
