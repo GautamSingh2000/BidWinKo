@@ -297,7 +297,7 @@
         android:focusable="true"
         android:clickable="true"
         android:elevation="@dimen/_10sdp"
-        android:text="Place Bid"
+        android:text="Bid"
         android:textSize="@dimen/_12ssp"
         android:fontFamily="@font/lato_bold"
         android:layout_alignParentBottom="true"

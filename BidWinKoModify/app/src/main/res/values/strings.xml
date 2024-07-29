@@ -75,5 +75,6 @@
     <string name="pub_key">MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmlwwg3RdW7mIXE3OdpeDrDeNq4R+HQfBL0lx4eovf87JBYNEfTqyOpz5O38vDy9H3jw9/rfX93o6+FA+ElkCv35rnZjtvdpoBFxRIpjljC9Xrsuqd26MOvV97L1H4kBYgH1HSXGxp3zTwbky4Tutf9+xFem4LpmvZiHgMgnQROggM14aKNLnxcQgeosk1sJG1VWsOXLxIEAfcwgL92hLerYajoViQYW6tknp984jjN8AfIdszlQKR3676K8Emq6NbtNncT3w2enk7OqXQ5owkgoQ5rCZH0axKfRUGVuPfoY13ZxZKJYooOX5V5/Rvr69y9VuT7zegokXkj38ItWU5QIDAQAB</string>
     <string name="singlebidtext">Enter a price to bid on. Each price counts as a bid.</string>
     <string name="paymentstatus">Payment Status: </string>
+    <string name="place_bid">Place Bid</string>
 
 </resources>

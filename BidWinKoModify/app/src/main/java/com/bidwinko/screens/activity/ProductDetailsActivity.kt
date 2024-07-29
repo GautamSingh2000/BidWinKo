@@ -5,15 +5,12 @@ import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
-import android.graphics.PorterDuff
 import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.text.Html
 import android.text.InputFilter
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.view.ViewGroup.MarginLayoutParams
 import android.view.inputmethod.InputMethodManager
 import android.webkit.WebView
@@ -21,7 +18,6 @@ import android.webkit.WebViewClient
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.SeekBar
 import android.widget.TextView
@@ -29,10 +25,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
-import com.airbnb.lottie.LottieDrawable
 import com.bidwinko.R
-import com.bidwinko.components.BannerImageSlider.ImageItem
 import com.bidwinko.components.CircularProfileImagesInRow.CircularProfileInRowComponentAdapter
 import com.bidwinko.databinding.ProductDetailsBinding
 import com.bidwinko.utilies.Constants
@@ -40,11 +33,10 @@ import com.bidwinko.utilies.DecimalDigitsInputFilter
 import com.bidwinko.utilies.convertDpToPx
 import java.math.BigDecimal
 import java.math.RoundingMode
-import java.util.Date
 
 class ProductDetailsActivity : AppCompatActivity(), View.OnClickListener {
 
-    lateinit var binding : ProductDetailsBinding
+    lateinit var binding: ProductDetailsBinding
     val countDown = com.bidwinko.components.CountDown()
     var bidofferId: String? = null
     var bidValue: String? = null
@@ -70,8 +62,8 @@ class ProductDetailsActivity : AppCompatActivity(), View.OnClickListener {
     var progressDialog: ProgressDialog? = null
     var context: Context? = null
     var progressBar: ProgressBar? = null
-    var mCountDownTimer: CountDownTimer? = null
     var i = 100
+
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,7 +84,7 @@ class ProductDetailsActivity : AppCompatActivity(), View.OnClickListener {
         txt_productName = findViewById(R.id.productname)
         hwbidwork = findViewById(R.id.bidwork)
         progressBar = findViewById(R.id.progressBar)
-        progressBar?.setProgress(i)
+        progressBar?.progress = i
         txt_productPrice = findViewById(R.id.productprice)
         proImage = findViewById(R.id.productimage)
         txt_starttime = findViewById(R.id.starttime)
@@ -106,7 +98,7 @@ class ProductDetailsActivity : AppCompatActivity(), View.OnClickListener {
         hwbidwork?.setOnClickListener(this)
         txt_placebid_range?.setOnClickListener(this)
         txt_placebid?.setOnClickListener(this)
-        btn_plceBid =findViewById(R.id.place_bid)
+        btn_plceBid = findViewById(R.id.place_bid)
 
 //        val progressBar = findViewById<ProgressBar>(R.id.progressBar)
 //        progressBar.max = 100 // Set the maximum value of the progress bar
@@ -134,7 +126,8 @@ class ProductDetailsActivity : AppCompatActivity(), View.OnClickListener {
                 override fun onAnimationCancel(animation: Animator) {}
 
                 override fun onAnimationRepeat(animation: Animator) {}
-            })}
+            })
+        }
         //        getPrdocutDetails(bidofferId);
     }
 
@@ -158,7 +151,7 @@ class ProductDetailsActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             R.id.place_bid -> {
-                bidValue = et_placebid!!.getText().toString()
+//                bidValue = et_placebid!!.getText().toString()
                 if (bidValue!!.isEmpty() || bidValue!!.length == 0 || bidValue == "" || bidValue == null) {
                     et_placebid!!.error = "Enter bid value"
                 } else {
@@ -540,7 +533,6 @@ class ProductDetailsActivity : AppCompatActivity(), View.OnClickListener {
 
     public override fun onDestroy() {
         dismissProgressDialog()
-        mCountDownTimer!!.cancel()
         //        stopService(new Intent(this, BroadcastService.class));
 //        Log.e("testing", "Stopped service");
         super.onDestroy()
@@ -548,19 +540,12 @@ class ProductDetailsActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onStop() {
         try {
-            mCountDownTimer!!.cancel()
 
 //            unregisterReceiver(br);
         } catch (e: Exception) {
             // Receiver was probably already stopped in onPause()
         }
         super.onStop()
-    }
-
-    override fun onResume() {
-//        registerReceiver(br, new IntentFilter(BroadcastService.COUNTDOWN_BR));
-//        Log.e("testing", "Registered broacast receiver");
-        super.onResume()
     }
 
     public override fun onPause() {
@@ -576,27 +561,25 @@ class ProductDetailsActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
-    fun SetProfiles(list: ArrayList<String>)
-    {
-        if(list.size>0)
-        {
+    fun SetProfiles(list: ArrayList<String>) {
+        if (list.size > 0) {
             binding.profilesRv.let {
-               it.adapter = CircularProfileInRowComponentAdapter(this,list)
+                it.adapter = CircularProfileInRowComponentAdapter(this, list)
                 it.setTransitionVisibility(View.VISIBLE)
             }
             binding.profilePeopleNo.text = "${list.size}+"
-        }else{
+        } else {
             binding.profileLl.visibility = View.GONE
         }
     }
 
-    fun View.overlapProfile(dp:Float)
-    {
+    fun View.overlapProfile(dp: Float) {
         val px = convertDpToPx(dp, context)
         val layoutParams = this.layoutParams as MarginLayoutParams
         layoutParams.setMargins(0, 0, px, 0)
         this.layoutParams = layoutParams
     }
+
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true

@@ -14,7 +14,8 @@
     <color name="btn_bid_color">#D0F55245</color>
     <color name="gray">#cecece</color>
     <color name="background_gray">#EFEEEE</color>
-    <color name="darkgray">#918F8F</color>
+    <color name="littledarkgray">#918F8F</color>
+    <color name="darkgray">#616161</color>
     <color name="customcardview">#cecece</color>
     <color name="yellow">#FFE600</color>
 </resources>
