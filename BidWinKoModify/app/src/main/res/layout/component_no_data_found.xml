@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/root"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/_10sdp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:visibility="gone"
+        android:id="@+id/secondCard"
+        android:animateLayoutChanges="true"
+        android:layout_marginTop="-20dp"
+        android:layout_below="@id/firstcard"
+        app:cardCornerRadius="@dimen/_10sdp"
+        app:cardElevation="0dp"
+        app:cardBackgroundColor="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:id="@+id/error_text"
+            android:textSize="@dimen/_10ssp"
+            android:fontFamily="@font/barlow_regular"
+            android:textColor="@color/btn_bid_color"
+            android:textAlignment="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="gautam singh"/>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/firstcard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="#EFEFEF"
+        app:cardElevation="@dimen/_13sdp"
+        app:cardCornerRadius="0dp">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageButton
+                android:id="@+id/cancel_btn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="@dimen/_3sdp"
+                android:scaleType="centerCrop"
+                android:translationZ="@dimen/_20sdp"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="@dimen/_10sdp"
+                android:background="@color/transparent"
+                android:src="@drawable/baseline_cancel_24"/>
+
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/anim"
+                android:layout_width="match_parent"
+                android:layout_height="170dp"
+                android:layout_gravity="end"
+                android:padding="@dimen/_60sdp"
+                android:scaleType="centerCrop"
+                app:lottie_repeatMode="reverse"
+                app:lottie_rawRes="@raw/auction"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="false" />
+
+            <ImageView
+                android:visibility="gone"
+                android:id="@+id/img"
+                android:layout_width="match_parent"
+                android:layout_height="170dp"/>
+
+            <View
+                android:id="@+id/divider"
+                android:layout_below="@id/anim"
+                android:layout_width="match_parent"
+                android:layout_height="0.8dp"
+                android:background="@color/colorPrimary"/>
+
+            <LinearLayout
+                android:id="@+id/textll"
+                android:layout_below="@id/anim"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginVertical="7dp"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/text1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="No Data"
+                    android:fontFamily="@font/barlow_bold"
+                    android:textSize="@dimen/_13ssp"/>
+                <TextView
+                    android:id="@+id/text2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Found !!"
+                    android:gravity="center"
+                    android:fontFamily="@font/barlow_medium"
+                    android:textSize="@dimen/_10ssp"/>
+            </LinearLayout>
+
+            <Button
+                android:visibility="gone"
+                android:layout_below="@id/textll"
+                android:background="@color/transparent"
+                android:id="@+id/positive"
+                android:layout_marginVertical="@dimen/_5sdp"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="@dimen/_70sdp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Positive"
+                android:textSize="@dimen/_10ssp"
+                android:textColor="@color/green"/>
+
+            <Button
+                android:visibility="gone"
+                android:id="@+id/negative"
+                android:background="@color/transparent"
+                android:layout_below="@id/textll"
+                android:layout_marginVertical="@dimen/_5sdp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="@dimen/_70sdp"
+                android:textSize="@dimen/_10ssp"
+                android:text="Negative"
+                android:textColor="@color/btn_bid_color"/>
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>

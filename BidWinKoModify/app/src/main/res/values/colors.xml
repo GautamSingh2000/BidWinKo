@@ -7,9 +7,10 @@
 
     <color name="transparent">#00000000</color>
     <color name="black">#000000</color>
+    <color name="light_red">#E6F6CECE</color>
     <color name="white">#ffffff</color>
     <color name="green">#1D611F</color>
-    <color name="lightgreen">#BEF8C0</color>
+    <color name="lightgreen">#E6D0F8D1</color>
     <color name="semiorange">#B32114</color>
     <color name="blue">#5EA6F3</color>
     <color name="btn_bid_color">#D0F55245</color>

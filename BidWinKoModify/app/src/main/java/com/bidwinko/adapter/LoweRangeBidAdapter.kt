@@ -11,7 +11,10 @@ import com.bidwinko.R
 
 class LoweRangeBidAdapter(
     private val context: Context,
+    private var clickable: Boolean,
     private val list: ArrayList<String>,
+    private var pre_selected_bids: ArrayList<String>,
+    private var canceled_bids: ArrayList<String>,
     private val mListener: LowerBidRangeitemClickListener?,
 ) : RecyclerView.Adapter<LoweRangeBidAdapter.ViewHolder>() {
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -20,7 +23,6 @@ class LoweRangeBidAdapter(
     }
 
     var selectedBidList: ArrayList<String> = ArrayList()
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val viewItem = LayoutInflater.from(parent.context)
@@ -31,7 +33,10 @@ class LoweRangeBidAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val data = list.get(position)
         holder.text.let {
-            if (selectedBidList.size >= 0) {
+            it.text = data
+
+
+            if (selectedBidList.size > 0) {
                 if (selectedBidList.contains(data)) {
                     holder.selected = true
                     it.isSelected = true
@@ -40,22 +45,51 @@ class LoweRangeBidAdapter(
                     it.isSelected = false
                 }
             }
-            it.text = data
+            Log.e("adapter1", "${list.size} size of list")
+            Log.e("adapter1", "${pre_selected_bids.size} size of pre_selected_bids")
+
+            if (pre_selected_bids.size > 0) {
+                if (pre_selected_bids.contains(data)) {
+                    Log.e("adapter", "pre_selected_bids list contain this $data")
+                    holder.selected = true
+                    it.isSelected = true
+                }
+            }
+            Log.e("adapter1", "${canceled_bids.size} size of canceled bids")
+            if (canceled_bids.size > 0) {
+                if (canceled_bids.contains(data)) {
+                    Log.e("adapter", "canceled bids list contain this $data")
+                    it.background = context.getDrawable(R.drawable.custom_light_red_box)
+                }
+            }
 
             it.setOnClickListener {
+                Log.e("adapter", "$clickable available bid in adapter")
                 mListener?.onLowerBidRangeItemClick(list[position])
-                if (holder.selected) {
-                    it.isSelected = false
-                    holder.selected = !holder.selected
+                if (clickable) {
+                    if (holder.selected) {
+                        Log.e("adapter", "D selected")
+                        it.isSelected = false
+                        holder.selected = !holder.selected
+                    } else {
+                        Log.e("adapter", " selected")
+                        it.isSelected = true
+                        holder.selected = !holder.selected
+                    }
                 } else {
-                    it.isSelected = true
-                    holder.selected = !holder.selected
+                    Log.e("adapter", "stop please stop for god pleaseeeeeee")
                 }
             }
         }
     }
+    fun clickableBid(bid: Boolean) {
+        this.clickable = bid
+    }
 
-    fun updateList(newlist: List<String>, selectedlist: List<String>) {
+    fun updateList(
+        newlist: List<String>,
+        selectedlist: List<String>,
+    ) {
         list.clear()
         list.addAll(newlist)
         selectedBidList.clear()

@@ -2,16 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/red_rounded_box"
-    android:paddingHorizontal="@dimen/_10sdp"
+    android:paddingHorizontal="@dimen/_5sdp"
     android:paddingVertical="@dimen/_5sdp"
     android:orientation="horizontal">
 
-    <ImageView
+    <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/thumb_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:tint="@color/black"
-        android:src="@drawable/alarm" />
+        app:lottie_autoPlay="false"
+        app:lottie_loop="true"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        app:lottie_rawRes="@raw/alarm"/>
 
 </LinearLayout>

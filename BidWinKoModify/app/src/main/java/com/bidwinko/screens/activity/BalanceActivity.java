@@ -25,13 +25,11 @@ import androidx.appcompat.widget.AppCompatRadioButton;
 
 import com.bidwinko.R;
 import com.bidwinko.API.APIService;
-import com.bidwinko.model.BidPurchaseModel;
+
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import com.bidwinko.model.GenerateTokenModel;
 //import com.bidwinko.uti.IabHelper;
-import com.bidwinko.API.Retrofit;
-import com.bidwinko.utilies.Constants;
 import com.gocashfree.cashfreesdk.CFPaymentService;
 
 
@@ -117,7 +115,7 @@ public class BalanceActivity extends AppCompatActivity {
         ll_cashfree = findViewById(R.id.ll_radio_cashfree);
 
 
-        bidAmounts.setText(Constants.getSharedPreferenceString(BalanceActivity.this, "curency", "")+bidAmount_intent);
+//        bidAmounts.setText(Constants.getSharedPreferenceString(BalanceActivity.this, "curency", "")+bidAmount_intent);
         totalBids.setText(bidTotal_intent);
 
 
@@ -147,13 +145,13 @@ public class BalanceActivity extends AppCompatActivity {
 
                 }
                 else if(paymode.equals("CashFree")){
-                    if(Constants.getSharedPreferenceString(BalanceActivity.this,"mobile","").length() >= 10){
-                        String	customerPhoneCustom = Constants.getSharedPreferenceString(BalanceActivity.this,"mobile","");
-                        generateToken(getString(R.string.order_bidwinko)+"-"+getRandomNumberString(), String.valueOf(bidAmount_intent),notifyUrl,customerPhoneCustom);
-                    }
-                    else{
-                        withEditText();
-                    }
+//                    if(Constants.getSharedPreferenceString(BalanceActivity.this,"mobile","").length() >= 10){
+//                        String	customerPhoneCustom = Constants.getSharedPreferenceString(BalanceActivity.this,"mobile","");
+//                        generateToken(getString(R.string.order_bidwinko)+"-"+getRandomNumberString(), String.valueOf(bidAmount_intent),notifyUrl,customerPhoneCustom);
+//                    }
+//                    else{
+//                        withEditText();
+//                    }
 
                 }
             }
@@ -195,7 +193,7 @@ public class BalanceActivity extends AppCompatActivity {
                     if (mobile.length() < 10) {
                         Toast.makeText(BalanceActivity.this, "Enter Valid Mobile", Toast.LENGTH_SHORT).show();
                     } else {
-                        Constants.setSharedPreferenceString(BalanceActivity.this, "mobile", mobile);
+//                        Constants.setSharedPreferenceString(BalanceActivity.this, "mobile", mobile);
                         dialog.dismiss();
                     }
                 }
@@ -241,8 +239,8 @@ public class BalanceActivity extends AppCompatActivity {
         String appId = "3293779d9d177fb60fe7d7aa073923"; // for live
         String orderNote = "BDWK Live Order";
 
-        String customerName = Constants.getSharedPreferenceString(BalanceActivity.this,"displayName","");
-        String customerEmail = Constants.getSharedPreferenceString(BalanceActivity.this,"email","");
+//        String customerName = Constants.getSharedPreferenceString(BalanceActivity.this,"displayName","");
+//        String customerEmail = Constants.getSharedPreferenceString(BalanceActivity.this,"email","");
         String customerPhone = customerPhoneCustom;
         Map<String, String> params = new HashMap<>();
 
@@ -250,9 +248,9 @@ public class BalanceActivity extends AppCompatActivity {
         params.put(PARAM_ORDER_ID, orderId);
         params.put(PARAM_ORDER_AMOUNT, orderAmount);
         params.put(PARAM_ORDER_NOTE, orderNote);
-        params.put(PARAM_CUSTOMER_NAME, customerName);
+//        params.put(PARAM_CUSTOMER_NAME, customerName);
         params.put(PARAM_CUSTOMER_PHONE, customerPhone);
-        params.put(PARAM_CUSTOMER_EMAIL,customerEmail);
+//        params.put(PARAM_CUSTOMER_EMAIL,customerEmail);
         params.put(PARAM_NOTIFY_URL,notifyUrl);
 
 

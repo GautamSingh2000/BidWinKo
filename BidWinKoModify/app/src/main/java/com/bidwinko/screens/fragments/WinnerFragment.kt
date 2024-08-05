@@ -81,7 +81,7 @@ class WinnerFragment : Fragment() {
             {
                 winnerDetailArrayList =it.winner_details as ArrayList<winnerDetail>
                 mAdapter = WinnerListAdapter(winnerDetailArrayList,requireContext())
-                binding?.recyclerView?.apply {
+                binding?.bidRecyclerView?.apply {
                     itemAnimator = DefaultItemAnimator()
                     adapter = mAdapter
                 }

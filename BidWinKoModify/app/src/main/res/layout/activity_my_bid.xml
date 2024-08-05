@@ -4,8 +4,99 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingTop="@dimen/_8sdp"
     android:orientation="vertical"
     tools:context=".screens.activity.MyBidActivity">
+
+    <RelativeLayout
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/productcv"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:layout_alignParentLeft="true"
+            android:layout_width="@dimen/_60sdp"
+            android:layout_height="@dimen/_50sdp">
+            <ImageView
+                android:id="@+id/productimage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/placeholder"/>
+        </androidx.cardview.widget.CardView>
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="   -   -   "
+            android:fontFamily="@font/lato_bold"
+            android:layout_toRightOf="@id/productcv"
+            android:textSize="@dimen/_13ssp"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:id="@+id/Opentimett"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:layout_below="@id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Opening Date : "
+            android:fontFamily="@font/lato_regular"
+            android:layout_toRightOf="@id/productcv"
+            android:textSize="@dimen/_9ssp"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:id="@+id/cloatimett"
+            android:layout_below="@id/Opentimett"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Closing Date : "
+            android:layout_marginTop="@dimen/_5sdp"
+            android:fontFamily="@font/lato_regular"
+            android:layout_toRightOf="@id/productcv"
+            android:textSize="@dimen/_9ssp"
+            android:textColor="@color/black"/>
+
+
+        <TextView
+            android:id="@+id/Opentime"
+            android:layout_below="@id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" - - "
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:fontFamily="@font/lato_regular"
+            android:layout_toRightOf="@id/Opentimett"
+            android:textSize="@dimen/_9ssp"
+            android:textColor="@color/darkgray"/>
+
+        <TextView
+            android:id="@+id/cloatime"
+            android:layout_below="@id/Opentimett"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="  - -  "
+            android:layout_marginTop="@dimen/_5sdp"
+            android:fontFamily="@font/lato_regular"
+            android:layout_toRightOf="@id/cloatimett"
+            android:textSize="@dimen/_9ssp"
+            android:textColor="@color/darkgray"/>
+
+        <ImageButton
+            android:id="@+id/filtrerbtn"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:backgroundTint="@color/transparent"
+            android:elevation="@dimen/_10sdp"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:src="@drawable/filter"/>
+    </RelativeLayout>
 
     <LinearLayout
         android:visibility="gone"
@@ -37,40 +128,32 @@
 
     <LinearLayout
         android:background="@color/gray"
-        android:padding="15dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
+            android:id="@+id/filterTitle"
             android:gravity="center"
-            android:text="Date"
-            android:layout_weight="1"
-            android:layout_width="0dp"
+            android:text="All"
+            android:textColor="#515050"
+            android:paddingVertical="@dimen/_5sdp"
+            android:layout_marginHorizontal="@dimen/_13sdp"
+            android:textSize="@dimen/_11ssp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
-
-        <TextView
-            android:gravity="center"
-            android:text="Bid Value"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-            android:gravity="center"
-            android:text="Status"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"/>
-
 
     </LinearLayout>
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
+        android:id="@+id/bid_recycler_view"
         android:padding="8dp"
         android:scrollbars="none"
+        android:layout_gravity="center"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="5"
+        tools:listitem="@layout/single_bidrange_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

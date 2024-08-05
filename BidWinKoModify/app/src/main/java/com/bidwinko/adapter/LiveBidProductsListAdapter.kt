@@ -146,7 +146,8 @@ class LiveBidProductsListAdapter(
         val bidoffer = bidofferArrayList[holder.adapterPosition]
         if (type == "live") {
             val inputDateString = bidoffer.endDate
-            holder.countDown.start(inputDateString, holder.Timer)
+            val startingdate = bidoffer.startDate
+            holder.countDown.start(startingdate,inputDateString, holder.Timer,null)
         }
     }
 

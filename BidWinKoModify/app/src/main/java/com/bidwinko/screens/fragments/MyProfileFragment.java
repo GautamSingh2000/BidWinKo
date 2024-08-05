@@ -1,6 +1,5 @@
 package com.bidwinko.screens.fragments;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 
 import android.os.Bundle;
@@ -13,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -21,20 +19,7 @@ import androidx.fragment.app.Fragment;
 
 import com.bidwinko.R;
 
-import com.bidwinko.API.APIService;
-import com.bidwinko.model.UserDetailsModel;
-import com.bidwinko.utilies.Constants;
-import com.bidwinko.API.Retrofit;
-import com.bidwinko.utilies.PicassoCircleTransformation;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import com.squareup.picasso.Picasso;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 
 
 public class MyProfileFragment extends Fragment implements View.OnClickListener {

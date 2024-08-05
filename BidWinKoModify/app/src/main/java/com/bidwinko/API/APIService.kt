@@ -1,20 +1,30 @@
 package com.bidwinko.API
 
-import android.net.Uri
-import com.bidwinko.model.AppOpenModel
 import com.bidwinko.model.BidPurchaseModel
 import com.bidwinko.model.BuyBid
 import com.bidwinko.model.GenerateTokenModel
 import com.bidwinko.model.InviteFriendModel
 import com.bidwinko.model.ProductsDetailsModel
+import com.bidwinko.model.ResponseModels.AppOpenResponse
+import com.bidwinko.model.RequestModels.ProductDetailRequest
+import com.bidwinko.model.RequestModels.AppOpenRequest
+import com.bidwinko.model.RequestModels.CommonRequest
+import com.bidwinko.model.RequestModels.PlaceBidRequest
 import com.bidwinko.model.ResponseModels.HomeResponse
+import com.bidwinko.model.ResponseModels.ProductDetailResponse
+import com.bidwinko.model.RequestModels.UserSignUpRequest
+import com.bidwinko.model.ResponseModels.BuyBidResponse
+import com.bidwinko.model.ResponseModels.PlaceBidResponse
 import com.bidwinko.model.ResponseModels.winners_Response_Model
 import com.bidwinko.model.ShowUserBidsModel
-import com.bidwinko.model.SignUpModel
 import com.bidwinko.model.SingleBidSubmitModel
+import com.bidwinko.model.ResponseModels.USerSignUpResponse
+import com.bidwinko.model.ResponseModels.UserProductBidResponse
+import com.bidwinko.model.ResponseModels.myBidsResponse
 import com.bidwinko.model.UserDetailsModel
 import com.bidwinko.model.UserTransactionModel
 import retrofit2.Call
+import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -23,63 +33,31 @@ import retrofit2.http.QueryMap
 
 interface APIService {
     @POST("home")
-    fun GetHomeData(): Call<HomeResponse>
-
-    @FormUrlEncoded
-    @POST("bidUserSignup")
-    fun userSignUp(
-        @Field("deviceType") deviceType: String?,
-        @Field("deviceId") deviceId: String?,
-        @Field("deviceName") deviceName: String?,
-        @Field("socialType") socialType: String?,
-        @Field("socialId") socialId: String?,
-        @Field("socialEmail") socialEmail: String?,
-        @Field("socialName") socialName: String?,
-        @Field("socialImgurl") socialImgurl: Uri?,
-        @Field("advertisingId") advertisingId: String?,
-        @Field("versionName") versionName: String?,
-        @Field("versionCode") versionCode: Int,
-        @Field("fcmToken") token: String?,
-        @Field("utmSource") utmSource: String?,
-        @Field("utmMedium") utmMedium: String?,
-        @Field("utmTerm") utmTerm: String?,
-        @Field("utmContent") utmContent: String?,
-        @Field("utmCampaign") utmCampaign: String?,
-        @Field("userFrom") userFrom: String?,
-        @Field("socialToken") socialToken: String?
-    ): Call<SignUpModel?>?
-
-    @FormUrlEncoded
-    @POST("bidAppOpen")
-    fun appOpen(
-        @Field("userId") userId: Int,
-        @Field("securityToken") securityToken: String?,
-        @Field("versionName") versionName: String?,
-        @Field("versionCode") versionCode: Int,
-        @Field("userFrom") userFrom: String?
-    ): Call<AppOpenModel?>?
-
-    //    @FormUrlEncoded
-    //    @POST("bidOfferList")
-    //    Call<ProductsListModel> mybidOffer(@Field("userId") int userId,
-    //                                       @Field("securityToken") String securityToken,
-    //                                       @Field("versionName") String versionName,
-    //                                       @Field("versionCode") int versionCode,
-    //                                       @Field("userFrom") String userFrom);
-
-    @FormUrlEncoded///////////////////////////////
-    @POST("bidofferDetails")
-    fun getProductDetails(
-        @Field("userId") userId: Int,
-        @Field("securityToken") securityToken: String?,
-        @Field("versionName") versionName: String?,
-        @Field("versionCode") versionCode: Int,
-        @Field("bidofferId") bidofferId: String?,
-        @Field("userFrom") userFrom: String?
-    ): Call<ProductsDetailsModel?>?
+    fun GetHomeData(@Body homeRequest: CommonRequest): Call<HomeResponse>
 
     @POST("bidPastWinners")
-    fun GetWinnerList () : Call<winners_Response_Model>
+    fun GetWinnerList(): Call<winners_Response_Model>
+
+
+    @POST("bidDetails")
+    fun GetProductDetail(@Body productDetailRequest: ProductDetailRequest): Call<ProductDetailResponse>
+
+    @POST("myBids")
+    fun GetMyBids(@Body productDetailRequest: ProductDetailRequest): Call<myBidsResponse>
+
+    @POST("userSignup")
+    fun UserSignUp(@Body userSignUpRequest: UserSignUpRequest): Call<USerSignUpResponse>
+
+    @POST("appOpen")
+    fun AppOpen(@Body appOpenRequest: AppOpenRequest): Call<AppOpenResponse>
+    @POST("placeBid")
+    fun PlaceBid(@Body placeBidRequest: PlaceBidRequest): Call<PlaceBidResponse>
+
+    @POST("userProductBids")
+    fun GetUserProductBid(@Body productDetailRequest: ProductDetailRequest): Call<UserProductBidResponse>
+    @POST("buyBids")
+    fun GetBidPacakage(@Body commonRequest: CommonRequest): Call<BuyBidResponse>
+
 
     @FormUrlEncoded
     @POST("buyBidPage")
@@ -88,7 +66,7 @@ interface APIService {
         @Field("securityToken") securityToken: String?,
         @Field("versionName") versionName: String?,
         @Field("versionCode") versionCode: Int,
-        @Field("userFrom") userFrom: String?
+        @Field("userFrom") userFrom: String?,
     ): Call<BuyBid?>?
 
     @FormUrlEncoded
@@ -98,7 +76,7 @@ interface APIService {
         @Field("securityToken") securityToken: String?,
         @Field("versionName") versionName: String?,
         @Field("versionCode") versionCode: Int,
-        @Field("userFrom") userFrom: String?
+        @Field("userFrom") userFrom: String?,
     ): Call<UserDetailsModel?>?
 
     @FormUrlEncoded
@@ -113,7 +91,7 @@ interface APIService {
         @Field("usermobile") usermobile: String?,
         @Field("shipingaddress") shpingaddress: String?,
         @Field("actiontype") actiontype: String?,
-        @Field("userFrom") userFrom: String?
+        @Field("userFrom") userFrom: String?,
     ): Call<UserDetailsModel?>?
 
     @FormUrlEncoded
@@ -124,7 +102,7 @@ interface APIService {
         @Field("versionName") versionName: String?,
         @Field("versionCode") versionCode: Int,
         @Field("bidofferId") bidofferId: String?,
-        @Field("userFrom") userFrom: String?
+        @Field("userFrom") userFrom: String?,
     ): Call<ShowUserBidsModel?>?
 
     @FormUrlEncoded
@@ -134,7 +112,7 @@ interface APIService {
         @Field("securityToken") securityToken: String?,
         @Field("versionName") versionName: String?,
         @Field("versionCode") versionCode: Int,
-        @Field("userFrom") userFrom: String?
+        @Field("userFrom") userFrom: String?,
     ): Call<InviteFriendModel?>?
 
     @FormUrlEncoded
@@ -146,7 +124,7 @@ interface APIService {
         @Field("versionCode") versionCode: Int,
         @Field("bidValue") bidValue: String?,
         @Field("bidofferId") bidofferId: String?,
-        @Field("userFrom") userFrom: String?
+        @Field("userFrom") userFrom: String?,
     ): Call<SingleBidSubmitModel?>?
 
     @FormUrlEncoded
@@ -159,7 +137,7 @@ interface APIService {
         @Field("bidValueFm") bidValueFm: String?,
         @Field("bidValueTo") bidValueTo: String?,
         @Field("bidofferId") bidofferId: String?,
-        @Field("userFrom") userFrom: String?
+        @Field("userFrom") userFrom: String?,
     ): Call<SingleBidSubmitModel?>?
 
     @POST("bidUserTransactions")
@@ -169,7 +147,7 @@ interface APIService {
         @Field("securityToken") securityToken: String?,
         @Field("versionName") versionName: String?,
         @Field("versionCode") versionCode: Int,
-        @Field("userFrom") userFrom: String?
+        @Field("userFrom") userFrom: String?,
     ): Call<UserTransactionModel?>?
 
     @POST("bidPurchase")
@@ -188,7 +166,7 @@ interface APIService {
         @Field("developerPayload") developerPayload: String?,
         @Field("purchaseTime") purchaseTime: String?,
         @Field("purchaseState") purchaseState: String?,
-        @Field("purchaseToken") purchaseToken: String?
+        @Field("purchaseToken") purchaseToken: String?,
     ): Call<BidPurchaseModel?>?
 
     @GET("generate-cftoken.json")

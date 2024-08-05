@@ -1,34 +1,21 @@
 package com.bidwinko.screens.activity;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.bidwinko.R;
 import com.bidwinko.adapter.MYTransactionAdapter;
-import com.bidwinko.API.APIService;
 
 import com.bidwinko.model.Transaction;
-import com.bidwinko.model.UserTransactionModel;
-import com.bidwinko.utilies.Constants;
-import com.bidwinko.API.Retrofit;
 
 import java.util.ArrayList;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 public class TransactionActivity extends AppCompatActivity {
@@ -55,7 +42,7 @@ public class TransactionActivity extends AppCompatActivity {
             ((AppCompatActivity)this).getSupportActionBar().setTitle((Html.fromHtml("<font color=\"#ffffff\">" +getString(R.string.app_name)+" / "+getString(R.string.mytransaction) + "</font>")));
 
 
-            recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+            recyclerView = (RecyclerView) findViewById(R.id.bid_recycler_view);
 
 //            getMyTransactions();
 

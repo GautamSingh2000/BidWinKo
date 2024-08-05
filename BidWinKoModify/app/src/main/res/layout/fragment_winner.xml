@@ -73,7 +73,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:backgroundTint="@color/white"
-        android:id="@+id/recycler_view"
+        android:id="@+id/bid_recycler_view"
         tools:itemCount="8"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:orientation="vertical"

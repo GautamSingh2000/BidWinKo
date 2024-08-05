@@ -5,8 +5,20 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.bidwinko.Repo.Repositoy
+import com.bidwinko.model.ResponseModels.AppOpenResponse
+import com.bidwinko.model.RequestModels.ProductDetailRequest
+import com.bidwinko.model.RequestModels.AppOpenRequest
+import com.bidwinko.model.RequestModels.CommonRequest
+import com.bidwinko.model.RequestModels.PlaceBidRequest
 import com.bidwinko.model.ResponseModels.HomeResponse
+import com.bidwinko.model.ResponseModels.ProductDetailResponse
+import com.bidwinko.model.RequestModels.UserSignUpRequest
+import com.bidwinko.model.ResponseModels.BuyBidResponse
+import com.bidwinko.model.ResponseModels.PlaceBidResponse
 import com.bidwinko.model.ResponseModels.winners_Response_Model
+import com.bidwinko.model.ResponseModels.USerSignUpResponse
+import com.bidwinko.model.ResponseModels.UserProductBidResponse
+import com.bidwinko.model.ResponseModels.myBidsResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,6 +31,13 @@ class mainViewModel(val context: Context) : ViewModel() {
 
     private var HomeResponse = MutableLiveData<HomeResponse>()
     private var WinnerList = MutableLiveData<winners_Response_Model>()
+    private var ProductDetail = MutableLiveData<ProductDetailResponse>()
+    private var MyBids = MutableLiveData<myBidsResponse>()
+    private var UserSignUp = MutableLiveData<USerSignUpResponse>()
+    private var AppOpen = MutableLiveData<AppOpenResponse>()
+    private var PlaceBid = MutableLiveData<PlaceBidResponse>()
+    private var UserProductBid = MutableLiveData<UserProductBidResponse>()
+    private var BuyBids = MutableLiveData<BuyBidResponse>()
 
 
     private fun <T> enqueueCall(call: Call<T>, liveData: MutableLiveData<T>) {
@@ -43,9 +62,16 @@ class mainViewModel(val context: Context) : ViewModel() {
         ongoingCalls.remove(call)
     }
 
-    fun GetHomeData():MutableLiveData<HomeResponse>
+    fun PlaceBid(placeBidRequest: PlaceBidRequest):MutableLiveData<PlaceBidResponse>
     {
-        val call = repo.GetHomeData()
+        val call = repo.PlaceBid(placeBidRequest)
+        enqueueCall(call,PlaceBid)
+        return PlaceBid
+    }
+
+    fun GetHomeData(homeRequest: CommonRequest):MutableLiveData<HomeResponse>
+    {
+        val call = repo.GetHomeData(homeRequest)
         enqueueCall(call, HomeResponse)
         return HomeResponse
     }
@@ -56,6 +82,42 @@ class mainViewModel(val context: Context) : ViewModel() {
         return WinnerList
     }
 
+ fun GetProductDetail(productDetailRequest: ProductDetailRequest):MutableLiveData<ProductDetailResponse>
+    {
+        val call = repo.GetProductDetail(productDetailRequest)
+        enqueueCall(call,ProductDetail)
+        return ProductDetail
+    }
+ fun GetMyBids(productDetailRequest: ProductDetailRequest):MutableLiveData<myBidsResponse>
+    {
+        val call = repo.GEtMyBids(productDetailRequest)
+        enqueueCall(call,MyBids)
+        return MyBids
+    }
+ fun GetUserProductBid(productDetailRequest: ProductDetailRequest):MutableLiveData<UserProductBidResponse>
+    {
+        val call = repo.GetUserProductBid(productDetailRequest)
+        enqueueCall(call,UserProductBid)
+        return UserProductBid
+    }
+ fun Signup(userSignUpRequest: UserSignUpRequest):MutableLiveData<USerSignUpResponse>
+    {
+        val call = repo.Signup(userSignUpRequest)
+        enqueueCall(call,UserSignUp)
+        return UserSignUp
+    }
+ fun appOpen(appOpenRequest: AppOpenRequest):MutableLiveData<AppOpenResponse>
+    {
+        val call = repo.AppOpen(appOpenRequest)
+        enqueueCall(call,AppOpen)
+        return AppOpen
+    }
+ fun GetBidsPacakage(commonRequest: CommonRequest):MutableLiveData<BuyBidResponse>
+    {
+        val call = repo.GetBidsPacakage(commonRequest)
+        enqueueCall(call,BuyBids)
+        return BuyBids
+    }
 
 
 

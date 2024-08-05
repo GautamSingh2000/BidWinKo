@@ -9,7 +9,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 object Retrofit {
     //  public static final String BASE_URL = "https://bidwinko.app/api/v1/";
     //    public static final String BASE_URL1 = "https://bidwinko.app/";
-    const val BASE_URL = " http://192.168.1.13:3000/api/v1/"
+    const val BASE_URL = " http://192.168.1.31:5000/api/v1/"
 
     private fun provideOkHttpClient(): OkHttpClient {
         val loggingInterceptor = HttpLoggingInterceptor()

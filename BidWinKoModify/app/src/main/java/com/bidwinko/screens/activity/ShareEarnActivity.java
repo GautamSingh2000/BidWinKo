@@ -1,6 +1,5 @@
 package com.bidwinko.screens.activity;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
@@ -10,27 +9,16 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.Html;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bidwinko.R;
-import com.bidwinko.API.APIService;
-import com.bidwinko.model.InviteFriendModel;
-import com.bidwinko.utilies.Constants;
-import com.bidwinko.API.Retrofit;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 public class ShareEarnActivity extends AppCompatActivity {

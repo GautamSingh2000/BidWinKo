@@ -45,6 +45,11 @@
         android:layout_below="@id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
         <LinearLayout
             android:paddingHorizontal="@dimen/_10sdp"
             android:orientation="vertical"
@@ -72,9 +77,11 @@
                     android:layout_weight="0.5"
                     android:layout_height="wrap_content"
                     app:cardElevation="@dimen/_10sdp"
+                    android:elevation="@dimen/_10sdp"
                     app:cardBackgroundColor="@color/darkgray"
                     app:cardCornerRadius="@dimen/_5sdp">
                         <ImageView
+                            android:id="@+id/prevbtn_img"
                             android:layout_gravity="center"
                             android:layout_width="@dimen/_20sdp"
                             android:layout_height="@dimen/_40sdp"
@@ -98,11 +105,13 @@
                     android:id="@+id/nextbtn"
                     android:layout_width="0dp"
                     android:layout_weight="0.5"
+                    android:elevation="@dimen/_10sdp"
                     android:layout_height="wrap_content"
                     app:cardElevation="@dimen/_10sdp"
                     app:cardBackgroundColor="@color/darkgray"
                     app:cardCornerRadius="@dimen/_5sdp">
                     <ImageView
+                        android:id="@+id/nextbtnimg"
                         android:layout_gravity="center"
                         android:layout_width="@dimen/_20sdp"
                         android:layout_height="@dimen/_40sdp"
@@ -157,6 +166,12 @@
                 android:layout_height="@dimen/_50sdp"
                 android:background="@color/transparent"/>
         </LinearLayout>
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/party"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:lottie_rawRes="@raw/party2"/>
+        </RelativeLayout>
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.button.MaterialButton

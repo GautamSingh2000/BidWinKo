@@ -130,16 +130,16 @@
             android:name="com.google.android.gms.analytics.CampaignTrackingService"
             android:exported="false" />
 
-        <receiver
-            android:name=".utilies.UtmReceiver"
-            android:enabled="true"
-            android:exported="true"
-            android:permission="android.permission.INSTALL_PACKAGES">
-            <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER" />
-                <action android:name="android.intent.action.USER_PRESENT" />
-            </intent-filter>
-        </receiver> <!-- <service android:name=".utilies.BroadcastService" /> -->
+<!--        <receiver-->
+<!--            android:name=".utilies.UtmReceiver"-->
+<!--            android:enabled="true"-->
+<!--            android:exported="true"-->
+<!--            android:permission="android.permission.INSTALL_PACKAGES">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="com.android.vending.INSTALL_REFERRER" />-->
+<!--                <action android:name="android.intent.action.USER_PRESENT" />-->
+<!--            </intent-filter>-->
+<!--        </receiver> &lt;!&ndash; <service android:name=".utilies.BroadcastService" /> &ndash;&gt;-->
         <!-- <service android:name=".testing.Timer_Service" /> -->
         <activity
             android:name=".testing.MainActivity"
