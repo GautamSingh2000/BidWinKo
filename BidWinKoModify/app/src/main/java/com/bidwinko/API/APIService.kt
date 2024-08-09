@@ -8,13 +8,21 @@ import com.bidwinko.model.ProductsDetailsModel
 import com.bidwinko.model.ResponseModels.AppOpenResponse
 import com.bidwinko.model.RequestModels.ProductDetailRequest
 import com.bidwinko.model.RequestModels.AppOpenRequest
+import com.bidwinko.model.RequestModels.ClosedBidWinnerRequest
 import com.bidwinko.model.RequestModels.CommonRequest
+import com.bidwinko.model.RequestModels.GetProfileRequest
+import com.bidwinko.model.RequestModels.PaymentRequest
 import com.bidwinko.model.RequestModels.PlaceBidRequest
 import com.bidwinko.model.ResponseModels.HomeResponse
 import com.bidwinko.model.ResponseModels.ProductDetailResponse
 import com.bidwinko.model.RequestModels.UserSignUpRequest
 import com.bidwinko.model.ResponseModels.BuyBidResponse
+import com.bidwinko.model.ResponseModels.ClosedBidWinnerResponse
+import com.bidwinko.model.ResponseModels.GetProfileResponse
+import com.bidwinko.model.ResponseModels.HomeListDataResponse
+import com.bidwinko.model.ResponseModels.PaymentResponse
 import com.bidwinko.model.ResponseModels.PlaceBidResponse
+import com.bidwinko.model.ResponseModels.TransactionHistoryResponse
 import com.bidwinko.model.ResponseModels.winners_Response_Model
 import com.bidwinko.model.ShowUserBidsModel
 import com.bidwinko.model.SingleBidSubmitModel
@@ -34,9 +42,22 @@ import retrofit2.http.QueryMap
 interface APIService {
     @POST("home")
     fun GetHomeData(@Body homeRequest: CommonRequest): Call<HomeResponse>
+    @POST("transactionHistory")
+    fun GetTransactionHistory(@Body homeRequest: CommonRequest): Call<TransactionHistoryResponse>
+    @POST("liveBids")
+    fun GetliveBidsList(@Body homeRequest: CommonRequest): Call<HomeListDataResponse>
+    @POST("upcomingBids")
+    fun GetupcomingBidsList(@Body homeRequest: CommonRequest): Call<HomeListDataResponse>
+    @POST("completedBids")
+    fun GetcompletedBidsList(@Body homeRequest: CommonRequest): Call<HomeListDataResponse>
+    @POST("profile")
+    fun GetProfile(@Body getProfileRequest: GetProfileRequest): Call<GetProfileResponse>
 
     @POST("bidPastWinners")
-    fun GetWinnerList(): Call<winners_Response_Model>
+    fun GetWinnerList(@Body commonRequest: CommonRequest): Call<winners_Response_Model>
+
+    @POST("closedBidWinner")
+    fun GetBidWinner(@Body closedBidWinnerRequest: ClosedBidWinnerRequest): Call<ClosedBidWinnerResponse>
 
 
     @POST("bidDetails")
@@ -57,6 +78,8 @@ interface APIService {
     fun GetUserProductBid(@Body productDetailRequest: ProductDetailRequest): Call<UserProductBidResponse>
     @POST("buyBids")
     fun GetBidPacakage(@Body commonRequest: CommonRequest): Call<BuyBidResponse>
+    @POST("payment")
+    fun GetPayment(@Body paymentRequest: PaymentRequest): Call<PaymentResponse>
 
 
     @FormUrlEncoded

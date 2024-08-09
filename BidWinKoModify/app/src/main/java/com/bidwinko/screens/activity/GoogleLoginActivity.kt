@@ -1,23 +1,38 @@
 package com.bidwinko.screens.activity
 
+import android.animation.Animator
+import android.animation.Animator.AnimatorListener
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.RemoteException
 import android.provider.Settings
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.TextPaint
+import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
+import android.transition.TransitionInflater
 import android.util.Log
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.browser.customtabs.CustomTabColorSchemeParams
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.compose.ui.res.colorResource
+import androidx.core.content.ContextCompat
 import com.android.installreferrer.api.InstallReferrerClient
 import com.android.installreferrer.api.InstallReferrerStateListener
 import com.android.installreferrer.api.ReferrerDetails
@@ -63,17 +78,106 @@ class GoogleLoginActivity : AppCompatActivity() , View.OnClickListener , Install
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.tvPrivacy.setOnClickListener(this)
-        binding.txtTermcondition.setOnClickListener(this)
+
         binding.googleLogin.setOnClickListener(this)
         viewModel = mainViewModel(this)
         sessionManager = SessionManager(this)
         context = this
+       binding.anim.let{
+            it.playAnimation()
+            it.addAnimatorListener(object : AnimatorListener{
+                override fun onAnimationStart(animation: Animator) {
+                    
+                }
+
+                override fun onAnimationEnd(animation: Animator) {
+             binding.anim.playAnimation()
+                }
+
+                override fun onAnimationCancel(animation: Animator) {
+             
+                }
+
+                override fun onAnimationRepeat(animation: Animator) {
+             
+                }
+
+            })
+        }
+
+        val text = ContextCompat.getString(this@GoogleLoginActivity,R.string.textprviacy)
+
+        val spannableString = SpannableString(text)
+
+        // Set color and clickable span for "Privacy Policy"
+        val privacyPolicyText = "Privacy Policy"
+        val privacyPolicyStartIndex = text.indexOf(privacyPolicyText)
+        val privacyPolicyEndIndex = privacyPolicyStartIndex + privacyPolicyText.length
+
+        val privacyPolicyClickableSpan = object : ClickableSpan() {
+            override fun onClick(widget: View) {
+                val url = "http://192.168.1.31:5000/privacy.html"
+                // Open Privacy Policy webpage
+                openTab(url)
+            }
+
+            override fun updateDrawState(ds: TextPaint) {
+                super.updateDrawState(ds)
+                ds.isUnderlineText = false // Remove underline
+            }
+        }
+
+        val blue = ContextCompat.getColor(this@GoogleLoginActivity,R.color.blue)
+
+        spannableString.setSpan(
+            ForegroundColorSpan(blue),
+            privacyPolicyStartIndex, privacyPolicyEndIndex,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        spannableString.setSpan(
+            privacyPolicyClickableSpan,
+            privacyPolicyStartIndex, privacyPolicyEndIndex,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+        // Set color and clickable span for "Terms Of Services"
+        val termsOfServicesText = "Terms Of Services"
+        val termsOfServicesStartIndex = text.indexOf(termsOfServicesText)
+        val termsOfServicesEndIndex = termsOfServicesStartIndex + termsOfServicesText.length
+
+        val termsOfServicesClickableSpan = object : ClickableSpan() {
+            override fun onClick(widget: View) {
+                val urlcondition = "http://192.168.1.31:5000/terms.html"
+                // Open Terms Of Services webpage
+                openTab(urlcondition)
+            }
+
+            override fun updateDrawState(ds: TextPaint) {
+                super.updateDrawState(ds)
+                ds.isUnderlineText = false // Remove underline
+            }
+        }
+
+        spannableString.setSpan(
+            ForegroundColorSpan(blue),
+            termsOfServicesStartIndex, termsOfServicesEndIndex,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        spannableString.setSpan(
+            termsOfServicesClickableSpan,
+            termsOfServicesStartIndex, termsOfServicesEndIndex,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+        binding.tvPrivacy.text = spannableString
+        binding.tvPrivacy.movementMethod = android.text.method.LinkMovementMethod.getInstance()
 
         findViewById<View>(R.id.google_login).setOnClickListener(this)
         FirebaseApp.initializeApp(this)
+        supportActionBar?.hide()
         mAuth = FirebaseAuth.getInstance(FirebaseApp.getInstance())
         setUtm()
+        binding.image.startAnimation(AnimationUtils.loadAnimation(this,R.anim.fast_fade_in))
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken("276302943649-ce98hsrs7vl775dch6gjd06o1rplvvu6.apps.googleusercontent.com")
@@ -138,7 +242,7 @@ class GoogleLoginActivity : AppCompatActivity() , View.OnClickListener , Install
         viewModel.appOpen(appOpenRequest).observe(this) {
             progressDialog?.dismiss()
             if (it.status == 200) {
-
+                SessionManager(this).InitializeValue(Constants.TOTAL_BIDS,it.bids)
                 if (it.forceUpdate) {
                     startActivity(
                         Intent(
@@ -214,85 +318,15 @@ class GoogleLoginActivity : AppCompatActivity() , View.OnClickListener , Install
             progressDialog?.dismiss()
             if (it.status == 200) {
                 sessionManager.InitializeValue(Constants.USER_ID, it.userId.toString())
-                sessionManager.InitializeValue(Constants.SECURITY_TOKEN, it.securityToken.toString())
+                sessionManager.InitializeValue(
+                    Constants.SECURITY_TOKEN,
+                    it.securityToken.toString()
+                )
                 openApp()
             } else {
                 Toast.makeText(this, "Try again later ${it.message}", Toast.LENGTH_LONG).show()
             }
         }
-    }
-
-
-    // [START auth_with_google]
-    private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
-
-        // [START_EXCLUDE silent]
-//        showProgressDialog();
-        // [END_EXCLUDE]
-        val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
-        mAuth!!.signInWithCredential(credential)
-            .addOnCompleteListener(
-                this
-            ) { task ->
-                if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    //                            Log.d(TAG, "signInWithCredential:success");
-                    val user = mAuth!!.currentUser
-                    //                            Log.e(TAG, "onComplete: "+user.getDisplayName());
-                    //                            Log.e(TAG, "onComplete: "+user.getEmail());
-
-                    //                            Log.e(TAG, "onComplete:pho "+user.getPhotoUrl());
-                    val apilevel = Build.VERSION.SDK_INT.toString()
-                    val android_id = Settings.Secure.getString(
-                        contentResolver, Settings.Secure.ANDROID_ID
-                    )
-                    val devicename = Build.MODEL
-                    var version = ""
-                    Log.d(TAG, "task success: " + task.isSuccessful)
-                    var versioncode = 0
-                    try {
-                        val pInfo = packageManager.getPackageInfo(
-                            packageName, 0
-                        )
-                        version = pInfo.versionName
-                        versioncode = pInfo.versionCode
-                    } catch (e: PackageManager.NameNotFoundException) {
-                        e.printStackTrace()
-                    }
-                    val userFrom = "bidwinko"
-//                    Constants.setSharedPreferenceString(
-//                        this@GoogleLoginActivity,
-//                        "email",
-//                        acct.email
-//                    )
-//                    Constants.setSharedPreferenceString(
-//                        this@GoogleLoginActivity,
-//                        "displayName",
-//                        acct.displayName
-//                    )
-//                    Constants.setSharedPreferenceInt(
-//                        this@GoogleLoginActivity,
-//                        "versionCode",
-//                        versioncode
-//                    )
-//                    Constants.setSharedPreferenceString(
-//                        this@GoogleLoginActivity,
-//                        "versionName",
-//                        version
-//                    )
-//                    Constants.setSharedPreferenceString(
-//                        this@GoogleLoginActivity,
-//                        "userFrom",
-//                        userFrom
-//                    )
-
-                    //                            userSignUp(apilevel, android_id, devicename, "google", acct.getId(),
-                    //                                    Constants.getSharedPreferenceString(GoogleLoginActivity.this, "email", ""), acct.getDisplayName(),
-                    //                                    acct.getPhotoUrl(), Constants.getSharedPreferenceString(GoogleLoginActivity.this, "adverId", ""),
-                    //                                    acct);
-                } else {
-                }
-            }
     }
     private fun signIn() {
         val signInIntent = mGoogleSignInClient!!.signInIntent
@@ -309,43 +343,9 @@ class GoogleLoginActivity : AppCompatActivity() , View.OnClickListener , Install
             handleSignInResult(task)
         }
     }
-
-    // [END signin]
-    private fun signOut() {
-        // Firebase sign out
-        mAuth!!.signOut()
-
-        // Google sign out
-        mGoogleSignInClient!!.signOut().addOnCompleteListener(
-            this
-        ) {
-            //                        updateUI(null);
-        }
-    }
-
-    private fun revokeAccess() {
-        // Firebase sign out
-        mAuth!!.signOut()
-
-        // Google revoke access
-        mGoogleSignInClient!!.revokeAccess().addOnCompleteListener(
-            this
-        ) {
-            //                        updateUI(null);
-        }
-    }
     override fun onClick(v: View) {
         when (v.id) {
             R.id.google_login -> signIn()
-            R.id.txt_privacy -> {
-                val url = "https://bidwinzo.app/privacy-policy.html"
-                webViewLoad(url, "Privacy Policy")
-            }
-
-            R.id.txt_termcondition -> {
-                val urlcondition = "https://bidwinzo.app/terms-conditions.html"
-                webViewLoad(urlcondition, "Terms Of Services")
-            }
         }
     }
 
@@ -429,6 +429,41 @@ class GoogleLoginActivity : AppCompatActivity() , View.OnClickListener , Install
             )
         } catch (e: Exception) {
             Log.e("TAG1", "Failed to get install referrer: ${e.message}")
+        }
+    }
+
+    fun openTab(url: String) {
+        try {
+            val builder = CustomTabsIntent.Builder()
+
+            // to set the toolbar color use CustomTabColorSchemeParams
+            // since CustomTabsIntent.Builder().setToolBarColor() is deprecated
+
+            val params = CustomTabColorSchemeParams.Builder()
+            params.setToolbarColor(ContextCompat.getColor(context!!, R.color.black))
+            builder.setDefaultColorSchemeParams(params.build())
+            // shows the title of web-page in toolbar
+            builder.setShowTitle(true)
+
+            // setShareState(CustomTabsIntent.SHARE_STATE_ON) will add a menu to share the web-page
+            builder.setShareState(CustomTabsIntent.SHARE_STATE_ON)
+
+            // To modify the close button, use
+            // builder.setCloseButtonIcon(bitmap)
+
+            // to set weather instant apps is enabled for the custom tab or not, use
+            builder.setInstantAppsEnabled(true)
+
+            //  To use animations use -
+            //  builder.setStartAnimations(this, android.R.anim.start_in_anim, android.R.anim.start_out_anim)
+            //  builder.setExitAnimations(this, android.R.anim.exit_in_anim, android.R.anim.exit_out_anim)
+            val customBuilder = builder.build()
+            customBuilder.intent.setPackage("com.android.chrome")
+            customBuilder.launchUrl(context!!, Uri.parse(url))
+        }
+        catch (e:Exception)
+        {
+            Toast.makeText(context,e.message,Toast.LENGTH_SHORT).show()
         }
     }
 }

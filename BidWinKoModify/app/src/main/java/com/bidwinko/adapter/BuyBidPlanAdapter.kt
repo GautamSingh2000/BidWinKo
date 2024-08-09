@@ -8,12 +8,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bidwinko.R
 import com.bidwinko.model.ResponseModels.BidPlan
 import com.bidwinko.model.ResponseModels.Plan
-import com.bidwinko.screens.activity.BalanceActivity
+//import com.bidwinko.screens.activity.BalanceActivity
+import com.bidwinko.screens.activity.TransactionActivity
 
 class BuyBidPlanAdapter(
     val buyBidValueArrayList: ArrayList<BidPlan>,
@@ -22,6 +24,7 @@ class BuyBidPlanAdapter(
 
     inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val category_title = view.findViewById<TextView>(R.id.bid_pacage_name)
+        val transactionbtn = view.findViewById<TextView>(R.id.transaction_btn)
         val Rv = view.findViewById<RecyclerView>(R.id.bidPlansRV)
     }
 
@@ -34,6 +37,13 @@ class BuyBidPlanAdapter(
     override fun onBindViewHolder(holder: MyViewHolder, position: Int){
         Log.e("adaptyer","${buyBidValueArrayList.size } size in 1 adapter")
         val category = buyBidValueArrayList.get(position)
+
+        holder.transactionbtn.setOnClickListener {
+            Toast.makeText(context, "All Transaction !!", Toast.LENGTH_SHORT).show()
+            val intent = Intent(context, TransactionActivity::class.java)
+            context.startActivity(intent)
+        }
+
         holder.category_title.text = category.categoryTitle
         val adapter = BuyBidListAdapter(category.plans as ArrayList<Plan>,context)
         holder.Rv.adapter = adapter

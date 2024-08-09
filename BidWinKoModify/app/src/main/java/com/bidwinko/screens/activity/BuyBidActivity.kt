@@ -1,12 +1,16 @@
 package com.bidwinko.screens.activity
 
+import android.animation.Animator
+import android.animation.Animator.AnimatorListener
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Html
+import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
@@ -45,18 +49,35 @@ class BuyBidActivity : AppCompatActivity() {
         )
         txtBidBalance = findViewById(R.id.bidbalance)
         unlimitedBid = findViewById(R.id.card_unlimited_bid)
+        binding.bidbalance.text = SessionManager(this).GetValue(Constants.TOTAL_BIDS)
 
+
+        binding.cardUnlimitedBid.setOnClickListener {
+            val intentbuybid = Intent(this, ReferActivity::class.java)
+            startActivity(intentbuybid)
+        }
+
+        binding.choosetv.setOnClickListener {
+            val intentbuybid = Intent(this, ReferActivity::class.java)
+            startActivity(intentbuybid)
+        }
+
+
+        binding.anim.let {
+            it.playAnimation()
+            it.addAnimatorListener(object : AnimatorListener{
+                override fun onAnimationStart(animation: Animator) {}
+                override fun onAnimationEnd(animation: Animator) {
+                    it.playAnimation()
+                }
+                override fun onAnimationCancel(animation: Animator) {}
+                override fun onAnimationRepeat(animation: Animator) {}
+            })
+        }
         getData()
     }
 
     private fun getData() {
-
-        if(!(this).isFinishing()) {
-                        progressDialog = ProgressDialog(this);
-                        progressDialog!!.setMessage(getString(R.string.loadingwait));
-                        progressDialog!!.show();
-                        progressDialog!!.setCancelable(false);
-                    }
 
         val request = CommonRequest(
             userId =  SessionManager(this).GetValue(Constants.USER_ID).toString(),
@@ -66,26 +87,20 @@ class BuyBidActivity : AppCompatActivity() {
         )
         mainViewModel(this).GetBidsPacakage(request).observe(this){
             if(it.status == 200){
-                 progressDialog?.dismiss()
                     mAdapter = BuyBidPlanAdapter(it.bidPlans as ArrayList<BidPlan>, this@BuyBidActivity)
                 binding.bidRecyclerView.setAdapter(mAdapter)
+                binding.shimmer.root.stopShimmer()
+                binding.shimmer.root.visibility = View.GONE
+                binding.bidRecyclerView.visibility = View.VISIBLE
             }
         }
     }
 
-    private fun dismissProgressDialog() {
-        if (progressDialog != null && progressDialog!!.isShowing) {
-            progressDialog!!.dismiss()
-        }
-    }
-
     public override fun onDestroy() {
-        dismissProgressDialog()
         super.onDestroy()
     }
 
     public override fun onPause() {
-        dismissProgressDialog()
         super.onPause()
     }
 

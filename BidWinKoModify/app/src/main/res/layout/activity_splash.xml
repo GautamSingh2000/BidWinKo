@@ -6,8 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".screens.activity.SplashActivity">
 
-
+<ImageView
+    android:visibility="gone"
+    app:cardElevation="0dp"
+    android:layout_alignTop="@id/ll"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="-40dp"
+    android:layout_width="@dimen/_150sdp"
+    android:layout_height="@dimen/_170sdp"
+    android:src="@drawable/shadow"/>
     <LinearLayout
+        android:id="@+id/ll"
         android:layout_centerInParent="true"
         android:gravity="center"
         android:orientation="vertical"
@@ -15,18 +24,24 @@
         android:layout_height="wrap_content">
 
         <ImageView
+            android:elevation="@dimen/_20sdp"
+            android:id="@+id/image"
+            android:layout_marginHorizontal="@dimen/_50sdp"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:src="@drawable/splash_icon" />
+            android:layout_height="@dimen/_100sdp"
+            android:transitionName="logo"
+            android:src="@drawable/bidlogo" />
 
         <TextView
+            android:id="@+id/name"
+            android:transitionName="appname"
             android:lineSpacingMultiplier="2.5"
             android:lineSpacingExtra="6dp"
             android:gravity="center"
             android:layout_marginTop="10dp"
             android:textColor="@color/black"
-            android:textSize="23sp"
-            android:textStyle="bold"
+            android:textSize="@dimen/_17ssp"
+            android:fontFamily="@font/lato_bold"
             android:text="@string/app_namebidwin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>

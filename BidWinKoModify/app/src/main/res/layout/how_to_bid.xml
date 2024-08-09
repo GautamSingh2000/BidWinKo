@@ -272,7 +272,7 @@
                 android:layout_height="@dimen/_80sdp"
                 android:layout_marginTop="@dimen/_15sdp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/step3preview"/>
+                android:src="@drawable/stepthree"/>
 
         </LinearLayout>
         <LinearLayout

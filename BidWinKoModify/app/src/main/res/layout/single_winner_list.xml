@@ -49,6 +49,7 @@
 
             <LinearLayout
                 android:orientation="vertical"
+                android:gravity="center_vertical"
                 android:layout_width="0dp"
                 android:paddingTop="20dp"
                 android:layout_marginStart="10dp"

@@ -71,16 +71,43 @@
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 
+        <include
+            android:id="@+id/no_data_found"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_below="@id/trophycard"
+            layout="@layout/component_no_data_found"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:backgroundTint="@color/white"
         android:id="@+id/bid_recycler_view"
-        tools:itemCount="8"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:orientation="vertical"
-        tools:listitem="@layout/single_winner_list"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:layout_below="@id/trophycard"
         android:scrollbars="none" />
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmer"
+            android:layout_below="@id/trophycard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:shimmer_direction="top_to_bottom"
+            app:shimmer_repeat_mode="restart"
+            app:shimmer_auto_start="true">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+            <include layout="@layout/gray_single_buy_bid_layout"/>
+            <include layout="@layout/gray_single_buy_bid_layout"/>
+            <include layout="@layout/gray_single_buy_bid_layout"/>
+            <include layout="@layout/gray_single_buy_bid_layout"/>
+            <include layout="@layout/gray_single_buy_bid_layout"/>
+            <include layout="@layout/gray_single_buy_bid_layout"/>
+            <include layout="@layout/gray_single_buy_bid_layout"/>
+            </LinearLayout>
+        </com.facebook.shimmer.ShimmerFrameLayout>
     </RelativeLayout>
 </ScrollView>

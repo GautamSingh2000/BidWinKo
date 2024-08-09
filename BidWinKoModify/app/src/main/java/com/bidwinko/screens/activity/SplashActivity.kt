@@ -1,6 +1,7 @@
 package com.bidwinko.screens.activity
 
 import android.app.Activity
+import android.app.ActivityOptions
 import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.Context
@@ -14,9 +15,12 @@ import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
 import android.util.Log
+import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityOptionsCompat
 import com.bidwinko.MainActivity
 import com.bidwinko.R
 import com.bidwinko.model.RequestModels.AppOpenRequest
@@ -59,10 +63,13 @@ class SplashActivity() : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
 
         txtVersion = findViewById(R.id.txtvesion)
-
+        supportActionBar?.hide()
         mainViewModel = mainViewModel(this)
         sessionManager = SessionManager(this)
+        val logo_image = findViewById<ImageView>(R.id.image)
+        val logo_name = findViewById<TextView>(R.id.name)
 
+//        image.startAnimation(AnimationUtils.loadAnimation(this,R.anim.zoom_out))
         coroutineScope.launch {
             try {
                 val adInfo = async { getAdvertisingIdInfo() }
@@ -104,7 +111,10 @@ class SplashActivity() : AppCompatActivity() {
                             }
                             Log.e("SplashSCreen", "sending to google signin activity !")
                             val intent = Intent(this@SplashActivity, GoogleLoginActivity::class.java)
-                            startActivity(intent)
+                            val options = ActivityOptions.makeSceneTransitionAnimation(this@SplashActivity,
+                                android.util.Pair(logo_image, "logo"),
+                                android.util.Pair(logo_name,"appname"))
+                            startActivity(intent,options.toBundle())
                             finish()
                         }, 3000)
                     }
@@ -153,6 +163,7 @@ class SplashActivity() : AppCompatActivity() {
             dismissProgressDialog()
             if (it.status == 200) {
 
+                SessionManager(this).InitializeValue(Constants.TOTAL_BIDS,it.bids)
                 if (it.forceUpdate) {
                     startActivity(
                         Intent(
@@ -162,6 +173,7 @@ class SplashActivity() : AppCompatActivity() {
                     )
                     finish()
                 } else {
+                    SessionManager(this).InitializeValue(Constants.APP_URL,it.appUrl)
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                     finish()
@@ -218,5 +230,7 @@ class SplashActivity() : AppCompatActivity() {
             }
         }
     }
+
+
 
 }

@@ -45,7 +45,7 @@ class WinnerListAdapter
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val winnerDetail = winnerList.get(position)
 
-        if(winnerDetail.user_Image != "")
+        if(winnerDetail.user_Image != "" && !winnerDetail.user_Image.isNullOrEmpty())
         {
             winnerDetail.user_Image?.let {
                 holder.userImage.setPadding(0, 0, 0, 0)
@@ -63,7 +63,7 @@ class WinnerListAdapter
 
         holder.userName.text = winnerDetail.user_Name
         holder.proName.text = winnerDetail.product_Name
-        holder.winingBid.text = winnerDetail.price
+        holder.winingBid.text = winnerDetail.winnning_Bid
         holder.winnerLocation.text = winnerDetail.location
 
 //

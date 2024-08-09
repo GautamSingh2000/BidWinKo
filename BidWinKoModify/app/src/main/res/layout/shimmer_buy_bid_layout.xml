@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.facebook.shimmer.ShimmerFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:shimmer_auto_start="true"
+    app:shimmer_direction="top_to_bottom"
+    app:shimmer_repeat_delay="@integer/material_motion_duration_medium_1"
+    app:shimmer_repeat_mode="reverse">
+
+    <ScrollView
+        android:scrollIndicators="none"
+        android:scrollbars="none"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="@dimen/_150sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:fontFamily="@font/barlow_bold"
+                android:text="Choose your Bids"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_15ssp"
+                android:textStyle="bold"
+                app:cardBackgroundColor="@color/gray_2"
+                app:cardCornerRadius="@dimen/_20sdp" />
+
+            <include layout="@layout/gray_single_buy_bid_layout" />
+
+            <include layout="@layout/gray_single_buy_bid_layout" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="@dimen/_150sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:fontFamily="@font/barlow_bold"
+                android:text="Choose your Bids"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_15ssp"
+                android:textStyle="bold"
+                app:cardBackgroundColor="@color/gray_2"
+                app:cardCornerRadius="@dimen/_20sdp" />
+
+            <include layout="@layout/gray_single_buy_bid_layout" />
+
+            <include layout="@layout/gray_single_buy_bid_layout" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    </ScrollView>
+</com.facebook.shimmer.ShimmerFrameLayout>

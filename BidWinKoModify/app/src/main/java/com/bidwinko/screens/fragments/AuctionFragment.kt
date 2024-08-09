@@ -2,13 +2,14 @@ package com.bidwinko.screens.fragments
 
 import android.animation.Animator
 import android.animation.Animator.AnimatorListener
-import android.app.ProgressDialog
-import android.content.Intent
+import android.animation.LayoutTransition
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
@@ -17,21 +18,20 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.viewpager2.widget.ViewPager2
 import com.bidwinko.R
+//import com.bidwinko.adapter.LiveBidProductsGridAdapter
 import com.bidwinko.adapter.LiveBidProductsListAdapter
 import com.bidwinko.components.BannerImageSlider.ImageItem
 import com.bidwinko.components.BannerImageSlider.bannerImageAdapter
-import com.bidwinko.databinding.FragmentHomeBinding
 import com.bidwinko.model.RequestModels.CommonRequest
 import com.bidwinko.model.ResponseModels.AppBanner
-import com.bidwinko.model.ResponseModels.HomeResponse
-import com.bidwinko.model.ResponseModels.ListData
-import com.bidwinko.screens.activity.ProductDetailsActivity
+import com.bidwinko.model.ResponseModels.HomeList
 import com.bidwinko.utilies.Constants
 import com.bidwinko.utilies.SessionManager
+import com.bidwinko.databinding.FragmentHomeBinding
 import com.bidwinko.viewModel.mainViewModel
+import kotlin.coroutines.coroutineContext
 
 private lateinit var viewpager2: ViewPager2
 private lateinit var pageChangeListener: ViewPager2.OnPageChangeCallback
@@ -41,16 +41,19 @@ private val params = LinearLayout.LayoutParams(
 ).apply {
     setMargins(8, 0, 8, 0)
 }
+var CardSelected = "Live"
+private lateinit var update: Runnable
+
+
+lateinit var binding: FragmentHomeBinding
 
 class AuctionFragment : Fragment() {
     private lateinit var viewmodel: mainViewModel
-    lateinit var binding: FragmentHomeBinding
-    var LiveBidList = ArrayList<ListData>()
-    var ClosedBidList = ArrayList<ListData>()
-    var UpcommingBidList = ArrayList<ListData>()
+    var LiveBidList = ArrayList<HomeList>()
+    var ClosedBidList = ArrayList<HomeList>()
+    var UpcommingBidList = ArrayList<HomeList>()
     var banner_list = ArrayList<ImageItem>()
     private var mAdapter: LiveBidProductsListAdapter? = null
-    var progressDialog: ProgressDialog? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -80,104 +83,117 @@ class AuctionFragment : Fragment() {
         GetHomeData()
 
         binding.upcomingBtn.setOnClickListener {
+
+            binding.shimmer.startShimmer()
+            binding.shimmer.visibility =View.VISIBLE
+            binding.bidRecyclerView.visibility =View.GONE
+
+            CardSelected = "Upcoming"
             binding.upcomingBtnText.setTextColor(requireContext().getColor(R.color.black))
-            binding.upcomingBtnText.background = requireContext().getDrawable(R.drawable.white_rounded_bg)
+            binding.upcomingBtnText.background =
+                requireContext().getDrawable(R.drawable.white_rounded_bg)
 
             binding.liveBtnText.setTextColor(requireContext().getColor(R.color.white))
             binding.liveBtnText.background = requireContext().getDrawable(R.drawable.white_holo_bg)
 
             binding.closeBtnText.setTextColor(requireContext().getColor(R.color.white))
             binding.closeBtnText.background = requireContext().getDrawable(R.drawable.white_holo_bg)
-            if (UpcommingBidList.size > 0) {
-                mAdapter = LiveBidProductsListAdapter(
-                    UpcommingBidList,
-                    requireContext(),
-                    "upcomming"
+
+            val homeRequest = CommonRequest(
+                userId = SessionManager(requireContext()).GetValue(Constants.USER_ID).toString(),
+                securityToken = SessionManager(requireContext()).GetValue(Constants.SECURITY_TOKEN),
+                versionName = SessionManager(requireContext()).GetValue(Constants.VERSION_NAME),
+                versionCode = SessionManager(requireContext()).GetValue(Constants.VERSION_CODE)
+            )
+
+            GetUpcommingData(homeRequest)
+
+        }
+
+
+        binding.liveBtn.setOnClickListener {
+            CardSelected = "Live"
+            binding.shimmer.startShimmer()
+            binding.shimmer.visibility =View.VISIBLE
+            binding.bidRecyclerView.visibility =View.GONE
+
+            LiveBidList.clear()
+            binding.liveBtnText.setTextColor(requireContext().getColor(R.color.black))
+            binding.liveBtnText.background =
+                requireContext().getDrawable(R.drawable.white_rounded_bg)
+
+            binding.upcomingBtnText.setTextColor(requireContext().getColor(R.color.white))
+            binding.upcomingBtnText.background =
+                requireContext().getDrawable(R.drawable.white_holo_bg)
+
+            binding.closeBtnText.setTextColor(requireContext().getColor(R.color.white))
+            binding.closeBtnText.background = requireContext().getDrawable(R.drawable.white_holo_bg)
+
+            val homeRequest = CommonRequest(
+                userId = SessionManager(requireContext()).GetValue(Constants.USER_ID).toString(),
+                securityToken = SessionManager(requireContext()).GetValue(Constants.SECURITY_TOKEN),
+                versionName = SessionManager(requireContext()).GetValue(Constants.VERSION_NAME),
+                versionCode = SessionManager(requireContext()).GetValue(Constants.VERSION_CODE)
+            )
+
+            GetLiveData(homeRequest)
+        }
+
+        binding.closeBtn.setOnClickListener {
+            CardSelected = "Closed"
+            binding.shimmer.startShimmer()
+            binding.shimmer.visibility =View.VISIBLE
+            binding.bidRecyclerView.visibility =View.GONE
+            ClosedBidList.clear()
+            binding.closeBtnText.setTextColor(requireContext().getColor(R.color.black))
+            binding.closeBtnText.background =
+                requireContext().getDrawable(R.drawable.white_rounded_bg)
+
+            binding.upcomingBtnText.setTextColor(requireContext().getColor(R.color.white))
+            binding.upcomingBtnText.background =
+                requireContext().getDrawable(R.drawable.white_holo_bg)
+
+            binding.liveBtnText.setTextColor(requireContext().getColor(R.color.white))
+            binding.liveBtnText.background = requireContext().getDrawable(R.drawable.white_holo_bg)
+
+            val homeRequest = CommonRequest(
+                userId = SessionManager(requireContext()).GetValue(Constants.USER_ID).toString(),
+                securityToken = SessionManager(requireContext()).GetValue(Constants.SECURITY_TOKEN),
+                versionName = SessionManager(requireContext()).GetValue(Constants.VERSION_NAME),
+                versionCode = SessionManager(requireContext()).GetValue(Constants.VERSION_CODE)
+            )
+
+            GetCompletedData(homeRequest)
+        }
+
+        binding.howToBidBtn.setOnClickListener {
+            val textView = binding.howToBidBtnText
+            if (binding.biddingsteps.visibility == View.VISIBLE) {
+                textView.setCompoundDrawablesWithIntrinsicBounds(
+                    null, null, ContextCompat.getDrawable(
+                        requireContext(), R.drawable.down_btn
+                    ), null
                 )
-                binding.bidRecyclerView.apply {
-                    setItemAnimator(DefaultItemAnimator())
-                    setAdapter(mAdapter)
-                }
+                binding.howToBidBtn.setCardBackgroundColor(resources.getColor(R.color.colorAccent))
+                binding.biddingsteps.visibility = View.GONE
             } else {
-                Toast.makeText(requireContext(), "No Data !!", Toast.LENGTH_SHORT).show()
-            }
+                textView.setCompoundDrawablesWithIntrinsicBounds(
+                    null, null, ContextCompat.getDrawable(
+                        requireContext(), R.drawable.up
+                    ), null
+                )
+                val transition = LayoutTransition()
+                transition.setAnimateParentHierarchy(true)
+                binding.biddingsteps.layoutTransition = transition
 
-
-            binding.liveBtn.setOnClickListener {
-
-                binding.liveBtnText.setTextColor(requireContext().getColor(R.color.black))
-                binding.liveBtnText.background = requireContext().getDrawable(R.drawable.white_rounded_bg)
-
-                binding.upcomingBtnText.setTextColor(requireContext().getColor(R.color.white))
-                binding.upcomingBtnText.background = requireContext().getDrawable(R.drawable.white_holo_bg)
-
-                binding.closeBtnText.setTextColor(requireContext().getColor(R.color.white))
-                binding.closeBtnText.background = requireContext().getDrawable(R.drawable.white_holo_bg)
-
-                if (LiveBidList.size > 0) {
-                    binding.bidRecyclerView.visibility = View.VISIBLE
-                    binding.relax.visibility = View.GONE
-                    mAdapter = LiveBidProductsListAdapter(
-                        LiveBidList,
-                        requireContext(),
-                        "live"
-                    )
-                    binding.bidRecyclerView.apply {
-                        setItemAnimator(DefaultItemAnimator())
-                        setAdapter(mAdapter)
-                    }
-
-                } else {
-                    binding.bidRecyclerView.visibility = View.GONE
-                    binding.relax.visibility = View.VISIBLE
-                    Toast.makeText(requireContext(), "No Auction !!", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            binding.closeBtn.setOnClickListener {
-
-                binding.closeBtnText.setTextColor(requireContext().getColor(R.color.black))
-                binding.closeBtnText.background = requireContext().getDrawable(R.drawable.white_rounded_bg)
-
-                binding.upcomingBtnText.setTextColor(requireContext().getColor(R.color.white))
-                binding.upcomingBtnText.background = requireContext().getDrawable(R.drawable.white_holo_bg)
-
-                binding.liveBtnText.setTextColor(requireContext().getColor(R.color.white))
-                binding.liveBtnText.background = requireContext().getDrawable(R.drawable.white_holo_bg)
-
-                if (ClosedBidList.size > 0) {
-                    mAdapter = LiveBidProductsListAdapter(
-                        ClosedBidList,
-                        requireContext(),
-                        "cloased"
-                    )
-                    binding.bidRecyclerView.apply {
-                        setItemAnimator(DefaultItemAnimator())
-                        setAdapter(mAdapter)
-                    }
-
-                } else {
-                    Toast.makeText(requireContext(), "No Data !!", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            binding.howToBidBtn.setOnClickListener {
-                val textView = binding.howToBidBtnText
-                if (binding.biddingsteps.visibility == View.VISIBLE) {
-                    textView.setCompoundDrawablesWithIntrinsicBounds(
-                        null, null, ContextCompat.getDrawable(
-                            requireContext(), R.drawable.down_btn
-                        ), null
-                    )
-                    binding.biddingsteps.visibility = View.GONE
-                } else {
-                    textView.setCompoundDrawablesWithIntrinsicBounds(
-                        null, null, ContextCompat.getDrawable(
-                            requireContext(), R.drawable.up
-                        ), null
-                    )
-                    binding.biddingsteps.visibility = View.VISIBLE
-                }
+                binding.howToBidBtn.setCardBackgroundColor(resources.getColor(R.color.gray_4))
+                binding.biddingsteps.visibility = View.VISIBLE
+//                binding.scrollview.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+//                    override fun onGlobalLayout() {
+//                        binding.scrollview.viewTreeObserver.removeOnGlobalLayoutListener(this)
+//                        binding.scrollview.smoothScrollTo(0, binding.step1Ll.bottom)
+//                    }
+//                })
             }
         }
 
@@ -185,13 +201,6 @@ class AuctionFragment : Fragment() {
     }
 
     private fun GetHomeData() {
-        if (!(activity?.isFinishing)!!) {
-            progressDialog = ProgressDialog(requireContext())
-            progressDialog!!.setMessage(getString(R.string.loadingwait))
-            progressDialog!!.show()
-            progressDialog!!.setCancelable(false)
-        }
-
         val homeRequest = CommonRequest(
             userId = SessionManager(requireContext()).GetValue(Constants.USER_ID).toString(),
             securityToken = SessionManager(requireContext()).GetValue(Constants.SECURITY_TOKEN),
@@ -199,10 +208,9 @@ class AuctionFragment : Fragment() {
             versionCode = SessionManager(requireContext()).GetValue(Constants.VERSION_CODE)
         )
         viewmodel.GetHomeData(homeRequest).observe(requireActivity()) {
-            progressDialog?.dismiss()
             if (it.status == 200) {
                 setBannerData(it.appBanners)
-                getAllList(it)
+                GetLiveData(homeRequest)
             } else {
                 Log.e(tag, "banner apis error ${it.message}")
                 Toast.makeText(
@@ -223,6 +231,8 @@ class AuctionFragment : Fragment() {
         val imageAdapter = bannerImageAdapter()
         viewpager2.adapter = imageAdapter
         imageAdapter.submitList(banner_list)
+        binding.shimmer1.stopShimmer()
+        binding.shimmer1.visibility =View.GONE
 
         val dotsImage = Array(banner_list.size) { ImageView(requireContext()) }
 
@@ -234,7 +244,7 @@ class AuctionFragment : Fragment() {
         }
 
         // default first dot selected
-        dotsImage[0].setImageResource(R.drawable.dot)
+        if(dotsImage.size>0 && dotsImage.isNullOrEmpty()) dotsImage[0].setImageResource(R.drawable.dot)
 
         pageChangeListener = object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
@@ -252,6 +262,17 @@ class AuctionFragment : Fragment() {
         }
         viewpager2.registerOnPageChangeCallback(pageChangeListener)
 
+        val handler = Handler()
+        update = Runnable {
+            val currentPage = viewpager2.currentItem
+            if (currentPage == banner_list.size - 1) {
+                viewpager2.setCurrentItem(0, true) // reset to first page
+            } else {
+                viewpager2.setCurrentItem(currentPage + 1, true)
+            }
+            handler.postDelayed(update, 3000) // self-schedule again
+        }
+        handler.postDelayed(update, 3000) // initial schedule
     }
 
 
@@ -382,47 +403,149 @@ class AuctionFragment : Fragment() {
 
     }
 
-    private fun getAllList(data: HomeResponse) {
-        LiveBidList.clear()
-        LiveBidList = data.liveOffers as ArrayList<ListData>
-        ClosedBidList.clear()
-        ClosedBidList = data.completedOffers as ArrayList<ListData>
+    private fun GetUpcommingData(homeRequest: CommonRequest) {
+
         UpcommingBidList.clear()
-        UpcommingBidList = data.upcomingOffers as ArrayList<ListData>
-        mAdapter =
-            LiveBidProductsListAdapter(
-                LiveBidList,
-                requireContext(),
-                "live"
-            )
-        binding.bidRecyclerView.apply {
-            setItemAnimator(DefaultItemAnimator())
-            setAdapter(mAdapter)
-        }
-        mAdapter!!.setOnItemClickListener { position, v ->
-            val intentProductDetails =
-                Intent(activity, ProductDetailsActivity::class.java)
-            intentProductDetails.putExtra(
-                "bidofferId", LiveBidList[position].id
-            )
-            startActivity(intentProductDetails)
+        viewmodel.GetupcomingBidsList(homeRequest).observe(requireActivity()) {
+            if (it.status == 200) {
+                UpcommingBidList = it.offers as ArrayList<HomeList>
+
+                Log.e("Auction", "${UpcommingBidList.size}   UpcommingBidList.size")
+                if (UpcommingBidList.size > 0) {
+                    binding.nodatafound.visibility = View.GONE
+                    binding.bidRecyclerView.visibility = View.VISIBLE
+                    binding.relax.visibility = View.GONE
+
+                    mAdapter = LiveBidProductsListAdapter(
+                        UpcommingBidList,
+                        requireContext(),
+                        "upcomming"
+                    )
+                    binding.bidRecyclerView.apply {
+//                        setItemAnimator(DefaultItemAnimator())
+                        setAdapter(mAdapter)
+                        mAdapter!!.notifyDataSetChanged()
+                    }
+
+                    binding.shimmer.stopShimmer()
+                    binding.shimmer.visibility =View.GONE
+
+                } else {
+                    binding.relax.visibility  =View.GONE
+                    binding.shimmer.stopShimmer()
+                    binding.shimmer.visibility =View.GONE
+                    Log.e("Auction", "${UpcommingBidList.size}   UpcommingBidList.size   2 ")
+                    binding.nodatafound.visibility = View.VISIBLE
+                    binding.animm.addAnimatorListener(object : AnimatorListener{
+                        override fun onAnimationStart(animation: Animator) {
+                        }
+
+                        override fun onAnimationEnd(animation: Animator) {
+                            binding.animm.playAnimation()
+                        }
+
+                        override fun onAnimationCancel(animation: Animator) {
+                        }
+
+                        override fun onAnimationRepeat(animation: Animator) {
+                        }
+
+                    })
+                }
+            } else {
+                Log.e(tag, "GetUpcommingData apis error ${it.message}")
+            }
         }
     }
 
-    private fun dismissProgressDialog() {
-        if (progressDialog != null && progressDialog!!.isShowing) {
-            progressDialog!!.dismiss()
+    private fun GetCompletedData(homeRequest: CommonRequest) {
+
+        viewmodel.GetcompletedBidsList(homeRequest).observe(requireActivity()) {
+            if (it.status == 200) {
+                ClosedBidList = it.offers as ArrayList<HomeList>
+                Log.e("Auction", "${ClosedBidList.size}   ClosedBidList.size")
+                if (ClosedBidList.size > 0) {
+                    binding.nodatafound.visibility = View.GONE
+                    binding.bidRecyclerView.visibility = View.VISIBLE
+                    binding.relax.visibility = View.GONE
+
+                    mAdapter = LiveBidProductsListAdapter(
+                        ClosedBidList,
+                        requireContext(),
+                        "cloased"
+                    )
+                    binding.bidRecyclerView.apply {
+//                        setItemAnimator(DefaultItemAnimator())
+                        setAdapter(mAdapter)
+                        mAdapter!!.notifyDataSetChanged()
+                    }
+                    binding.shimmer.stopShimmer()
+                    binding.shimmer.visibility =View.GONE
+
+                } else {
+                    binding.relax.visibility  =View.GONE
+                    binding.shimmer.stopShimmer()
+                    binding.shimmer.visibility =View.GONE
+                    Log.e("Auction", "${ClosedBidList.size}   ClosedBidList.size  2 ")
+                    binding.nodatafound.visibility = View.VISIBLE
+                    binding.animm.addAnimatorListener(object : AnimatorListener{
+                        override fun onAnimationStart(animation: Animator) {
+                        }
+
+                        override fun onAnimationEnd(animation: Animator) {
+                            binding.animm.playAnimation()
+                        }
+
+                        override fun onAnimationCancel(animation: Animator) {
+                        }
+
+                        override fun onAnimationRepeat(animation: Animator) {
+                        }
+
+                    })
+                }
+            } else {
+                Log.e(tag, "GetUpcommingData apis error ${it.message}")
+            }
         }
     }
 
-    override fun onDestroy() {
-        dismissProgressDialog()
-        super.onDestroy()
-    }
+    private fun GetLiveData(homeRequest: CommonRequest) {
 
-    override fun onPause() {
-        dismissProgressDialog()
-        super.onPause()
+        viewmodel.GetLiveData(homeRequest).observe(requireActivity()) {
+            if (it.status == 200) {
+                LiveBidList = it.offers as ArrayList<HomeList>
+                Log.e("Auction", "${LiveBidList.size}   LiveBidList.size")
+                if (LiveBidList.size > 0) {
+                    binding.nodatafound.visibility = View.GONE
+                    binding.bidRecyclerView.visibility = View.VISIBLE
+                    binding.relax.visibility = View.GONE
+
+                    mAdapter = LiveBidProductsListAdapter(
+                        LiveBidList,
+                        requireContext(),
+                        "live"
+                    )
+
+                    binding.bidRecyclerView.apply {
+//                        setItemAnimator(DefaultItemAnimator())
+                        setAdapter(mAdapter)
+                        mAdapter!!.notifyDataSetChanged()
+                    }
+                    binding.shimmer.stopShimmer()
+                    binding.shimmer.visibility =View.GONE
+                } else {
+                    binding.shimmer.stopShimmer()
+                    binding.shimmer.visibility =View.GONE
+                    binding.nodatafound.visibility = View.GONE
+                    Log.e("Auction", "${LiveBidList.size}     LiveBidList.size   2 ")
+                    binding.bidRecyclerView.visibility = View.GONE
+                    binding.relax.visibility = View.VISIBLE
+                }
+            } else {
+                Log.e(tag, "GetUpcommingData apis error ${it.message}")
+            }
+        }
     }
 
     companion object {
@@ -431,4 +554,5 @@ class AuctionFragment : Fragment() {
             return AuctionFragment()
         }
     }
+
 }

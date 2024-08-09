@@ -1,22 +1,29 @@
 package com.bidwinko.adapter
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
+import androidx.browser.customtabs.CustomTabColorSchemeParams
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.bidwinko.R
+import com.bidwinko.model.RequestModels.PaymentRequest
 import com.bidwinko.model.ResponseModels.Plan
-import com.bidwinko.screens.activity.BalanceActivity
+import com.bidwinko.utilies.Constants
+import com.bidwinko.utilies.SessionManager
+import com.bidwinko.viewModel.mainViewModel
 
 
 class BuyBidListAdapter(
     val plans: ArrayList<Plan>,
-    var context: Context
+    var context: Context,
 ) : RecyclerView.Adapter<BuyBidListAdapter.MyViewHolder>() {
     inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var no_of_bids: TextView = view.findViewById(R.id.no_of_bid)
@@ -40,18 +47,61 @@ class BuyBidListAdapter(
         holder.bidAmount.text = "${buyBidValue.planPrice}"
 
         holder.card_main.setOnClickListener {
-            val intentProductDetails = Intent(context, BalanceActivity::class.java)
-//            intentProductDetails.putExtra("bidamount", buyBidValue.buybidPrice)
-//            intentProductDetails.putExtra("buybidId", buyBidValue.buybidId)
-//            intentProductDetails.putExtra("totalbid", buyBidValue.buybidName)
-//            intentProductDetails.putExtra("walletOpt", response.body!!.walletOpt)
-//            intentProductDetails.putExtra("gplayOpt", response.body!!.gplayOpt)
-//            intentProductDetails.putExtra("cashFree", response.body!!.cashFree)
-//            intentProductDetails.putExtra("notifyUrl", response.body!!.notifyUrl)
-//            intentProductDetails.putExtra("ITEM_SKU", buyBidValue.inAppId)
-            (context as Activity).startActivityForResult(intentProductDetails, 103)
+
+            val request = PaymentRequest(
+                planId =buyBidValue.planId.toString(),
+                userId = SessionManager(context).GetValue(Constants.USER_ID).toString(),
+                securityToken = SessionManager(context).GetValue(Constants.SECURITY_TOKEN),
+                versionName = SessionManager(context).GetValue(Constants.VERSION_NAME),
+                versionCode = SessionManager(context).GetValue(Constants.VERSION_CODE)
+            )
+            mainViewModel(context).GetPayment(request).observe(context as LifecycleOwner)
+            {
+                if (it.status == 200)
+                {
+                  openTab(it.url)
+                }else{
+                    Toast.makeText(context, "Not Able To Open !!", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
+
+    fun openTab(url: String) {
+        try {
+            val builder = CustomTabsIntent.Builder()
+
+            // to set the toolbar color use CustomTabColorSchemeParams
+            // since CustomTabsIntent.Builder().setToolBarColor() is deprecated
+
+            val params = CustomTabColorSchemeParams.Builder()
+            params.setToolbarColor(ContextCompat.getColor(context!!, R.color.black))
+            builder.setDefaultColorSchemeParams(params.build())
+            // shows the title of web-page in toolbar
+            builder.setShowTitle(true)
+
+            // setShareState(CustomTabsIntent.SHARE_STATE_ON) will add a menu to share the web-page
+            builder.setShareState(CustomTabsIntent.SHARE_STATE_ON)
+
+            // To modify the close button, use
+            // builder.setCloseButtonIcon(bitmap)
+
+            // to set weather instant apps is enabled for the custom tab or not, use
+            builder.setInstantAppsEnabled(true)
+
+            //  To use animations use -
+            //  builder.setStartAnimations(this, android.R.anim.start_in_anim, android.R.anim.start_out_anim)
+            //  builder.setExitAnimations(this, android.R.anim.exit_in_anim, android.R.anim.exit_out_anim)
+            val customBuilder = builder.build()
+            customBuilder.intent.setPackage("com.android.chrome")
+            customBuilder.launchUrl(context!!, Uri.parse(url))
+        }
+        catch (e:Exception)
+        {
+            Toast.makeText(context,e.message,Toast.LENGTH_SHORT).show()
+        }
+    }
+
     override fun getItemCount(): Int {
         return plans.size
     }

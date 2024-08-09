@@ -8,13 +8,21 @@ import com.bidwinko.Repo.Repositoy
 import com.bidwinko.model.ResponseModels.AppOpenResponse
 import com.bidwinko.model.RequestModels.ProductDetailRequest
 import com.bidwinko.model.RequestModels.AppOpenRequest
+import com.bidwinko.model.RequestModels.ClosedBidWinnerRequest
 import com.bidwinko.model.RequestModels.CommonRequest
+import com.bidwinko.model.RequestModels.GetProfileRequest
+import com.bidwinko.model.RequestModels.PaymentRequest
 import com.bidwinko.model.RequestModels.PlaceBidRequest
 import com.bidwinko.model.ResponseModels.HomeResponse
 import com.bidwinko.model.ResponseModels.ProductDetailResponse
 import com.bidwinko.model.RequestModels.UserSignUpRequest
 import com.bidwinko.model.ResponseModels.BuyBidResponse
+import com.bidwinko.model.ResponseModels.ClosedBidWinnerResponse
+import com.bidwinko.model.ResponseModels.GetProfileResponse
+import com.bidwinko.model.ResponseModels.HomeListDataResponse
+import com.bidwinko.model.ResponseModels.PaymentResponse
 import com.bidwinko.model.ResponseModels.PlaceBidResponse
+import com.bidwinko.model.ResponseModels.TransactionHistoryResponse
 import com.bidwinko.model.ResponseModels.winners_Response_Model
 import com.bidwinko.model.ResponseModels.USerSignUpResponse
 import com.bidwinko.model.ResponseModels.UserProductBidResponse
@@ -31,6 +39,7 @@ class mainViewModel(val context: Context) : ViewModel() {
 
     private var HomeResponse = MutableLiveData<HomeResponse>()
     private var WinnerList = MutableLiveData<winners_Response_Model>()
+    private var ClosedWinnerList = MutableLiveData<ClosedBidWinnerResponse>()
     private var ProductDetail = MutableLiveData<ProductDetailResponse>()
     private var MyBids = MutableLiveData<myBidsResponse>()
     private var UserSignUp = MutableLiveData<USerSignUpResponse>()
@@ -38,6 +47,12 @@ class mainViewModel(val context: Context) : ViewModel() {
     private var PlaceBid = MutableLiveData<PlaceBidResponse>()
     private var UserProductBid = MutableLiveData<UserProductBidResponse>()
     private var BuyBids = MutableLiveData<BuyBidResponse>()
+    private var paymentResponse = MutableLiveData<PaymentResponse>()
+    private var liveBidList = MutableLiveData<HomeListDataResponse>()
+    private var CompletedBidList = MutableLiveData<HomeListDataResponse>()
+    private var upcommingBidList = MutableLiveData<HomeListDataResponse>()
+    private var GetProfileResponse = MutableLiveData<GetProfileResponse>()
+    private var GetTransactionHistory = MutableLiveData<TransactionHistoryResponse>()
 
 
     private fun <T> enqueueCall(call: Call<T>, liveData: MutableLiveData<T>) {
@@ -75,11 +90,48 @@ class mainViewModel(val context: Context) : ViewModel() {
         enqueueCall(call, HomeResponse)
         return HomeResponse
     }
-    fun GetWinnerList():MutableLiveData<winners_Response_Model>
+
+    fun GetTransactionHistory(homeRequest: CommonRequest):MutableLiveData<TransactionHistoryResponse>
     {
-        val call = repo.GetWinnersList()
+        val call = repo.GetTransactionHistory(homeRequest)
+        enqueueCall(call, GetTransactionHistory)
+        return GetTransactionHistory
+    }
+    fun GetProfileResponse(getProfileRequest: GetProfileRequest):MutableLiveData<GetProfileResponse>
+    {
+        val call = repo.GEtProfile(getProfileRequest)
+        enqueueCall(call, GetProfileResponse)
+        return GetProfileResponse
+    }
+    fun GetLiveData(homeRequest: CommonRequest):MutableLiveData<HomeListDataResponse>
+    {
+        val call = repo.GetliveBidsList(homeRequest)
+        enqueueCall(call, liveBidList)
+        return liveBidList
+    }
+    fun GetcompletedBidsList(homeRequest: CommonRequest):MutableLiveData<HomeListDataResponse>
+    {
+        val call = repo.GetcompletedBidsList(homeRequest)
+        enqueueCall(call,CompletedBidList )
+        return CompletedBidList
+    }
+    fun GetupcomingBidsList(homeRequest: CommonRequest):MutableLiveData<HomeListDataResponse>
+    {
+        val call = repo.GetupcomingBidsList(homeRequest)
+        enqueueCall(call, upcommingBidList)
+        return upcommingBidList
+    }
+    fun GetWinnerList(homeRequest: CommonRequest):MutableLiveData<winners_Response_Model>
+    {
+        val call = repo.GetWinnersList(homeRequest)
         enqueueCall(call,WinnerList)
         return WinnerList
+    }
+    fun GetClosedWinnersList(closedBidWinnerRequest: ClosedBidWinnerRequest):MutableLiveData<ClosedBidWinnerResponse>
+    {
+        val call = repo.GetClosedWinnersList(closedBidWinnerRequest)
+        enqueueCall(call,ClosedWinnerList)
+        return ClosedWinnerList
     }
 
  fun GetProductDetail(productDetailRequest: ProductDetailRequest):MutableLiveData<ProductDetailResponse>
@@ -117,6 +169,13 @@ class mainViewModel(val context: Context) : ViewModel() {
         val call = repo.GetBidsPacakage(commonRequest)
         enqueueCall(call,BuyBids)
         return BuyBids
+    }
+
+ fun GetPayment(commonRequest: PaymentRequest):MutableLiveData<PaymentResponse>
+    {
+        val call = repo.GetPayment(commonRequest)
+        enqueueCall(call,paymentResponse)
+        return paymentResponse
     }
 
 

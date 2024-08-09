@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    android:id="@+id/carview" xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@color/white"
+    app:cardElevation="0dp"
+    android:layout_marginTop="@dimen/_2sdp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="@dimen/_30sdp">
+               <androidx.cardview.widget.CardView
+                   android:layout_width="@dimen/_70sdp"
+                   android:layout_height="@dimen/_20sdp"
+                   app:cardCornerRadius="@dimen/_10sdp"
+                   app:cardBackgroundColor="@color/gray_2"/>
+            </RelativeLayout>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/transactiontime"
+                android:layout_weight="0.0"
+                android:layout_width="@dimen/_70sdp"
+                android:layout_height="@dimen/_20sdp"
+                app:cardCornerRadius="@dimen/_10sdp"
+                app:cardBackgroundColor="@color/gray_2"/>
+         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/productimage"
+            android:layout_width="wrap_content"
+            android:layout_height="180dp"
+            android:src="@drawable/prize_plceholder"
+            android:tint="@color/gray"/>
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.0"
+            android:layout_width="@dimen/_80sdp"
+            android:layout_height="@dimen/_20sdp"
+            app:cardCornerRadius="@dimen/_10sdp"
+            app:cardBackgroundColor="@color/gray_2"/>
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.0"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_height="@dimen/_20sdp"
+            app:cardCornerRadius="@dimen/_10sdp"
+            app:cardBackgroundColor="@color/gray_2"/>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="0.7dp"
+            app:dividerColor="@color/gray"/>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

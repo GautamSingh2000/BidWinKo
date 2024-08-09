@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <androidx.cardview.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/carview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_5sdp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        app:cardBackgroundColor="@color/gray_2"
+        app:cardCornerRadius="@dimen/_7sdp"
+        app:cardElevation="@dimen/_3sdp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/offer_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                app:shimmer_auto_start="true"
+                app:shimmer_base_alpha="0.5"
+                app:shimmer_direction="left_to_right"
+                app:shimmer_repeat_delay="@integer/material_motion_duration_long_2"
+                app:shimmer_repeat_mode="restart">
+
+                <TextView
+                    android:id="@+id/offer_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:background="@drawable/pink_blue_white_gradient"
+                    android:paddingHorizontal="@dimen/_7sdp"
+                    android:paddingVertical="@dimen/_1sdp"
+                    android:text="    - -    "
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_10ssp" />
+            </com.facebook.shimmer.ShimmerFrameLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/offer_tv"
+                android:layout_marginBottom="@dimen/_10sdp">
+
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/no_of_bid"
+                    android:layout_width="@dimen/_40sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    app:cardCornerRadius="@dimen/_7sdp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/_15sdp"
+                    app:cardBackgroundColor="@color/gray_3"/>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/expiry_date"
+                    android:layout_width="@dimen/_80sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginStart="@dimen/_20sdp"
+                    app:cardBackgroundColor="@color/gray_3"
+                    app:cardCornerRadius="40dp"
+                    app:cardElevation="0dp">
+                </androidx.cardview.widget.CardView>
+
+
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/amount_tv"
+                    android:layout_width="@dimen/_80sdp"
+                    android:layout_height="@dimen/_50sdp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginStart="@dimen/_20sdp"
+                    app:cardBackgroundColor="@color/gray_3"
+                    app:cardCornerRadius="@dimen/_7sdp"
+                    app:cardElevation="0dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/_15sdp"
+                    android:paddingHorizontal="@dimen/_15sdp"
+                    android:paddingVertical="@dimen/_8sdp">
+                </androidx.cardview.widget.CardView>
+
+            </RelativeLayout>
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>

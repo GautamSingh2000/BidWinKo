@@ -14,7 +14,7 @@
     <application
         android:name="com.MyApplication"
         android:allowBackup="true"
-        android:hardwareAccelerated="false"
+        android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
@@ -23,6 +23,12 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:node="merge">
+        <activity
+            android:name=".screens.activity.ReferActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.activity.ClosedBidWinnerActivity"
+            android:exported="false" />
         <activity
             android:name=".screens.activity.SelectBidActivity"
             android:exported="false" />
@@ -128,18 +134,16 @@
 
         <service
             android:name="com.google.android.gms.analytics.CampaignTrackingService"
-            android:exported="false" />
-
-<!--        <receiver-->
-<!--            android:name=".utilies.UtmReceiver"-->
-<!--            android:enabled="true"-->
-<!--            android:exported="true"-->
-<!--            android:permission="android.permission.INSTALL_PACKAGES">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="com.android.vending.INSTALL_REFERRER" />-->
-<!--                <action android:name="android.intent.action.USER_PRESENT" />-->
-<!--            </intent-filter>-->
-<!--        </receiver> &lt;!&ndash; <service android:name=".utilies.BroadcastService" /> &ndash;&gt;-->
+            android:exported="false" /> <!-- <receiver -->
+        <!-- android:name=".utilies.UtmReceiver" -->
+        <!-- android:enabled="true" -->
+        <!-- android:exported="true" -->
+        <!-- android:permission="android.permission.INSTALL_PACKAGES"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="com.android.vending.INSTALL_REFERRER" /> -->
+        <!-- <action android:name="android.intent.action.USER_PRESENT" /> -->
+        <!-- </intent-filter> -->
+        <!-- </receiver> &lt;!&ndash; <service android:name=".utilies.BroadcastService" /> &ndash;&gt; -->
         <!-- <service android:name=".testing.Timer_Service" /> -->
         <activity
             android:name=".testing.MainActivity"

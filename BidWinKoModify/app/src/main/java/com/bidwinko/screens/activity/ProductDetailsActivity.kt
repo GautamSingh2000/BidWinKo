@@ -12,7 +12,6 @@ import android.os.Bundle
 import android.text.Html
 import android.text.InputFilter
 import android.transition.TransitionManager
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -31,12 +30,13 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.bidwinko.R
-import com.bidwinko.components.CountDown
+import com.bidwinko.components.Countdown.CountDown
 import com.bidwinko.databinding.ProductDetailsBinding
 import com.bidwinko.model.RequestModels.ProductDetailRequest
 import com.bidwinko.utilies.Constants
 import com.bidwinko.utilies.DecimalDigitsInputFilter
 import com.bidwinko.utilies.SessionManager
+import com.bidwinko.utilies.convertDpToPx
 import com.bidwinko.viewModel.mainViewModel
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -75,6 +75,7 @@ class ProductDetailsActivity : AppCompatActivity(), View.OnClickListener {
     var image3 : String = ""
     var image4 : String = ""
     var i = 100
+    var type = ""
 
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -96,6 +97,7 @@ class ProductDetailsActivity : AppCompatActivity(), View.OnClickListener {
         val intent = intent
         if (intent != null) {
             bidofferId = intent.getIntExtra("bidofferId", -1).toString()
+            type = intent.getStringExtra("type").toString()
         }
 
         //startService(new Intent(this, BroadcastService.class));
@@ -123,6 +125,23 @@ class ProductDetailsActivity : AppCompatActivity(), View.OnClickListener {
         viewmodel = mainViewModel(this)
         bidofferId?.let { GetProductDetail(bidId = it) }
 
+
+        if(type.equals("upcomming"))
+        {
+            val leftPadding = convertDpToPx(0f,this)
+            val topPadding = convertDpToPx(11f,this)
+            val rightPadding = convertDpToPx(0f,this)
+            val bottomPadding = convertDpToPx(11f,this)
+            binding.ribbonTag.text="Upcoming"
+            binding.liveAnim.setPadding(leftPadding, topPadding, rightPadding, bottomPadding)
+            binding.ribbon.imageTintList = getColorStateList(R.color.yellow)
+            binding.liveAnim.setAnimation(R.raw.clock)
+            binding.mybid.visibility = View.GONE
+            binding.placeBid.setBackgroundColor(getColor(R.color.gray_4))
+            binding.progressBar.visibility =View.GONE
+            binding.profileLl.visibility =View.GONE
+
+        }
         binding.liveAnim.let {
             it.playAnimation()
             it.addAnimatorListener(object : AnimatorListener {
@@ -144,7 +163,6 @@ class ProductDetailsActivity : AppCompatActivity(), View.OnClickListener {
             val builder = MaterialAlertDialogBuilder(this)
             builder.setView(alertDialog_layout)
           var alertDialog = builder.create()
-
             alertDialog.setCanceledOnTouchOutside(true)
             alertDialog.setCancelable(true)
             alertDialog.window?.setGravity(Gravity.CENTER)
@@ -238,13 +256,16 @@ class ProductDetailsActivity : AppCompatActivity(), View.OnClickListener {
             if (it.status == 200) {
                 Glide.with(this).load(it.bidDetails.productImage.get(0)).into(binding.productimage)
                 image1 = it.bidDetails.productImage.get(0)
+                binding.profilePeopleNo.text = " "
                 if (it.bidDetails.productImage.size >= 2) {
+                    binding.profilePeopleNo.text = "+${it.bidDetails.totalBid - 1}"
                     image2 = it.bidDetails.productImage.get(1)
                     binding.cv2.visibility = View.VISIBLE
                     Glide.with(this).load(it.bidDetails.productImage.get(1))
                         .into(binding.productimage2)
                 }
                 if (it.bidDetails.productImage.size >= 3) {
+                    binding.profilePeopleNo.text = "+${it.bidDetails.totalBid - 2}"
                     image2 = it.bidDetails.productImage.get(1)
                     image3 = it.bidDetails.productImage.get(2)
                     binding.cv2.visibility = View.VISIBLE
@@ -255,7 +276,7 @@ class ProductDetailsActivity : AppCompatActivity(), View.OnClickListener {
                         .into(binding.productimage3)
                 }
                 if (it.bidDetails.productImage.size >= 4) {
-
+                    binding.profilePeopleNo.text = "+${it.bidDetails.totalBid - 3}"
                     image2 = it.bidDetails.productImage.get(1)
                     image3 = it.bidDetails.productImage.get(2)
                     image4 = it.bidDetails.productImage.get(3)
@@ -272,18 +293,39 @@ class ProductDetailsActivity : AppCompatActivity(), View.OnClickListener {
                 }
 
 
-                binding.profilePeopleNo.text = "+${it.bidDetails.totalBid - 4}"
+                binding.noOfBid.text = SessionManager(this).GetValue(Constants.TOTAL_BIDS)
                 binding.productname.text = it.bidDetails.productName
                 binding.productprice.text = it.bidDetails.productPrice
                 binding.features.text = it.bidDetails.productKeyFeature
-                val count = CountDown()
+
                 SetProfiles(it.bidDetails.bidder as ArrayList<String>)
-                count.start(
-                    startTime = it.bidDetails.productStartTime.toLong(),
-                    endTime = it.bidDetails.productEndTime.toLong(),
-                    textView = binding.time,
-                    seekBar = binding.progressBar
-                )
+                if(!type.equals("upcomming"))
+                {
+                    val count = CountDown()
+                    count.start(
+                        startTime = it.bidDetails.productStartTime.toLong(),
+                        endTime = it.bidDetails.productEndTime.toLong(),
+                        textView = binding.transactiontime,
+                        seekBar = binding.progressBar
+                    )
+                }else{
+                     val millisUntilFinished = it.bidDetails.productStartTime
+                    val days = millisUntilFinished / (1000 * 60 * 60 * 24)
+                    val hours = (millisUntilFinished / (1000 * 60 * 60)) % 24
+                    val minutes = (millisUntilFinished / (1000 * 60)) % 60
+                    val seconds = (millisUntilFinished / 1000) % 60
+
+                    val parts = mutableListOf<String>()
+                    if (days > 0) parts.add("${days}d")
+                    if (hours > 0 || days > 0) parts.add("${hours}h")
+                    if (minutes > 0 || hours > 0 || days > 0) parts.add("${minutes}m")
+                    if(days == 0) {
+                        if (seconds > 0 || minutes > 0 || hours > 0 || days > 0) parts.add("${seconds}s")
+                    }
+                    val countdown = parts.joinToString(":")
+                    binding.transactiontime.setText(countdown)
+                }
+
             } else {
                 Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
             }
@@ -310,9 +352,14 @@ class ProductDetailsActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             R.id.place_bid -> {
-                val intent = Intent(this, SelectBidActivity::class.java)
-                intent.putExtra("bidId", bidofferId)
-                startActivity(intent)
+                if(type.equals("upcomming"))
+                {
+                    Toast.makeText(this,"Will be live soon !",Toast.LENGTH_SHORT).show()
+                }else {
+                    val intent = Intent(this, SelectBidActivity::class.java)
+                    intent.putExtra("bidId", bidofferId)
+                    startActivity(intent)
+                }
                 //                bidValue = et_placebid!!.getText().toString()
 //                if (bidValue!!.isEmpty() || bidValue!!.length == 0 || bidValue == "" || bidValue == null) {
 //                    et_placebid!!.error = "Enter bid value"

@@ -19,5 +19,6 @@ class Constants() {
         const val UTM_Content = "utm_content"
         const val UTM_Campaign = "utm_campaign"
         const val UTM_ReferalLink = "referalUrl"
+        const val TOTAL_BIDS = "totalBids"
     }
 }

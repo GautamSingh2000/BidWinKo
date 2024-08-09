@@ -19,8 +19,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bidwinko.R
 import com.bidwinko.adapter.LoweRangeBidAdapter
 import com.bidwinko.adapter.UpperRangeBidAdapter
-import com.bidwinko.components.CustomDialog
-import com.bidwinko.components.OnDialogActionListener
+import com.bidwinko.components.CustomDialog.CustomDialog
+import com.bidwinko.components.CustomDialog.OnDialogActionListener
 import com.bidwinko.databinding.ActivitySelectBidBinding
 import com.bidwinko.model.RequestModels.PlaceBidRequest
 import com.bidwinko.model.RequestModels.ProductDetailRequest
@@ -30,11 +30,12 @@ import com.bidwinko.viewModel.mainViewModel
 
 class SelectBidActivity : AppCompatActivity(), UpperRangeBidAdapter.UpperBidRangeitemClickListener,
     LoweRangeBidAdapter.LowerBidRangeitemClickListener {
+
     val upperlist = ArrayList<String>()
     val lowerlist = ArrayList<String>()
     val pre_selected_bid = ArrayList<String>()
     val canceled_bid = ArrayList<String>()
-    var bidsAvailable = 5
+    var bidsAvailable = 0
     var upperRvPosition = 0
     val lowerSelectedBidList = ArrayList<String>()
     private lateinit var lowerListAdapter: LoweRangeBidAdapter
@@ -45,8 +46,9 @@ class SelectBidActivity : AppCompatActivity(), UpperRangeBidAdapter.UpperBidRang
         super.onCreate(savedInstanceState)
         binding = ActivitySelectBidBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.bidsAvailable.text = "$bidsAvailable Bids"
-
+        supportActionBar?.hide()
+        binding.bidsAvailable.text = "${SessionManager(this).GetValue(Constants.TOTAL_BIDS)} Bids"
+        bidsAvailable = SessionManager(this).GetValue(Constants.TOTAL_BIDS).toInt()
         bidId = intent.getStringExtra("bidId").toString()
         getInitialUpperRange()
         getInitialLoweRange()
@@ -122,7 +124,7 @@ class SelectBidActivity : AppCompatActivity(), UpperRangeBidAdapter.UpperBidRang
         binding.resetBtn.setOnClickListener {
             val anim = AnimationUtils.loadAnimation(this, R.anim.fast_rotate_clock_wise)
             binding.resetBtn.startAnimation(anim)
-            bidsAvailable = 5
+            bidsAvailable = SessionManager(this).GetValue(Constants.TOTAL_BIDS).toInt()
             binding.bidsAvailable.text = "$bidsAvailable Bid"
             lowerSelectedBidList.clear()
             lowerListAdapter.notifyDataSetChanged()
@@ -217,6 +219,7 @@ class SelectBidActivity : AppCompatActivity(), UpperRangeBidAdapter.UpperBidRang
         val mainViewModel = mainViewModel(this)
         mainViewModel.PlaceBid(placeBidRequest).observe(this) {
             if (it.status == 200) {
+                SessionManager(this).InitializeValue(Constants.TOTAL_BIDS,it.remainingBids)
                 binding.party.let {
                     it.playAnimation()
                     it.addAnimatorListener(object : AnimatorListener {

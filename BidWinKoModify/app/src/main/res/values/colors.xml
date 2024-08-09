@@ -20,4 +20,14 @@
     <color name="darkgray">#616161</color>
     <color name="customcardview">#cecece</color>
     <color name="yellow">#FFE600</color>
+
+
+
+    <color name="gray_1">#F5F5F5</color>
+    <color name="gray_2">#E0E0E0</color>
+    <color name="gray_3">#BDBDBD</color>
+    <color name="gray_4">#9E9E9E</color>
+
+
+
 </resources>
