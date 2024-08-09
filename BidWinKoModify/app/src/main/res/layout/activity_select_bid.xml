@@ -99,7 +99,7 @@
                     android:layout_weight="6"
                     android:paddingVertical="@dimen/_2sdp"
                     android:layout_gravity="center_vertical"
-                    tools:listitem="@layout/single_bidrange_layout"
+                    tools:listitem="@layout/single_upper_bidrange_layout"
                     tools:itemCount="10"/>
 
                 <androidx.cardview.widget.CardView
@@ -159,7 +159,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                tools:listitem="@layout/single_bidrange_layout"
+                tools:listitem="@layout/single_upper_bidrange_layout"
                 tools:itemCount="100"
                 app:spanCount="6"/>
             <View

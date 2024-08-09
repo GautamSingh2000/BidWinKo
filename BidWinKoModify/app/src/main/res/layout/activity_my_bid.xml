@@ -153,7 +153,7 @@
         android:layout_gravity="center"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="5"
-        tools:listitem="@layout/single_bidrange_layout"
+        tools:listitem="@layout/single_upper_bidrange_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

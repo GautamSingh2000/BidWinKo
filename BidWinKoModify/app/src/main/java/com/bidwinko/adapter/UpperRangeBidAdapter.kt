@@ -21,7 +21,7 @@ class UpperRangeBidAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val viewItem = LayoutInflater.from(parent.context)
-            .inflate(R.layout.single_bidrange_layout, parent, false)
+            .inflate(R.layout.single_upper_bidrange_layout, parent, false)
         return ViewHolder(viewItem)
     }
 

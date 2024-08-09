@@ -8,7 +8,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bidwinko.R
 import com.bidwinko.model.ResponseModels.myBidsResponse
-import com.bidwinko.model.UserBid
 
 class UserBidListAdapter(private val userBidArrayList: ArrayList<myBidsResponse.Bid>?, var context: Context) :
     RecyclerView.Adapter<UserBidListAdapter.MyViewHolder>() {
@@ -22,7 +21,7 @@ class UserBidListAdapter(private val userBidArrayList: ArrayList<myBidsResponse.
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView: View = LayoutInflater.from(parent.context)
-            .inflate(R.layout.single_bidrange_layout, parent, false)
+            .inflate(R.layout.single_upper_bidrange_layout, parent, false)
         return MyViewHolder(itemView)
     }
 

@@ -2,9 +2,14 @@ package com.bidwinko.viewModel
 
 import android.content.Context
 import android.util.Log
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.bidwinko.R
 import com.bidwinko.Repo.Repositoy
+import com.bidwinko.components.CustomDialog.CustomDialog
+import com.bidwinko.components.CustomDialog.OnDialogActionListener
 import com.bidwinko.model.ResponseModels.AppOpenResponse
 import com.bidwinko.model.RequestModels.ProductDetailRequest
 import com.bidwinko.model.RequestModels.AppOpenRequest
@@ -37,6 +42,8 @@ class mainViewModel(val context: Context) : ViewModel() {
     private val tag = "ViewModel"
     private val ongoingCalls = mutableListOf<Call<*>>()
 
+    private lateinit var NoDataFoundDialog: CustomDialog
+
     private var HomeResponse = MutableLiveData<HomeResponse>()
     private var WinnerList = MutableLiveData<winners_Response_Model>()
     private var ClosedWinnerList = MutableLiveData<ClosedBidWinnerResponse>()
@@ -66,12 +73,73 @@ class mainViewModel(val context: Context) : ViewModel() {
                     } else {
                         Log.e(tag,"data is null")
                     }
+                }else{
+                    val padding = PaddingValues(
+                        start = 78.dp,
+                        top = 78.dp,
+                        end = 78.dp,
+                        bottom = 78.dp
+                    )
+                    NoDataFoundDialog = CustomDialog(
+                        context = context,
+                        Title1 = "Something Went Wrong !",
+                        Title2 = "Restart This App Or Try Again Later",
+                        cancelable = false,
+                        Error = " Error : ${response.message()}",
+                        animationID = R.raw.api_wrong,
+                        padding = padding,
+                        repeat = false,
+                        onDialogActionListener = object : OnDialogActionListener{
+                            override fun onPositiveButtonClick(dialog: CustomDialog) {
+                               
+                            }
+
+                            override fun onNegativeButtonClick(dialog: CustomDialog) {
+                               
+                            }
+
+                            override fun onCancel(dialog: CustomDialog) {
+                               
+                            }
+
+                        }
+                    )
                 }
                 ongoingCalls.remove(call)
             }
 
             override fun onFailure(call: Call<T>, t: Throwable) {
                 Log.e(tag, "in onFail of GetLeagueData ${t.message}")
+                val padding = PaddingValues(
+                    start = 78.dp,
+                    top = 78.dp,
+                    end = 78.dp,
+                    bottom = 78.dp
+                )
+                NoDataFoundDialog = CustomDialog(
+                    context = context,
+                    Title1 = "Something Went Wrong !",
+                    Title2 = "Restart This App Or Try Again Later",
+                    cancelable = false,
+                    Error = " Error : ${t.message}",
+                    animationID = R.raw.api_wrong,
+                    padding = padding,
+                    repeat = false,
+                    onDialogActionListener = object : OnDialogActionListener{
+                        override fun onPositiveButtonClick(dialog: CustomDialog) {
+
+                        }
+
+                        override fun onNegativeButtonClick(dialog: CustomDialog) {
+
+                        }
+
+                        override fun onCancel(dialog: CustomDialog) {
+
+                        }
+
+                    }
+                )
             }
         })
         ongoingCalls.remove(call)

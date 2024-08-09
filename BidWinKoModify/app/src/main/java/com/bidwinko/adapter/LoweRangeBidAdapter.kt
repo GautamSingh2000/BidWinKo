@@ -26,7 +26,7 @@ class LoweRangeBidAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val viewItem = LayoutInflater.from(parent.context)
-            .inflate(R.layout.single_bidrange_layout, parent, false)
+            .inflate(R.layout.single_lower_bidrange_layout, parent, false)
         return ViewHolder(viewItem)
     }
 
@@ -36,32 +36,74 @@ class LoweRangeBidAdapter(
             it.text = data
 
 
-            if (selectedBidList.size > 0) {
-                if (selectedBidList.contains(data)) {
-                    holder.selected = true
-                    it.isSelected = true
-                } else {
-                    holder.selected = false
-                    it.isSelected = false
-                }
-            }
-            Log.e("adapter1", "${list.size} size of list")
-            Log.e("adapter1", "${pre_selected_bids.size} size of pre_selected_bids")
-
-            if (pre_selected_bids.size > 0) {
-                if (pre_selected_bids.contains(data)) {
-                    Log.e("adapter", "pre_selected_bids list contain this $data")
-                    holder.selected = true
-                    it.isSelected = true
-                }
-            }
             Log.e("adapter1", "${canceled_bids.size} size of canceled bids")
             if (canceled_bids.size > 0) {
                 if (canceled_bids.contains(data)) {
                     Log.e("adapter", "canceled bids list contain this $data")
                     it.background = context.getDrawable(R.drawable.custom_light_red_box)
+                } else {
+                    if (pre_selected_bids.size > 0) {
+                        if (pre_selected_bids.contains(data)) {
+                            it.background = context.getDrawable(R.drawable.green_rounded_box)
+                            Log.e("adapter", "pre_selected_bids list contain this $data")
+                            holder.selected = true
+                            it.isSelected = true
+                        } else {
+                            if (selectedBidList.size >= 0) {
+                                if (selectedBidList.contains(data)) {
+                                    holder.selected = true
+                                    it.isSelected = true
+                                    it.background =
+                                        context.getDrawable(R.drawable.green_rounded_box)
+                                } else {
+                                    holder.selected = false
+                                    it.isSelected = false
+                                    it.background =
+                                        context.getDrawable(R.drawable.gray_rounded_border)
+                                }
+                            }
+                        }
+                    }
+                }
+            }else{
+                if (pre_selected_bids.size > 0) {
+                    if (pre_selected_bids.contains(data)) {
+                        it.background = context.getDrawable(R.drawable.green_rounded_box)
+                        Log.e("adapter", "pre_selected_bids list contain this $data")
+                        holder.selected = true
+                        it.isSelected = true
+                    } else {
+                        if (selectedBidList.size >= 0) {
+                            if (selectedBidList.contains(data)) {
+                                holder.selected = true
+                                it.isSelected = true
+                                it.background =
+                                    context.getDrawable(R.drawable.green_rounded_box)
+                            } else {
+                                holder.selected = false
+                                it.isSelected = false
+                                it.background =
+                                    context.getDrawable(R.drawable.gray_rounded_border)
+                            }
+                        }
+                    }
+                }else{
+                    if (selectedBidList.size >= 0) {
+                        if (selectedBidList.contains(data)) {
+                            holder.selected = true
+                            it.isSelected = true
+                            it.background =
+                                context.getDrawable(R.drawable.green_rounded_box)
+                        } else {
+                            holder.selected = false
+                            it.isSelected = false
+                            it.background =
+                                context.getDrawable(R.drawable.gray_rounded_border)
+                        }
+                    }
                 }
             }
+
 
             it.setOnClickListener {
                 Log.e("adapter", "$clickable available bid in adapter")
@@ -69,11 +111,11 @@ class LoweRangeBidAdapter(
                 if (clickable) {
                     if (holder.selected) {
                         Log.e("adapter", "D selected")
-                        it.isSelected = false
+                        it.background = context.getDrawable(R.drawable.gray_rounded_border)
                         holder.selected = !holder.selected
                     } else {
                         Log.e("adapter", " selected")
-                        it.isSelected = true
+                        it.background = context.getDrawable(R.drawable.green_rounded_box)
                         holder.selected = !holder.selected
                     }
                 } else {
@@ -82,6 +124,7 @@ class LoweRangeBidAdapter(
             }
         }
     }
+
     fun clickableBid(bid: Boolean) {
         this.clickable = bid
     }

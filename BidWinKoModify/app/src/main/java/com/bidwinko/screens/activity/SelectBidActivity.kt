@@ -32,13 +32,13 @@ class SelectBidActivity : AppCompatActivity(), UpperRangeBidAdapter.UpperBidRang
     LoweRangeBidAdapter.LowerBidRangeitemClickListener {
 
     val upperlist = ArrayList<String>()
-    val lowerlist = ArrayList<String>()
-    val pre_selected_bid = ArrayList<String>()
-    val canceled_bid = ArrayList<String>()
+    var lowerlist = ArrayList<String>()
+    var pre_selected_bid = ArrayList<String>()
+    var canceled_bid = ArrayList<String>()
     var bidsAvailable = 0
     var upperRvPosition = 0
     val lowerSelectedBidList = ArrayList<String>()
-    private lateinit var lowerListAdapter: LoweRangeBidAdapter
+    private  var lowerListAdapter : LoweRangeBidAdapter? = null
     private lateinit var binding: ActivitySelectBidBinding
     var itemclick = "0"
     lateinit var bidId: String
@@ -47,11 +47,12 @@ class SelectBidActivity : AppCompatActivity(), UpperRangeBidAdapter.UpperBidRang
         binding = ActivitySelectBidBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
+//        lowerSelectedBidList.add("-1")
         binding.bidsAvailable.text = "${SessionManager(this).GetValue(Constants.TOTAL_BIDS)} Bids"
         bidsAvailable = SessionManager(this).GetValue(Constants.TOTAL_BIDS).toInt()
         bidId = intent.getStringExtra("bidId").toString()
         getInitialUpperRange()
-        getInitialLoweRange()
+        lowerlist = generateLowerValues(0)
         getUserBid()
 
         binding.rangerv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -105,7 +106,6 @@ class SelectBidActivity : AppCompatActivity(), UpperRangeBidAdapter.UpperBidRang
             }
         }
 
-
         binding.prevbtn.setOnClickListener {
             val layoutManager = binding.rangerv.layoutManager as? LinearLayoutManager
             layoutManager?.let {
@@ -127,8 +127,19 @@ class SelectBidActivity : AppCompatActivity(), UpperRangeBidAdapter.UpperBidRang
             bidsAvailable = SessionManager(this).GetValue(Constants.TOTAL_BIDS).toInt()
             binding.bidsAvailable.text = "$bidsAvailable Bid"
             lowerSelectedBidList.clear()
-            lowerListAdapter.notifyDataSetChanged()
+            lowerListAdapter = null
+            val numbers = generateLowerValues(0)
+            lowerListAdapter = LoweRangeBidAdapter(
+                context = this,
+                clickable = true,
+                list = numbers,
+                pre_selected_bids = pre_selected_bid,
+                canceled_bids = canceled_bid,
+                mListener = this
+            )
+            binding.allbidRv.adapter = lowerListAdapter
             binding.rangerv.smoothScrollToPosition(0)
+            lowerListAdapter?.notifyDataSetChanged()
 
             binding.placeBid.backgroundTintList =
                 ContextCompat.getColorStateList(this, R.color.littledarkgray)
@@ -201,7 +212,6 @@ class SelectBidActivity : AppCompatActivity(), UpperRangeBidAdapter.UpperBidRang
                     mListener = this
                 )
                 binding.allbidRv.adapter = lowerListAdapter
-
             }
         }
     }
@@ -255,13 +265,6 @@ class SelectBidActivity : AppCompatActivity(), UpperRangeBidAdapter.UpperBidRang
         }
     }
 
-    private fun getInitialLoweRange() {
-        for (i in 0..99) {
-            val number = i / 100.0
-            lowerlist.add(number.toString())
-        }
-    }
-
     fun generateLowerValues(inputNumber: Int): ArrayList<String> {
         val numbers = ArrayList<String>()
 
@@ -275,7 +278,7 @@ class SelectBidActivity : AppCompatActivity(), UpperRangeBidAdapter.UpperBidRang
     override fun onLowerBidRangeItemClick(item: String) {
         val found = lowerSelectedBidList.contains(item)
         if(canceled_bid.contains(item) || pre_selected_bid.contains(item)) {
-            lowerListAdapter.clickableBid(false)
+            lowerListAdapter?.clickableBid(false)
             val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
             vibrator.vibrate(200)
             Toast.makeText(this, "Sorry Not This One !!", Toast.LENGTH_LONG).show()
@@ -286,7 +289,7 @@ class SelectBidActivity : AppCompatActivity(), UpperRangeBidAdapter.UpperBidRang
                 Log.e("SelectBid", "1 item selected")
                 lowerSelectedBidList.add(item)
                 bidsAvailable--
-                lowerListAdapter.clickableBid(true)
+                lowerListAdapter?.clickableBid(true)
                 binding.bidsAvailable.text = "$bidsAvailable Bids"
                 binding.placeBid.let {
                     it.backgroundTintList =
@@ -297,7 +300,7 @@ class SelectBidActivity : AppCompatActivity(), UpperRangeBidAdapter.UpperBidRang
                 Log.e("SelectBid", "2 item D selected")
                 lowerSelectedBidList.remove(item)
                 bidsAvailable++
-                lowerListAdapter.clickableBid(true)
+                lowerListAdapter?.clickableBid(true)
                 binding.bidsAvailable.text = "$bidsAvailable Bids"
                 if (lowerSelectedBidList.size == 0) {
                     binding.placeBid.backgroundTintList =
@@ -310,7 +313,7 @@ class SelectBidActivity : AppCompatActivity(), UpperRangeBidAdapter.UpperBidRang
                 Log.e("SelectBid", "3 item D selected")
                 lowerSelectedBidList.remove(item)
                 bidsAvailable++
-                lowerListAdapter.clickableBid(true)
+                lowerListAdapter?.clickableBid(true)
                 binding.bidsAvailable.text = "$bidsAvailable Bids"
                 if (lowerSelectedBidList.size == 0) {
                     binding.placeBid.backgroundTintList =
@@ -318,7 +321,7 @@ class SelectBidActivity : AppCompatActivity(), UpperRangeBidAdapter.UpperBidRang
                     binding.placeBid.setTextColor(ContextCompat.getColor(this, R.color.white))
                 }
             } else {
-                lowerListAdapter.clickableBid(false)
+                lowerListAdapter?.clickableBid(false)
                 val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
                 vibrator.vibrate(500)
                 Toast.makeText(this, "No more bids are available!!", Toast.LENGTH_LONG).show()
@@ -328,13 +331,14 @@ class SelectBidActivity : AppCompatActivity(), UpperRangeBidAdapter.UpperBidRang
 
     override fun onUpperBidRangeItemClick(item: String, position: Int) {
         itemclick = item
-        upperRvPosition = position
+//        upperRvPosition = position
         val numbers = generateLowerValues(itemclick.toInt())
-        lowerListAdapter.updateList(
+        lowerListAdapter?.updateList(
             numbers,
             lowerSelectedBidList
         )
-        lowerListAdapter.notifyDataSetChanged()
+
+        lowerListAdapter?.notifyDataSetChanged()
     }
 
 }
