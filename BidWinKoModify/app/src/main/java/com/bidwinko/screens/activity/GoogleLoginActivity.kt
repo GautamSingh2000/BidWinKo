@@ -252,10 +252,10 @@ class GoogleLoginActivity : AppCompatActivity() , View.OnClickListener , Install
                     )
                     finish()
                 } else {
-
                     Toast.makeText(this, "Signin Complete!!", Toast.LENGTH_SHORT).show()
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
+                    overridePendingTransition(R.anim.fast_right_slide_in, R.anim.fast_left_slide_out)
                     finish()
                 }
             } else {
@@ -347,24 +347,6 @@ class GoogleLoginActivity : AppCompatActivity() , View.OnClickListener , Install
         when (v.id) {
             R.id.google_login -> signIn()
         }
-    }
-
-    private fun webViewLoad(url: String, title: String) {
-        val alert = AlertDialog.Builder(this@GoogleLoginActivity)
-        alert.setTitle(title)
-        val wv = WebView(this@GoogleLoginActivity)
-        wv.loadUrl(url)
-        wv.setWebViewClient(object : WebViewClient() {
-            override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-                view.loadUrl(url)
-                return true
-            }
-        })
-        alert.setView(wv)
-        alert.setNegativeButton(
-            "Accept"
-        ) { dialog, id -> dialog.dismiss() }
-        alert.show()
     }
 
     companion object {

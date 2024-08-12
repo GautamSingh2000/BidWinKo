@@ -115,6 +115,7 @@ class SplashActivity() : AppCompatActivity() {
                                 android.util.Pair(logo_image, "logo"),
                                 android.util.Pair(logo_name,"appname"))
                             startActivity(intent,options.toBundle())
+                            overridePendingTransition(R.anim.fast_right_slide_in, R.anim.fast_left_slide_out)
                             finish()
                         }, 3000)
                     }
@@ -176,6 +177,7 @@ class SplashActivity() : AppCompatActivity() {
                     SessionManager(this).InitializeValue(Constants.APP_URL,it.appUrl)
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
+                    overridePendingTransition(R.anim.fast_right_slide_in, R.anim.fast_left_slide_out)
                     finish()
                 }
             } else {

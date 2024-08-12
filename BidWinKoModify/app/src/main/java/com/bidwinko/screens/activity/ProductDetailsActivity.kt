@@ -7,6 +7,7 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.text.Html
@@ -29,6 +30,9 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.browser.customtabs.CustomTabColorSchemeParams
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.content.ContextCompat
 import com.bidwinko.R
 import com.bidwinko.components.Countdown.CountDown
 import com.bidwinko.databinding.ProductDetailsBinding
@@ -347,355 +351,22 @@ class ProductDetailsActivity : AppCompatActivity(), View.OnClickListener {
 
             R.id.bidwork -> {
                 val url = "https://bidwinzo.app/works.html"
-                val title = "How Bid Works"
-                webViewLoad(url, title)
+               openTab(url)
             }
 
             R.id.place_bid -> {
-                if(type.equals("upcomming"))
-                {
-                    Toast.makeText(this,"Will be live soon !",Toast.LENGTH_SHORT).show()
-                }else {
+                if (type.equals("upcomming")) {
+                    Toast.makeText(this, "Will be live soon !", Toast.LENGTH_SHORT).show()
+                } else {
                     val intent = Intent(this, SelectBidActivity::class.java)
                     intent.putExtra("bidId", bidofferId)
                     startActivity(intent)
                 }
-                //                bidValue = et_placebid!!.getText().toString()
-//                if (bidValue!!.isEmpty() || bidValue!!.length == 0 || bidValue == "" || bidValue == null) {
-//                    et_placebid!!.error = "Enter bid value"
-//                } else {
-//                    if (bidValue!!.contains(".")) {
-//                        val first = bidValue!![0].toString()
-//                        val second = bidValue!!.substring(bidValue!!.length - 1)
-//                        //                         Log.d("testing", "onClick:: "+first+"\n:"+second);
-//                        if (first == "." || second == ".") {
-//                            Toast.makeText(
-//                                context,
-//                                "Entered bid price is not correct, Valid bid price ex 01.25",
-//                                Toast.LENGTH_SHORT
-//                            ).show()
-//                        } else {
-//                            if (Constants.getSharedPreferenceString(
-//                                    this@ProductDetailsActivity,
-//                                    "bidBalance",
-//                                    ""
-//                                ).toInt() > 0
-//                            ) {
-//                                hideKeyboard(this@ProductDetailsActivity)
-//                                //                                 submitSingleBid(bidofferId, bidValue);
-//                            } else {
-//                                Toast.makeText(
-//                                    context,
-//                                    getString(R.string.systemmessage) + "Not sufficient bids",
-//                                    Toast.LENGTH_SHORT
-//                                ).show()
-//                            }
-//                        }
-//                    } else {
-//                        Toast.makeText(
-//                            context,
-//                            "Entered bid price is not correct, Valid bid price ex 01.25",
-//                            Toast.LENGTH_SHORT
-//                        ).show()
-//                        et_placebid!!.isFocusable = true
-//                    }
-//                }
-            }
 
-//            R.id.tv_placebid_range -> {
-//                firstBid = et_firstbid_range!!.getText().toString()
-//                secondBid = et_secondbid_range!!.getText().toString()
-//                invalidateBidRange(firstBid!!, secondBid!!, bidofferId)
-//            }
+            }
         }
     }
 
-    //    private void submitSingleBid(String bidofferId,String bidValue) {
-    //        APIService apiService = Retrofit.getClient().create(APIService.class);
-    //        Call<SingleBidSubmitModel> call = apiService.submitSingleBid(Constants.getSharedPreferenceInt(ProductDetailsActivity.this,"userId",0),
-    //                Constants.getSharedPreferenceString(ProductDetailsActivity.this,"securitytoken",""),
-    //                Constants.getSharedPreferenceString(ProductDetailsActivity.this,"versionName",""),
-    //                Constants.getSharedPreferenceInt(ProductDetailsActivity.this,"versionCode",0),bidValue,bidofferId,
-    //                Constants.getSharedPreferenceString(ProductDetailsActivity.this,"userFrom",""));
-    //
-    //        if(!((Activity) ProductDetailsActivity.this).isFinishing()) {
-    //            progressDialog = new ProgressDialog(ProductDetailsActivity.this);
-    //            progressDialog.setMessage(getString(R.string.loadingwait));
-    //            progressDialog.show();
-    //            progressDialog.setCancelable(false);
-    //        }
-    //
-    //        call.enqueue(new Callback<SingleBidSubmitModel>() {
-    //            @Override
-    //            public void onResponse(Call<SingleBidSubmitModel>call, Response<SingleBidSubmitModel> response) {
-    //                dismissProgressDialog();
-    //
-    //                if(response!=null){
-    //                    if(response.isSuccessful()){
-    //                        if(response.body().getStatus()==200){
-    ////                            Log.e("tesitng", "onResponse: "+response.body().getDisplayMsg() );
-    //                            Toast.makeText(context,response.body().getDisplayMsg(),Toast.LENGTH_SHORT).show();
-    //                            et_placebid.setText("");
-    //                            String bidremain = response.body().getBidBalance();
-    //                            Log.e("bidremain", "onResponse:pd_sB "+bidremain );
-    //                            Constants.setSharedPreferenceString(ProductDetailsActivity.this,"bidBalance",bidremain);
-    //                            txt_bidremain.setText(Constants.getSharedPreferenceString(ProductDetailsActivity.this,"bidBalance","")+" Bids Remaining");
-    //
-    //                        }else{
-    //                            Toast.makeText(context,getString(R.string.systemmessage)+response.body().getMessage(),Toast.LENGTH_SHORT).show();
-    //                        }
-    //
-    //                    }
-    //                }
-    //                else{
-    //                    Toast.makeText(context,getString(R.string.systemmessage)+response.errorBody(),Toast.LENGTH_SHORT).show();
-    //                }
-    //
-    //
-    //            }
-    //
-    //            @Override
-    //            public void onFailure(Call<SingleBidSubmitModel>call, Throwable t) {
-    //                // Log error here since request failed
-    //                Log.e("response", t.toString());
-    //            }
-    //        });
-    //    }
-    //
-    //    private void submitBidFromRange(String firstBid,String secondBid,String bidofferId) {
-    //        APIService apiService = Retrofit.getClient().create(APIService.class);
-    //        Call<SingleBidSubmitModel> call = apiService.submitBidfromTo(Constants.getSharedPreferenceInt(ProductDetailsActivity.this,"userId",0),
-    //                Constants.getSharedPreferenceString(ProductDetailsActivity.this,"securitytoken",""),
-    //                Constants.getSharedPreferenceString(ProductDetailsActivity.this,"versionName",""),
-    //                Constants.getSharedPreferenceInt(ProductDetailsActivity.this,"versionCode",0),firstBid,secondBid,bidofferId,
-    //                Constants.getSharedPreferenceString(ProductDetailsActivity.this,"userFrom",""));
-    //
-    //        if(!((Activity) ProductDetailsActivity.this).isFinishing()) {
-    //            progressDialog = new ProgressDialog(ProductDetailsActivity.this);
-    //            progressDialog.setMessage(getString(R.string.loadingwait));
-    //            progressDialog.show();
-    //            progressDialog.setCancelable(false);
-    //        }
-    //
-    //        call.enqueue(new Callback<SingleBidSubmitModel>() {
-    //            @Override
-    //            public void onResponse(Call<SingleBidSubmitModel>call, Response<SingleBidSubmitModel> response) {
-    //                dismissProgressDialog();
-    //
-    //                if(response!=null){
-    //                    if(response.isSuccessful()){
-    //                        if(response.body().getStatus()==200){
-    //                            Toast.makeText(context,getString(R.string.systemmessage)+response.body().getDisplayMsg(),Toast.LENGTH_SHORT).show();
-    //                            et_firstbid_range.setText("");
-    //                            et_secondbid_range.setText("");
-    //                            String bidremain = response.body().getBidBalance();
-    //                            Log.e("bidremain", "onResponse:pd "+bidremain );
-    //                            Constants.setSharedPreferenceString(ProductDetailsActivity.this,"bidBalance",bidremain);
-    //                            txt_bidremain.setText(Constants.getSharedPreferenceString(ProductDetailsActivity.this,"bidBalance","")+" Bids Remaining");
-    //
-    //
-    //                        }else{
-    //                            Toast.makeText(context,getString(R.string.systemmessage)+response.body().getMessage(),Toast.LENGTH_SHORT).show();
-    //                        }
-    //
-    //                    }
-    //                }
-    //                else{
-    //                    Toast.makeText(context,getString(R.string.systemmessage)+response.errorBody(),Toast.LENGTH_SHORT).show();
-    //                }
-    //
-    //
-    //            }
-    //
-    //            @Override
-    //            public void onFailure(Call<SingleBidSubmitModel>call, Throwable t) {
-    //                // Log error here since request failed
-    //                Log.e("response", t.toString());
-    //            }
-    //        });
-    //    }
-//    private fun invalidateBidRange(firstBid: String, secondBid: String, bidofferId: String?) {
-//        if (firstBid.matches("".toRegex()) && secondBid.matches("".toRegex())) {
-//            et_firstbid_range!!.error = "Enter bid value"
-//            et_secondbid_range!!.error = "Enter bid value"
-//            return
-//        } else if (firstBid.matches("".toRegex())) {
-//            et_firstbid_range!!.error = "Enter bid value"
-//            return
-//        } else if (secondBid.matches("".toRegex())) {
-//            et_secondbid_range!!.error = "Enter bid value"
-//            return
-//        } else {
-//            try {
-//                if (firstBid.contains(".") && secondBid.contains(".")) {
-//                    val firstbidValue = firstBid.toDouble()
-//                    val secondbidValue = secondBid.toDouble()
-//                    val diffrence = secondbidValue - firstbidValue
-//                    val bd = BigDecimal(diffrence).setScale(2, RoundingMode.HALF_UP)
-//                    val newInput = bd.toDouble()
-//                    Log.e("values", "invalidateBidRange: $diffrence newInput: $newInput")
-//                    //for first bid range
-//                    val firstValue = firstBid[0].toString()
-//                    val firsr_bid_range = firstBid.substring(firstBid.length - 1)
-//                    //for second bid range
-//                    val secondValue = secondBid[0].toString()
-//                    val second_bid_range = secondBid.substring(secondBid.length - 1)
-//                    if (firstValue == "." || firsr_bid_range == "." || secondValue == "." || second_bid_range == ".") {
-//                        Toast.makeText(
-//                            context,
-//                            "Enter correct bid range like ex 01.25 to ex 01.35",
-//                            Toast.LENGTH_SHORT
-//                        ).show()
-//                    } else {
-//                        if (newInput > 0.0) {
-//                            if (newInput <= 0.10) {
-//                                if (Constants.getSharedPreferenceString(
-//                                        this@ProductDetailsActivity,
-//                                        "bidBalance",
-//                                        ""
-//                                    ).toInt() > 0
-//                                ) {
-//                                    hideKeyboard(this@ProductDetailsActivity)
-//                                    //                                        submitBidFromRange(firstBid, secondBid, bidofferId);
-//                                } else {
-//                                    Toast.makeText(
-//                                        context,
-//                                        getString(R.string.systemmessage) + "Not sufficient bids",
-//                                        Toast.LENGTH_SHORT
-//                                    ).show()
-//                                }
-//                            } else Toast.makeText(
-//                                context,
-//                                "Enter correct bid range like ex 01.25 to ex 01.35",
-//                                Toast.LENGTH_SHORT
-//                            ).show()
-//                        } else Toast.makeText(
-//                            context,
-//                            "Enter correct bid range like ex 01.25 to ex 01.35",
-//                            Toast.LENGTH_SHORT
-//                        ).show()
-//                    }
-//                } else {
-//                    Toast.makeText(
-//                        context,
-//                        "Entered bid range price is not correct, Valid bid price ex 01.25 to 01.35",
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                    //et_placebid.setFocusable(true);
-//                }
-//            } catch (nfe: NumberFormatException) {
-//                nfe.printStackTrace()
-//                Log.e("numbervalue", "invalidateBidRange: $nfe")
-//            }
-//        }
-//    }
-
-    private fun webViewLoad(url: String, title: String) {
-        val alert = AlertDialog.Builder(this@ProductDetailsActivity)
-        alert.setTitle(title)
-        val wv = WebView(this@ProductDetailsActivity)
-        wv.loadUrl(url)
-        wv.setWebViewClient(object : WebViewClient() {
-            override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-                view.loadUrl(url)
-                return true
-            }
-        })
-        alert.setView(wv)
-        alert.setNegativeButton("Accept") { dialog, id -> dialog.dismiss() }
-        alert.show()
-    }
-
-    //    private void getPrdocutDetails(final String bidofferId) {
-    //
-    //        APIService apiService = Retrofit.getClient().create(APIService.class);
-    //        Call<ProductsDetailsModel> call = apiService.getProductDetails(Constants.getSharedPreferenceInt(ProductDetailsActivity.this,"userId",0),
-    //                Constants.getSharedPreferenceString(ProductDetailsActivity.this,"securitytoken",""),
-    //                Constants.getSharedPreferenceString(ProductDetailsActivity.this,"versionName",""),
-    //                Constants.getSharedPreferenceInt(ProductDetailsActivity.this,"versionCode",0),bidofferId,
-    //                Constants.getSharedPreferenceString(ProductDetailsActivity.this,"userFrom",""));
-    //
-    //
-    //
-    //        if(!((Activity) ProductDetailsActivity.this).isFinishing()) {
-    //            progressDialog = new ProgressDialog(ProductDetailsActivity.this);
-    //            progressDialog.setMessage(getString(R.string.loadingwait));
-    //            progressDialog.show();
-    //            progressDialog.setCancelable(false);
-    //        }
-    //
-    //        call.enqueue(new Callback<ProductsDetailsModel>() {
-    //            @Override
-    //            public void onResponse(Call<ProductsDetailsModel>call, Response<ProductsDetailsModel> response) {
-    //                dismissProgressDialog();
-    //
-    //                if(response!=null){
-    //                    if(response.isSuccessful()){
-    //                        if(response.body().getStatus()==200){
-    //
-    //                            ArrayList<BidofferDetails> offerDetails = new ArrayList<>();
-    //                            offerDetails.add(response.body().getBidofferDetails());
-    //
-    //                            String prodName="",prodPrice="",statime="",desciption="",bidtime ="",bidremain="";
-    //                            int bidlefttime = 0;
-    //
-    //                            RequestOptions requestOptions = new RequestOptions();
-    //                            requestOptions.placeholder(R.drawable.placeholder);
-    //                            requestOptions.error(R.drawable.placeholder);
-    //
-    //                            for(int i=0 ;i<offerDetails.size(); i++){
-    //                                prodName = offerDetails.get(i).getBidofferName();
-    //                                prodPrice = offerDetails.get(i).getBidofferPrice();
-    //                                statime = offerDetails.get(i).getStartTime();
-    //                                desciption = offerDetails.get(i).getOfferDescription();
-    //                                bidtime = offerDetails.get(i).getStartTime();
-    //                                bidlefttime = offerDetails.get(i).getOfferTimeLeft();
-    //                                bidremain = offerDetails.get(i).getBidBalance();
-    //                                Log.e("bidremain", "onResponse:pd_list "+bidremain );
-    //                                Constants.setSharedPreferenceString(ProductDetailsActivity.this,"bidBalance",bidremain);
-    //                                txt_bidremain.setText(Constants.getSharedPreferenceString(ProductDetailsActivity.this,"bidBalance","")+" Bids Remaining");
-    //
-    //                                Glide.with(context)
-    //                                        .setDefaultRequestOptions(requestOptions)
-    //                                        .load(offerDetails.get(i).getImageUrl()).into(proImage);
-    //                            }
-    //
-    //                            txt_productName.setText(prodName);
-    //                            txt_productPrice.setText(prodPrice);
-    //                            txt_starttime.setText(statime);
-    //                            txt_desciption.setText(desciption);
-    //
-    //                            String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
-    //                            txt_mytime.setText(currentDateTimeString);
-    //                            txt_currenttime.setText(bidtime);
-    //                            Log.e("testing", "onResponse:left time "+bidlefttime );
-    //                            //progressBar.setProgress(bidlefttime);
-    ////                            getProgressBarStatus(i);
-    //                            getCounter(bidlefttime);
-    //
-    //
-    //
-    //                        }else{
-    //                            Toast.makeText(context,getString(R.string.systemmessage)+response.body().getMessage(),Toast.LENGTH_SHORT).show();
-    //                        }
-    //
-    //                    }
-    //                }
-    //                else{
-    //                    Toast.makeText(context,getString(R.string.systemmessage)+response.errorBody(),Toast.LENGTH_SHORT).show();
-    //                }
-    //
-    //
-    //            }
-    //
-    //            @Override
-    //            public void onFailure(Call<ProductsDetailsModel>call, Throwable t) {
-    //                // Log error here since request failed
-    //                Log.e("response", t.toString());
-    //            }
-    //        });
-    //
-    //    }
     private fun dismissProgressDialog() {
         if (progressDialog != null && progressDialog!!.isShowing) {
             progressDialog!!.dismiss()
@@ -715,6 +386,41 @@ class ProductDetailsActivity : AppCompatActivity(), View.OnClickListener {
             // Receiver was probably already stopped in onPause()
         }
         super.onStop()
+    }
+
+    fun openTab(url: String) {
+        try {
+            val builder = CustomTabsIntent.Builder()
+
+            // to set the toolbar color use CustomTabColorSchemeParams
+            // since CustomTabsIntent.Builder().setToolBarColor() is deprecated
+
+            val params = CustomTabColorSchemeParams.Builder()
+            params.setToolbarColor(ContextCompat.getColor(context!!, R.color.black))
+            builder.setDefaultColorSchemeParams(params.build())
+            // shows the title of web-page in toolbar
+            builder.setShowTitle(true)
+
+            // setShareState(CustomTabsIntent.SHARE_STATE_ON) will add a menu to share the web-page
+            builder.setShareState(CustomTabsIntent.SHARE_STATE_ON)
+
+            // To modify the close button, use
+            // builder.setCloseButtonIcon(bitmap)
+
+            // to set weather instant apps is enabled for the custom tab or not, use
+            builder.setInstantAppsEnabled(true)
+
+            //  To use animations use -
+            //  builder.setStartAnimations(this, android.R.anim.start_in_anim, android.R.anim.start_out_anim)
+            //  builder.setExitAnimations(this, android.R.anim.exit_in_anim, android.R.anim.exit_out_anim)
+            val customBuilder = builder.build()
+            customBuilder.intent.setPackage("com.android.chrome")
+            customBuilder.launchUrl(context!!, Uri.parse(url))
+        }
+        catch (e:Exception)
+        {
+            Toast.makeText(context,e.message,Toast.LENGTH_SHORT).show()
+        }
     }
 
     public override fun onPause() {

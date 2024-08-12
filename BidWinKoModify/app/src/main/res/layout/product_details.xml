@@ -182,7 +182,7 @@
                             android:layout_centerInParent="true"
                             android:layout_width="@dimen/_25sdp"
                             android:layout_height="@dimen/_25sdp"
-                            android:src="@drawable/raj"
+                          
                             app:shapeAppearanceOverlay="@style/CircularImage"
                             />
                         <com.google.android.material.imageview.ShapeableImageView
@@ -191,7 +191,7 @@
                             android:layout_centerInParent="true"
                             android:layout_width="@dimen/_25sdp"
                             android:layout_height="@dimen/_25sdp"
-                            android:src="@drawable/raj"
+                          
                             app:shapeAppearanceOverlay="@style/CircularImage"
                             />
                         <com.google.android.material.imageview.ShapeableImageView
@@ -200,7 +200,7 @@
                             android:layout_centerInParent="true"
                             android:layout_width="@dimen/_25sdp"
                             android:layout_height="@dimen/_25sdp"
-                            android:src="@drawable/raj"
+                          
                             app:shapeAppearanceOverlay="@style/CircularImage"
                             />
                         <com.google.android.material.imageview.ShapeableImageView
@@ -209,14 +209,14 @@
                             android:layout_marginEnd="@dimen/_3sdp"
                             android:layout_width="@dimen/_25sdp"
                             android:layout_height="@dimen/_25sdp"
-                            android:src="@drawable/raj"
+                          
                             app:shapeAppearanceOverlay="@style/CircularImage"
                             />
                         <TextView
                             android:id="@+id/profile_people_no"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="+31"
+                            android:text=""
                             android:layout_gravity="center_vertical"
                             android:textColor="@color/gray"
                             android:fontFamily="@font/lato_regular"
@@ -257,7 +257,7 @@
                                 android:layout_height="wrap_content"
                                 android:textSize="@dimen/_12ssp"
                                 android:fontFamily="@font/lato_bold"
-                                android:text="2"
+                                android:text=" "
                                 android:textColor="@color/black" />
 
                             <TextView

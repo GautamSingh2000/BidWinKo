@@ -32,19 +32,27 @@
             android:transitionName="logo"
             android:src="@drawable/bidlogo" />
 
-        <TextView
-            android:id="@+id/name"
-            android:transitionName="appname"
-            android:lineSpacingMultiplier="2.5"
-            android:lineSpacingExtra="6dp"
-            android:gravity="center"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/black"
-            android:textSize="@dimen/_17ssp"
-            android:fontFamily="@font/lato_bold"
-            android:text="@string/app_namebidwin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+        <com.facebook.shimmer.ShimmerFrameLayout
+            app:shimmer_auto_start="true"
+            app:shimmer_repeat_mode="reverse"
+            app:shimmer_highlight_color="@color/white"
+            app:shimmer_base_color="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/name"
+                android:transitionName="appname"
+                android:lineSpacingMultiplier="2.5"
+                android:lineSpacingExtra="6dp"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_17ssp"
+                android:fontFamily="@font/lato_bold"
+                android:text="@string/app_namebidwin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </com.facebook.shimmer.ShimmerFrameLayout>
 
     </LinearLayout>
 

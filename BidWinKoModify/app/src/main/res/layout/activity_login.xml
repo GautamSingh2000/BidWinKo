@@ -25,6 +25,15 @@
         android:layout_height="@dimen/_70sdp"
         android:transitionName="logo"
         android:src="@drawable/bidlogo"/>
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        app:shimmer_repeat_delay="700"
+        app:shimmer_auto_start="true"
+        app:shimmer_repeat_mode="reverse"
+        app:shimmer_highlight_color="@color/white"
+        app:shimmer_base_color="@color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
     <TextView
         android:transitionName="appname"
         android:gravity="center"
@@ -36,6 +45,7 @@
         android:layout_marginBottom="@dimen/_50sdp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+    </com.facebook.shimmer.ShimmerFrameLayout>
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/anim"
         android:layout_width="@dimen/_150sdp"

@@ -2,6 +2,7 @@ package com.bidwinko.adapter
 
 import android.animation.Animator
 import android.animation.Animator.AnimatorListener
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.util.Log
@@ -127,6 +128,7 @@ class LiveBidProductsListAdapter(
             intentProductDetails.putExtra("type", type)
             Log.e("adapter", "${data.id} id")
             context.startActivity(intentProductDetails)
+//            (context as Activity).overridePendingTransition(R.anim.fast_left_slide_out, R.anim.fast_right_slide_in)
         }
 
         holder.cardView.setOnClickListener {
@@ -134,6 +136,8 @@ class LiveBidProductsListAdapter(
             intentProductDetails.putExtra("type", type)
             intentProductDetails.putExtra("bidofferId", data.id)
             context.startActivity(intentProductDetails)
+//            (context as Activity).overridePendingTransition(R.anim.fast_left_slide_out, R.anim.fast_right_slide_in)
+
         }
     }
 
