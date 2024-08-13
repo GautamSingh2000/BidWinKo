@@ -12,19 +12,14 @@ object BottomNavigationViewHelper {
     @SuppressLint("RestrictedApi")
     fun disableShiftMode(view: BottomNavigationView) {
         val menuView = view.getChildAt(0) as BottomNavigationMenuView
-//        menuView.labelVisibilityMode = LabelVisibilityMode.LABEL_VISIBILITY_LABELED
         try {
             val shiftingMode = menuView.javaClass.getDeclaredField("mShiftingMode")
             shiftingMode.isAccessible = true
-            shiftingMode.setBoolean(menuView, false)
+            shiftingMode.setBoolean(menuView, true) // Enable shift mode
             shiftingMode.isAccessible = false
             for (i in 0 until menuView.childCount) {
                 val item = menuView.getChildAt(i) as BottomNavigationItemView
-//                item.setShiftingMode(false);
-//                menuView.setLabelVisibilityMode(LabelVisibilityMode.LABEL_VISIBILITY_LABELED);
-                menuView.buildMenuView()
-                // set once again checked value, so view will be updated 
-                item.setChecked(item.itemData!!.isChecked)
+                item.setChecked(item.itemData!!.isChecked) // Update the view
             }
         } catch (e: NoSuchFieldException) {
             Log.e("BNVHelper", "Unable to get shift mode field", e)

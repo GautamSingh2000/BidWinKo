@@ -15,25 +15,35 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/productcv"
+            android:layout_marginVertical="@dimen/_5sdp"
+            android:layout_marginStart="@dimen/_2sdp"
             android:layout_marginEnd="@dimen/_5sdp"
+            app:cardElevation="@dimen/_5sdp"
+            android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
+            app:cardCornerRadius="@dimen/_7sdp"
             android:layout_width="@dimen/_60sdp"
             android:layout_height="@dimen/_50sdp">
             <ImageView
+                android:padding="@dimen/_3ssp"
+                android:scaleType="centerCrop"
                 android:id="@+id/productimage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@drawable/placeholder"/>
         </androidx.cardview.widget.CardView>
+
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="   -   -   "
-            android:fontFamily="@font/lato_bold"
+            android:layout_toStartOf="@+id/filtrerbtn"
+            android:layout_toEndOf="@+id/productcv"
             android:layout_toRightOf="@id/productcv"
-            android:textSize="@dimen/_13ssp"
-            android:textColor="@color/black"/>
+            android:fontFamily="@font/lato_bold"
+            android:text="   -   -   "
+            android:textColor="@color/black"
+            android:textSize="@dimen/_13ssp" />
 
         <TextView
             android:id="@+id/Opentimett"

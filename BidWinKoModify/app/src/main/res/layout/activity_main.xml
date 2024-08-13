@@ -58,7 +58,6 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:orientation="vertical"
-        android:layout_marginBottom="56dp"
         android:id="@+id/ll_main_fragment"
         android:layout_below="@+id/appbarlayout"
         android:layout_width="match_parent"
@@ -78,32 +77,82 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+        <RelativeLayout
+            android:layout_alignParentBottom="true"
+            app:cardBackgroundColor="@color/transparent"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_70sdp">
+            
+            <LinearLayout
+                android:weightSum="5"
+                android:layout_marginHorizontal="@dimen/_15sdp"
+                android:layout_above="@id/bottom_navigation_cv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+                <ImageView
+                    android:id="@+id/auction_indicator"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_6sdp"
+                    android:tint="@color/colorPrimary"
+                    android:src="@drawable/circle_background"/>
+                <ImageView
+                    android:id="@+id/buybid_indicator"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:visibility="gone"
+                   android:layout_height="@dimen/_6sdp"
+                    android:tint="@color/colorPrimary"
+                    android:src="@drawable/circle_background"/>
+                <ImageView
+                    android:id="@+id/winner_indicator"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:visibility="gone"
+                   android:layout_height="@dimen/_6sdp"
+                    android:tint="@color/colorPrimary"
+                    android:src="@drawable/circle_background"/>
+                <ImageView
+                    android:id="@+id/profile_indicator"
+                    android:layout_weight="1"
+                    android:visibility="gone"
+                    android:layout_width="0dp"
+                   android:layout_height="@dimen/_6sdp"
+                    android:tint="@color/colorPrimary"
+                    android:src="@drawable/circle_background"/>
+                <ImageView
+                    android:id="@+id/menu_indicator"
+                    android:layout_weight="1"
+                    android:visibility="gone"
+                    android:layout_width="0dp"
+                   android:layout_height="@dimen/_6sdp"
+                    android:tint="@color/colorPrimary"
+                    android:src="@drawable/circle_background"/>
+            </LinearLayout>
 
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:visibility="gone"
-        android:layout_alignParentRight="true"
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="16dp"
-        app:borderWidth="0dp"
-        android:backgroundTint="@color/white"
-        android:src="@drawable/ic_share_black_24dp"
-        android:layout_above="@+id/bottom_navigation"/>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/bottom_navigation_cv"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="bottom"
+                android:layout_marginHorizontal="@dimen/_15sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                app:cardElevation="@dimen/_5sdp"
+                app:cardCornerRadius="@dimen/_10sdp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <com.google.android.material.bottomnavigation.BottomNavigationView
+                    app:itemIconTint="@drawable/bottom_nav_icon_color_selector"
+                    app:itemTextColor="@drawable/bottom_nav_icon_color_selector"
+                    android:id="@+id/bottom_navigation"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_45sdp"
+                    android:background="@color/white"
+                    app:menu="@menu/menu_navigation"
+                    app:labelVisibilityMode="selected" />
+            </androidx.cardview.widget.CardView>
+        </RelativeLayout>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        app:itemIconTint="@drawable/bottom_nav_icon_color_selector"
-        app:itemTextColor="@drawable/bottom_nav_icon_color_selector"
-        android:layout_alignParentBottom="true"
-        android:id="@+id/bottom_navigation"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_gravity="bottom"
-        android:background="@color/white"
-        app:elevation="2dp"
-        app:menu="@menu/menu_navigation"
-        app:labelVisibilityMode="labeled"/>
 
 </RelativeLayout>

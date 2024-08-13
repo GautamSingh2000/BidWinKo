@@ -86,6 +86,7 @@ class LiveBidProductsListAdapter(
                 val topPadding = convertDpToPx(11f)
                 val rightPadding = convertDpToPx(0f)
                 val bottomPadding = convertDpToPx(11f)
+                holder.ribbon_tag.text = "Upcoming"
                 holder.liveanim.setPadding(leftPadding, topPadding, rightPadding, bottomPadding)
                 holder.bitbtn.background = context.getDrawable(R.drawable.simple_gray_box)
                 holder.liveanim.setAnimation(R.raw.clock)
@@ -161,10 +162,6 @@ class LiveBidProductsListAdapter(
     override fun getItemCount(): Int {
         return bidofferArrayList.size
     }
-
-//    companion object {
-//        var clickListener: ClickListener? = null
-//    }
 
     private fun convertDpToPx(dp: Float): Int {
         return TypedValue.applyDimension(

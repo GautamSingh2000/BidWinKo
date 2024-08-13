@@ -21,11 +21,11 @@
         app:cardElevation="0dp"
         card_view:cardCornerRadius="0dp">
         <RelativeLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+
             <LinearLayout
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:weightSum="3"
@@ -56,18 +56,66 @@
                     app:lottie_rawRes="@raw/party3" />
             </LinearLayout>
             <com.airbnb.lottie.LottieAnimationView
-                android:visibility="gone"
                 android:id="@+id/trophy_animation4"
                 android:layout_width="match_parent"
                 android:layout_height="130dp"
                 android:layout_gravity="end|center_vertical"
                 app:lottie_rawRes="@raw/party3" />
             <ImageView
-                android:layout_margin="10dp"
-                android:layout_width="wrap_content"
+                android:id="@+id/trophy"
+                android:layout_width="@dimen/_105sdp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="@dimen/_5sdp"
                 android:layout_height="105dp"
-                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_18sdp"
                 android:src="@drawable/trophy" />
+
+
+            <ImageView
+                android:layout_width="@dimen/_10sdp"
+                android:layout_height="@dimen/_10sdp"
+                android:layout_toRightOf="@id/trophy"
+                android:layout_alignBottom="@id/trophy"
+                android:layout_marginBottom="@dimen/_20sdp"
+                android:layout_marginStart="-20dp"
+                android:src="@drawable/yellow_small_circle"/>
+
+            <ImageView
+                android:layout_width="@dimen/_15sdp"
+                android:layout_height="@dimen/_15sdp"
+                android:layout_toLeftOf="@id/trophy"
+                android:layout_alignTop="@id/trophy"
+                android:layout_marginBottom="@dimen/_20sdp"
+                android:layout_marginEnd="-5dp"
+                android:alpha="0.3"
+                android:src="@drawable/yellow_small_circle"/>
+
+            <ImageView
+                android:id="@+id/twinkle"
+                android:layout_width="@dimen/_15sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_alignStart="@id/trophy"
+                android:layout_centerVertical="true"
+                android:src="@drawable/star_two"/>
+
+            <ImageView
+                android:id="@+id/twinkle_two"
+                android:layout_width="@dimen/_8sdp"
+                android:layout_height="@dimen/_8sdp"
+                android:layout_alignEnd="@id/trophy"
+                android:layout_alignTop="@id/trophy"
+                android:tint="#304FFE"
+                android:layout_marginEnd="-20dp"
+                android:src="@drawable/star_two"/>
+
+            <ImageView
+                android:id="@+id/highlight"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_alignEnd="@id/trophy"
+                android:layout_marginEnd="@dimen/_15sdp"
+                android:tint="@color/colorPrimary"
+                android:src="@drawable/three_lines"/>
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 
@@ -87,6 +135,14 @@
         android:layout_height="fill_parent"
         android:layout_below="@id/trophycard"
         android:scrollbars="none" />
+
+
+        <View
+            android:layout_below="@id/bid_recycler_view"
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_60sdp"
+            android:backgroundTint="@color/transparent"/>
 
         <com.facebook.shimmer.ShimmerFrameLayout
             android:id="@+id/shimmer"

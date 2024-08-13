@@ -15,11 +15,15 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_150sdp"
             app:shimmer_auto_start="true"
-            app:shimmer_direction="top_to_bottom"></com.facebook.shimmer.ShimmerFrameLayout>
+            app:shimmer_direction="top_to_bottom">
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
 
         <androidx.viewpager2.widget.ViewPager2
+            android:backgroundTint="@color/white"
             android:id="@+id/latest_dealslider"
             android:layout_width="match_parent"
+            android:layout_marginVertical="@dimen/_5sdp"
             android:layout_height="@dimen/_150sdp" />
 
         <LinearLayout
@@ -27,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/latest_dealslider"
-            android:layout_marginTop="-16dp"
+            android:layout_marginTop="-10dp"
             android:gravity="center"
             android:orientation="horizontal" />
 
@@ -123,7 +127,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:background="@drawable/white_rounded_bg"
-                        android:fontFamily="@font/barlow_regular"
+                        android:fontFamily="@font/barlow_bold"
                         android:paddingHorizontal="@dimen/_30sdp"
                         android:paddingVertical="@dimen/_10sdp"
                         android:text="Live"
@@ -144,7 +148,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/white_holo_bg"
-                        android:fontFamily="@font/barlow_regular"
+                        android:fontFamily="@font/barlow_bold"
                         android:paddingHorizontal="@dimen/_15sdp"
                         android:paddingVertical="@dimen/_10sdp"
                         android:text="Upcoming"
@@ -165,10 +169,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/white_holo_bg"
-                        android:fontFamily="@font/barlow_regular"
+                        android:fontFamily="@font/barlow_bold"
                         android:paddingHorizontal="@dimen/_20sdp"
                         android:paddingVertical="@dimen/_10sdp"
-                        android:text="Cloesd"
+                        android:text="Closed"
                         android:textColor="@color/white"
                         android:textSize="@dimen/_12ssp" />
                 </LinearLayout>
@@ -822,10 +826,15 @@
 
 
                 </LinearLayout>
-
-
             </LinearLayout>
         </androidx.cardview.widget.CardView>
+
+        <View
+            android:layout_below="@id/hodtobid_cv"
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_60sdp"
+            android:backgroundTint="@color/transparent"/>
     </RelativeLayout>
 
 

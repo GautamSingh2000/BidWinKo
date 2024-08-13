@@ -41,17 +41,17 @@
 
             <androidx.cardview.widget.CardView
                 card_view:cardElevation="0dp"
+                card_view:cardBackgroundColor="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 card_view:cardCornerRadius="0dp">
-                <LinearLayout
+                <RelativeLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <ImageView
                         android:id="@+id/productimage"
-                        android:layout_width="0dp"
-                        android:layout_weight="5"
+                        android:layout_width="match_parent"
                         android:layout_height="230dp"
                         android:src="@drawable/placeholder" />
 
@@ -60,9 +60,8 @@
                         android:id="@+id/otherimage"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginEnd="@dimen/_10sdp"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
+                        android:layout_marginEnd="@dimen/_20sdp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
@@ -72,6 +71,8 @@
                             android:layout_height="50dp"
                             android:layout_width="60dp"
                             android:layout_marginTop="@dimen/_5sdp"
+                            android:layout_marginHorizontal="@dimen/_2sdp"
+                            android:layout_marginBottom="@dimen/_2sdp"
                             card_view:cardBackgroundColor="@color/white"
                             card_view:cardCornerRadius="@dimen/_7sdp">
 
@@ -88,7 +89,9 @@
                             android:visibility="gone"
                             android:layout_height="50dp"
                             android:layout_width="60dp"
-                            android:layout_marginTop="@dimen/_5sdp"
+                            android:layout_marginTop="@dimen/_2sdp"
+                            android:layout_marginHorizontal="@dimen/_2sdp"
+                            android:layout_marginBottom="@dimen/_2sdp"
                             card_view:cardBackgroundColor="@color/white"
                             card_view:cardCornerRadius="@dimen/_7sdp">
                             <ImageView
@@ -100,11 +103,13 @@
                         </androidx.cardview.widget.CardView>
 
                         <androidx.cardview.widget.CardView
-                            android:id="@+id/cv4"
                             android:visibility="gone"
+                            android:id="@+id/cv4"
                             android:layout_height="50dp"
                             android:layout_width="60dp"
-                            android:layout_marginTop="@dimen/_5sdp"
+                            android:layout_marginTop="@dimen/_2sdp"
+                            android:layout_marginHorizontal="@dimen/_2sdp"
+                            android:layout_marginBottom="@dimen/_2sdp"
                             card_view:cardBackgroundColor="@color/white"
                             card_view:cardCornerRadius="@dimen/_7sdp">
                             <ImageView
@@ -116,7 +121,7 @@
                         </androidx.cardview.widget.CardView>
 
                     </LinearLayout>
-                </LinearLayout>
+                </RelativeLayout>
 
 
             </androidx.cardview.widget.CardView>

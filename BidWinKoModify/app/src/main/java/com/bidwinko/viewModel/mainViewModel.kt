@@ -245,7 +245,12 @@ class mainViewModel(val context: Context) : ViewModel() {
         enqueueCall(call,paymentResponse)
         return paymentResponse
     }
-
-
+    override fun onCleared() {
+        super.onCleared()
+        for (call in ongoingCalls) {
+            call.cancel()
+        }
+        ongoingCalls.clear()
+    }
 
 }

@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ShareCompat
 import com.bidwinko.R
 import com.bidwinko.databinding.PaymodeFragmentBinding
 import com.bidwinko.utilies.Constants
@@ -39,59 +40,19 @@ class ReferActivity : AppCompatActivity() {
         }
 
         binding.insta.setOnClickListener {
-            // Replace with the copied link
-            val packageName = "com.instagram.android"
-            val intent = Intent(Intent.ACTION_SEND)
-            intent.type = "text/plain"
-            intent.putExtra(Intent.EXTRA_TEXT, link)
-            if (isAppInstalled(packageName)) {
-                intent.setPackage(packageName)
-                startActivity(intent)
-            } else {
-                Toast.makeText(this, "Instagram app not found", Toast.LENGTH_SHORT).show()
-            }
+            shareLink("com.instagram.android", link, "Instagram app not found")
         }
 
         binding.facebook.setOnClickListener {
-            // Replace with the copied link
-            val packageName = "com.facebook.katana"
-            val intent = Intent(Intent.ACTION_SEND)
-            intent.type = "text/plain"
-            intent.putExtra(Intent.EXTRA_TEXT, link)
-            if (isAppInstalled(packageName)) {
-                intent.setPackage(packageName)
-                startActivity(intent)
-            } else {
-                Toast.makeText(this, "Facebook app not found", Toast.LENGTH_SHORT).show()
-            }
+            shareLink("com.facebook.katana", link, "Facebook app not found")
         }
 
         binding.teligram.setOnClickListener {
-            // Replace with the copied link
-            val packageName = "org.telegram.messenger"
-            val intent = Intent(Intent.ACTION_SEND)
-            intent.type = "text/plain"
-            intent.putExtra(Intent.EXTRA_TEXT, link)
-            if (isAppInstalled(packageName)) {
-                intent.setPackage(packageName)
-                startActivity(intent)
-            } else {
-                Toast.makeText(this, "Telegram app not found", Toast.LENGTH_SHORT).show()
-            }
+            shareLink("org.telegram.messenger", link, "Telegram app not found")
         }
 
         binding.whatsapp.setOnClickListener {
-            // Replace with the copied link
-            val packageName = "com.whatsapp"
-            val intent = Intent(Intent.ACTION_SEND)
-            intent.type = "text/plain"
-            intent.putExtra(Intent.EXTRA_TEXT, link)
-            if (isAppInstalled(packageName)) {
-                intent.setPackage(packageName)
-                startActivity(intent)
-            } else {
-                Toast.makeText(this, "Telegram app not found", Toast.LENGTH_SHORT).show()
-            }
+            shareLink("com.whatsapp", link, "WhatsApp app not found")
         }
 
         binding.other.setOnClickListener {
@@ -106,6 +67,21 @@ class ReferActivity : AppCompatActivity() {
 
         binding.referalcode.text = link
     }
+
+    private fun shareLink(packageName: String, link: String, notFoundMessage: String) {
+        if (isAppInstalled(packageName)) {
+            val intent = ShareCompat.IntentBuilder.from(this)
+                .setType("text/plain")
+                .setText(link)
+                .intent
+                .setPackage(packageName)
+
+            startActivity(intent)
+        } else {
+            Toast.makeText(this, notFoundMessage, Toast.LENGTH_SHORT).show()
+        }
+    }
+
 
     // Helper function to check if an app is installed
     private fun isAppInstalled(packageName: String): Boolean {

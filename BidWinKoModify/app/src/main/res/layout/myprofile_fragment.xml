@@ -87,7 +87,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:padding="10dp"
-                        android:src="@drawable/camera"
+                        android:src="@drawable/ic_edit_black"
                         android:tint="@color/colorPrimary" />
                 </androidx.cardview.widget.CardView>
 
@@ -114,6 +114,7 @@
                     android:layout_height="wrap_content"
                     android:hint="Enter Name"
                     android:inputType="text"
+                    android:editable="false"
                     android:textColor="@color/black"
                     android:textSize="@dimen/custom_txt" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -137,6 +138,7 @@
                     android:layout_height="wrap_content"
                     android:hint="Enter Your Email"
                     android:inputType="textEmailAddress"
+                    android:editable="false"
                     android:textColor="@color/black"
                     android:textSize="@dimen/custom_txt" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -160,6 +162,7 @@
                     android:layout_height="wrap_content"
                     android:hint="Enter Your Mobile"
                     android:inputType="number"
+                    android:editable="false"
                     android:textColor="@color/black"
                     android:textSize="@dimen/custom_txt" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -181,9 +184,11 @@
                     android:id="@+id/et_shipaddress"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="@dimen/_100sdp"
+                    android:editable="false"
                     android:hint="Enter Your Address"
-                    android:inputType="textPostalAddress"
+                    android:inputType="text"
+                    android:gravity="start"
+                    android:minHeight="@dimen/_100sdp"
                     android:textColor="@color/black"
                     android:textSize="@dimen/custom_txt" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -195,17 +200,22 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/_30sdp"
                 android:layout_marginBottom="@dimen/_10sdp"
-                android:backgroundTint="@color/colorPrimary"
-                android:clickable="true"
+                android:backgroundTint="@color/gray"
+                android:clickable="false"
                 android:elevation="@dimen/_10sdp"
-                android:focusable="true"
+                android:focusable="false"
                 android:fontFamily="@font/lato_bold"
                 android:text="SUBMIT"
+                android:textColor="@color/gray_4"
                 android:textAllCaps="false"
                 android:textSize="@dimen/_12ssp"
                 card_view:cornerRadius="@dimen/_5sdp" />
 
-
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_60sdp"
+                android:backgroundTint="@color/transparent"/>
         </LinearLayout>
 
     </ScrollView>

@@ -1,15 +1,16 @@
 package com.bidwinko.screens.fragments
 
+//import com.bidwinko.adapter.LiveBidProductsGridAdapter
 import android.animation.Animator
 import android.animation.Animator.AnimatorListener
 import android.animation.LayoutTransition
+import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
@@ -18,20 +19,19 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.bidwinko.R
-//import com.bidwinko.adapter.LiveBidProductsGridAdapter
 import com.bidwinko.adapter.LiveBidProductsListAdapter
 import com.bidwinko.components.BannerImageSlider.ImageItem
 import com.bidwinko.components.BannerImageSlider.bannerImageAdapter
+import com.bidwinko.databinding.FragmentHomeBinding
 import com.bidwinko.model.RequestModels.CommonRequest
 import com.bidwinko.model.ResponseModels.AppBanner
 import com.bidwinko.model.ResponseModels.HomeList
 import com.bidwinko.utilies.Constants
 import com.bidwinko.utilies.SessionManager
-import com.bidwinko.databinding.FragmentHomeBinding
 import com.bidwinko.viewModel.mainViewModel
-import kotlin.coroutines.coroutineContext
 
 private lateinit var viewpager2: ViewPager2
 private lateinit var pageChangeListener: ViewPager2.OnPageChangeCallback
@@ -47,7 +47,15 @@ private lateinit var update: Runnable
 
 lateinit var binding: FragmentHomeBinding
 
+private lateinit var const: FragmentActivity
 class AuctionFragment : Fragment() {
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is FragmentActivity) {
+            const = context
+        }
+    }
+
     private lateinit var viewmodel: mainViewModel
     var LiveBidList = ArrayList<HomeList>()
     var ClosedBidList = ArrayList<HomeList>()
@@ -59,8 +67,8 @@ class AuctionFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        requireActivity().findViewById<TextView>(R.id.title).setText(R.string.current_auction)
-        viewmodel = mainViewModel(requireContext())
+        const.findViewById<TextView>(R.id.title).setText(R.string.current_auction)
+        viewmodel = mainViewModel(const)
         binding = FragmentHomeBinding.inflate(layoutInflater)
 
         binding.anim.let {
@@ -85,25 +93,25 @@ class AuctionFragment : Fragment() {
         binding.upcomingBtn.setOnClickListener {
 
             binding.shimmer.startShimmer()
-            binding.shimmer.visibility =View.VISIBLE
-            binding.bidRecyclerView.visibility =View.GONE
+            binding.shimmer.visibility = View.VISIBLE
+            binding.bidRecyclerView.visibility = View.GONE
 
             CardSelected = "Upcoming"
-            binding.upcomingBtnText.setTextColor(requireContext().getColor(R.color.black))
+            binding.upcomingBtnText.setTextColor(const.getColor(R.color.black))
             binding.upcomingBtnText.background =
-                requireContext().getDrawable(R.drawable.white_rounded_bg)
+                const.getDrawable(R.drawable.white_rounded_bg)
 
-            binding.liveBtnText.setTextColor(requireContext().getColor(R.color.white))
-            binding.liveBtnText.background = requireContext().getDrawable(R.drawable.white_holo_bg)
+            binding.liveBtnText.setTextColor(const.getColor(R.color.white))
+            binding.liveBtnText.background = const.getDrawable(R.drawable.white_holo_bg)
 
-            binding.closeBtnText.setTextColor(requireContext().getColor(R.color.white))
-            binding.closeBtnText.background = requireContext().getDrawable(R.drawable.white_holo_bg)
+            binding.closeBtnText.setTextColor(const.getColor(R.color.white))
+            binding.closeBtnText.background = const.getDrawable(R.drawable.white_holo_bg)
 
             val homeRequest = CommonRequest(
-                userId = SessionManager(requireContext()).GetValue(Constants.USER_ID).toString(),
-                securityToken = SessionManager(requireContext()).GetValue(Constants.SECURITY_TOKEN),
-                versionName = SessionManager(requireContext()).GetValue(Constants.VERSION_NAME),
-                versionCode = SessionManager(requireContext()).GetValue(Constants.VERSION_CODE)
+                userId = SessionManager(const).GetValue(Constants.USER_ID).toString(),
+                securityToken = SessionManager(const).GetValue(Constants.SECURITY_TOKEN),
+                versionName = SessionManager(const).GetValue(Constants.VERSION_NAME),
+                versionCode = SessionManager(const).GetValue(Constants.VERSION_CODE)
             )
 
             GetUpcommingData(homeRequest)
@@ -114,26 +122,26 @@ class AuctionFragment : Fragment() {
         binding.liveBtn.setOnClickListener {
             CardSelected = "Live"
             binding.shimmer.startShimmer()
-            binding.shimmer.visibility =View.VISIBLE
-            binding.bidRecyclerView.visibility =View.GONE
+            binding.shimmer.visibility = View.VISIBLE
+            binding.bidRecyclerView.visibility = View.GONE
 
             LiveBidList.clear()
-            binding.liveBtnText.setTextColor(requireContext().getColor(R.color.black))
+            binding.liveBtnText.setTextColor(const.getColor(R.color.black))
             binding.liveBtnText.background =
-                requireContext().getDrawable(R.drawable.white_rounded_bg)
+                const.getDrawable(R.drawable.white_rounded_bg)
 
-            binding.upcomingBtnText.setTextColor(requireContext().getColor(R.color.white))
+            binding.upcomingBtnText.setTextColor(const.getColor(R.color.white))
             binding.upcomingBtnText.background =
-                requireContext().getDrawable(R.drawable.white_holo_bg)
+                const.getDrawable(R.drawable.white_holo_bg)
 
-            binding.closeBtnText.setTextColor(requireContext().getColor(R.color.white))
-            binding.closeBtnText.background = requireContext().getDrawable(R.drawable.white_holo_bg)
+            binding.closeBtnText.setTextColor(const.getColor(R.color.white))
+            binding.closeBtnText.background = const.getDrawable(R.drawable.white_holo_bg)
 
             val homeRequest = CommonRequest(
-                userId = SessionManager(requireContext()).GetValue(Constants.USER_ID).toString(),
-                securityToken = SessionManager(requireContext()).GetValue(Constants.SECURITY_TOKEN),
-                versionName = SessionManager(requireContext()).GetValue(Constants.VERSION_NAME),
-                versionCode = SessionManager(requireContext()).GetValue(Constants.VERSION_CODE)
+                userId = SessionManager(const).GetValue(Constants.USER_ID).toString(),
+                securityToken = SessionManager(const).GetValue(Constants.SECURITY_TOKEN),
+                versionName = SessionManager(const).GetValue(Constants.VERSION_NAME),
+                versionCode = SessionManager(const).GetValue(Constants.VERSION_CODE)
             )
 
             GetLiveData(homeRequest)
@@ -142,25 +150,25 @@ class AuctionFragment : Fragment() {
         binding.closeBtn.setOnClickListener {
             CardSelected = "Closed"
             binding.shimmer.startShimmer()
-            binding.shimmer.visibility =View.VISIBLE
-            binding.bidRecyclerView.visibility =View.GONE
+            binding.shimmer.visibility = View.VISIBLE
+            binding.bidRecyclerView.visibility = View.GONE
             ClosedBidList.clear()
-            binding.closeBtnText.setTextColor(requireContext().getColor(R.color.black))
+            binding.closeBtnText.setTextColor(const.getColor(R.color.black))
             binding.closeBtnText.background =
-                requireContext().getDrawable(R.drawable.white_rounded_bg)
+                const.getDrawable(R.drawable.white_rounded_bg)
 
-            binding.upcomingBtnText.setTextColor(requireContext().getColor(R.color.white))
+            binding.upcomingBtnText.setTextColor(const.getColor(R.color.white))
             binding.upcomingBtnText.background =
-                requireContext().getDrawable(R.drawable.white_holo_bg)
+                const.getDrawable(R.drawable.white_holo_bg)
 
-            binding.liveBtnText.setTextColor(requireContext().getColor(R.color.white))
-            binding.liveBtnText.background = requireContext().getDrawable(R.drawable.white_holo_bg)
+            binding.liveBtnText.setTextColor(const.getColor(R.color.white))
+            binding.liveBtnText.background = const.getDrawable(R.drawable.white_holo_bg)
 
             val homeRequest = CommonRequest(
-                userId = SessionManager(requireContext()).GetValue(Constants.USER_ID).toString(),
-                securityToken = SessionManager(requireContext()).GetValue(Constants.SECURITY_TOKEN),
-                versionName = SessionManager(requireContext()).GetValue(Constants.VERSION_NAME),
-                versionCode = SessionManager(requireContext()).GetValue(Constants.VERSION_CODE)
+                userId = SessionManager(const).GetValue(Constants.USER_ID).toString(),
+                securityToken = SessionManager(const).GetValue(Constants.SECURITY_TOKEN),
+                versionName = SessionManager(const).GetValue(Constants.VERSION_NAME),
+                versionCode = SessionManager(const).GetValue(Constants.VERSION_CODE)
             )
 
             GetCompletedData(homeRequest)
@@ -171,7 +179,7 @@ class AuctionFragment : Fragment() {
             if (binding.biddingsteps.visibility == View.VISIBLE) {
                 textView.setCompoundDrawablesWithIntrinsicBounds(
                     null, null, ContextCompat.getDrawable(
-                        requireContext(), R.drawable.down_btn
+                        const, R.drawable.down_btn
                     ), null
                 )
                 binding.howToBidBtn.setCardBackgroundColor(resources.getColor(R.color.colorAccent))
@@ -179,7 +187,7 @@ class AuctionFragment : Fragment() {
             } else {
                 textView.setCompoundDrawablesWithIntrinsicBounds(
                     null, null, ContextCompat.getDrawable(
-                        requireContext(), R.drawable.up
+                        const, R.drawable.up
                     ), null
                 )
                 val transition = LayoutTransition()
@@ -202,19 +210,19 @@ class AuctionFragment : Fragment() {
 
     private fun GetHomeData() {
         val homeRequest = CommonRequest(
-            userId = SessionManager(requireContext()).GetValue(Constants.USER_ID).toString(),
-            securityToken = SessionManager(requireContext()).GetValue(Constants.SECURITY_TOKEN),
-            versionName = SessionManager(requireContext()).GetValue(Constants.VERSION_NAME),
-            versionCode = SessionManager(requireContext()).GetValue(Constants.VERSION_CODE)
+            userId = SessionManager(const).GetValue(Constants.USER_ID).toString(),
+            securityToken = SessionManager(const).GetValue(Constants.SECURITY_TOKEN),
+            versionName = SessionManager(const).GetValue(Constants.VERSION_NAME),
+            versionCode = SessionManager(const).GetValue(Constants.VERSION_CODE)
         )
-        viewmodel.GetHomeData(homeRequest).observe(requireActivity()) {
+        viewmodel.GetHomeData(homeRequest).observe(const) {
             if (it.status == 200) {
                 setBannerData(it.appBanners)
                 GetLiveData(homeRequest)
             } else {
                 Log.e(tag, "banner apis error ${it.message}")
                 Toast.makeText(
-                    requireContext(),
+                    const,
                     "Somthing Wenr Wrong!! ${it.message}",
                     Toast.LENGTH_SHORT
                 ).show()
@@ -232,9 +240,9 @@ class AuctionFragment : Fragment() {
         viewpager2.adapter = imageAdapter
         imageAdapter.submitList(banner_list)
         binding.shimmer1.stopShimmer()
-        binding.shimmer1.visibility =View.GONE
+        binding.shimmer1.visibility = View.GONE
 
-        val dotsImage = Array(banner_list.size) { ImageView(requireContext()) }
+        val dotsImage = Array(banner_list.size) { ImageView(const) }
 
         dotsImage.forEach {
             it.setImageResource(
@@ -244,7 +252,7 @@ class AuctionFragment : Fragment() {
         }
 
         // default first dot selected
-        if(dotsImage.size>0 && dotsImage.isNullOrEmpty()) dotsImage[0].setImageResource(R.drawable.dot)
+        if (dotsImage.size > 0 && dotsImage.isNullOrEmpty()) dotsImage[0].setImageResource(R.drawable.dot)
 
         pageChangeListener = object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
@@ -270,28 +278,28 @@ class AuctionFragment : Fragment() {
             } else {
                 viewpager2.setCurrentItem(currentPage + 1, true)
             }
-            handler.postDelayed(update, 3000) // self-schedule again
+            handler.postDelayed(update, 3500) // self-schedule again
         }
-        handler.postDelayed(update, 3000) // initial schedule
+        handler.postDelayed(update, 3500) // initial schedule
     }
 
 
     private fun setAnimation() {
 
-        val leftslidein = AnimationUtils.loadAnimation(requireContext(), R.anim.left_slide_in)
-        val leftslideout = AnimationUtils.loadAnimation(requireContext(), R.anim.left_slide_out)
-        val rightslidein = AnimationUtils.loadAnimation(requireContext(), R.anim.right_slide_in)
-        val rightslideout = AnimationUtils.loadAnimation(requireContext(), R.anim.right_slide_out)
+        val leftslidein = AnimationUtils.loadAnimation(const, R.anim.left_slide_in)
+        val leftslideout = AnimationUtils.loadAnimation(const, R.anim.left_slide_out)
+        val rightslidein = AnimationUtils.loadAnimation(const, R.anim.right_slide_in)
+        val rightslideout = AnimationUtils.loadAnimation(const, R.anim.right_slide_out)
 
-        val slowleftslidein = AnimationUtils.loadAnimation(requireContext(), R.anim.slowleftin)
-        val slowleftslideout = AnimationUtils.loadAnimation(requireContext(), R.anim.slowleftout)
-        val slowrightslidein = AnimationUtils.loadAnimation(requireContext(), R.anim.slowrightin)
-        val slowrightslideout = AnimationUtils.loadAnimation(requireContext(), R.anim.slowrightout)
+        val slowleftslidein = AnimationUtils.loadAnimation(const, R.anim.slowleftin)
+        val slowleftslideout = AnimationUtils.loadAnimation(const, R.anim.slowleftout)
+        val slowrightslidein = AnimationUtils.loadAnimation(const, R.anim.slowrightin)
+        val slowrightslideout = AnimationUtils.loadAnimation(const, R.anim.slowrightout)
 
-        val fadein = AnimationUtils.loadAnimation(requireContext(), R.anim.fadein)
-        val fadeout = AnimationUtils.loadAnimation(requireContext(), R.anim.fadeout)
-        val rotate = AnimationUtils.loadAnimation(requireContext(), R.anim.clockwise_rotate)
-        val antirotate = AnimationUtils.loadAnimation(requireContext(), R.anim.aniclock_rotate)
+        val fadein = AnimationUtils.loadAnimation(const, R.anim.fadein)
+        val fadeout = AnimationUtils.loadAnimation(const, R.anim.fadeout)
+        val rotate = AnimationUtils.loadAnimation(const, R.anim.clockwise_rotate)
+        val antirotate = AnimationUtils.loadAnimation(const, R.anim.aniclock_rotate)
 
         binding.leftFirstline.startAnimation(leftslideout)
         binding.rightSecondline.startAnimation(rightslideout)
@@ -406,7 +414,7 @@ class AuctionFragment : Fragment() {
     private fun GetUpcommingData(homeRequest: CommonRequest) {
 
         UpcommingBidList.clear()
-        viewmodel.GetupcomingBidsList(homeRequest).observe(requireActivity()) {
+        viewmodel.GetupcomingBidsList(homeRequest).observe(const) {
             if (it.status == 200) {
                 UpcommingBidList = it.offers as ArrayList<HomeList>
 
@@ -418,7 +426,7 @@ class AuctionFragment : Fragment() {
 
                     mAdapter = LiveBidProductsListAdapter(
                         UpcommingBidList,
-                        requireContext(),
+                        const,
                         "upcomming"
                     )
                     binding.bidRecyclerView.apply {
@@ -428,15 +436,15 @@ class AuctionFragment : Fragment() {
                     }
 
                     binding.shimmer.stopShimmer()
-                    binding.shimmer.visibility =View.GONE
+                    binding.shimmer.visibility = View.GONE
 
                 } else {
-                    binding.relax.visibility  =View.GONE
+                    binding.relax.visibility = View.GONE
                     binding.shimmer.stopShimmer()
-                    binding.shimmer.visibility =View.GONE
+                    binding.shimmer.visibility = View.GONE
                     Log.e("Auction", "${UpcommingBidList.size}   UpcommingBidList.size   2 ")
                     binding.nodatafound.visibility = View.VISIBLE
-                    binding.animm.addAnimatorListener(object : AnimatorListener{
+                    binding.animm.addAnimatorListener(object : AnimatorListener {
                         override fun onAnimationStart(animation: Animator) {
                         }
 
@@ -460,7 +468,7 @@ class AuctionFragment : Fragment() {
 
     private fun GetCompletedData(homeRequest: CommonRequest) {
 
-        viewmodel.GetcompletedBidsList(homeRequest).observe(requireActivity()) {
+        viewmodel.GetcompletedBidsList(homeRequest).observe(const) {
             if (it.status == 200) {
                 ClosedBidList = it.offers as ArrayList<HomeList>
                 Log.e("Auction", "${ClosedBidList.size}   ClosedBidList.size")
@@ -471,7 +479,7 @@ class AuctionFragment : Fragment() {
 
                     mAdapter = LiveBidProductsListAdapter(
                         ClosedBidList,
-                        requireContext(),
+                        const,
                         "cloased"
                     )
                     binding.bidRecyclerView.apply {
@@ -480,15 +488,15 @@ class AuctionFragment : Fragment() {
                         mAdapter!!.notifyDataSetChanged()
                     }
                     binding.shimmer.stopShimmer()
-                    binding.shimmer.visibility =View.GONE
+                    binding.shimmer.visibility = View.GONE
 
                 } else {
-                    binding.relax.visibility  =View.GONE
+                    binding.relax.visibility = View.GONE
                     binding.shimmer.stopShimmer()
-                    binding.shimmer.visibility =View.GONE
+                    binding.shimmer.visibility = View.GONE
                     Log.e("Auction", "${ClosedBidList.size}   ClosedBidList.size  2 ")
                     binding.nodatafound.visibility = View.VISIBLE
-                    binding.animm.addAnimatorListener(object : AnimatorListener{
+                    binding.animm.addAnimatorListener(object : AnimatorListener {
                         override fun onAnimationStart(animation: Animator) {
                         }
 
@@ -512,7 +520,7 @@ class AuctionFragment : Fragment() {
 
     private fun GetLiveData(homeRequest: CommonRequest) {
 
-        viewmodel.GetLiveData(homeRequest).observe(requireActivity()) {
+        viewmodel.GetLiveData(homeRequest).observe(const) {
             if (it.status == 200) {
                 LiveBidList = it.offers as ArrayList<HomeList>
                 Log.e("Auction", "${LiveBidList.size}   LiveBidList.size")
@@ -523,7 +531,7 @@ class AuctionFragment : Fragment() {
 
                     mAdapter = LiveBidProductsListAdapter(
                         LiveBidList,
-                        requireContext(),
+                        const,
                         "live"
                     )
 
@@ -533,10 +541,10 @@ class AuctionFragment : Fragment() {
                         mAdapter!!.notifyDataSetChanged()
                     }
                     binding.shimmer.stopShimmer()
-                    binding.shimmer.visibility =View.GONE
+                    binding.shimmer.visibility = View.GONE
                 } else {
                     binding.shimmer.stopShimmer()
-                    binding.shimmer.visibility =View.GONE
+                    binding.shimmer.visibility = View.GONE
                     binding.nodatafound.visibility = View.GONE
                     Log.e("Auction", "${LiveBidList.size}     LiveBidList.size   2 ")
                     binding.bidRecyclerView.visibility = View.GONE

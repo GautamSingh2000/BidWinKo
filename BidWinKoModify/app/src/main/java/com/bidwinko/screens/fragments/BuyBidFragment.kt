@@ -2,6 +2,7 @@ package com.bidwinko.screens.fragments
 
 import android.animation.Animator
 import android.animation.Animator.AnimatorListener
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bidwinko.R
 import com.bidwinko.adapter.BuyBidPlanAdapter
@@ -30,13 +32,23 @@ class BuyBidFragment : Fragment() {
     private var mAdapter: BuyBidPlanAdapter? = null
     var txtBidBalance: TextView? = null
     var unlimitedBid: CardView? = null
+    private lateinit var const: FragmentActivity
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is FragmentActivity) {
+            const = context
+        }
+    }
+    
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
+        
         binding = BuybidFragmentBinding.inflate(layoutInflater)
-        requireActivity().findViewById<TextView>(R.id.title).text = getString(R.string.buybid)
+        const.findViewById<TextView>(R.id.title).text = getString(R.string.buybid)
         recyclerView = binding.bidRecyclerView
         txtBidBalance = binding.bidbalance
         unlimitedBid = binding.cardUnlimitedBid
@@ -62,7 +74,7 @@ class BuyBidFragment : Fragment() {
 
             })
         }
-        binding.bidbalance.text = SessionManager(requireContext()).GetValue(Constants.TOTAL_BIDS)
+        binding.bidbalance.text = SessionManager(const).GetValue(Constants.TOTAL_BIDS)
         getBuyBids()
         unlimitedBid!!.setOnClickListener(View.OnClickListener { //				Toast.makeText(getActivity(),"Feature Coming Soon..",Toast.LENGTH_SHORT).show();
             val intent = Intent(activity, ReferActivity::class.java)
@@ -73,16 +85,16 @@ class BuyBidFragment : Fragment() {
 
     private fun getBuyBids() {
         val request = CommonRequest(
-            userId = SessionManager(requireContext()).GetValue(Constants.USER_ID).toString(),
-            securityToken = SessionManager(requireContext()).GetValue(Constants.SECURITY_TOKEN),
-            versionName = SessionManager(requireContext()).GetValue(Constants.VERSION_NAME),
-            versionCode = SessionManager(requireContext()).GetValue(Constants.VERSION_CODE)
+            userId = SessionManager(const).GetValue(Constants.USER_ID).toString(),
+            securityToken = SessionManager(const).GetValue(Constants.SECURITY_TOKEN),
+            versionName = SessionManager(const).GetValue(Constants.VERSION_NAME),
+            versionCode = SessionManager(const).GetValue(Constants.VERSION_CODE)
         )
-        mainViewModel(requireContext()).GetBidsPacakage(request).observe(requireActivity()) {
+        mainViewModel(const).GetBidsPacakage(request).observe(const) {
             if (it.status == 200) {
                 if (it.bidPlans.size > 0) {
                     mAdapter =
-                        BuyBidPlanAdapter(it.bidPlans as ArrayList<BidPlan>, requireContext())
+                        BuyBidPlanAdapter(it.bidPlans as ArrayList<BidPlan>, const)
                     binding.bidRecyclerView.setAdapter(mAdapter)
                     binding.bidRecyclerView.visibility = View.VISIBLE
                     binding.shimmer.root.stopShimmer()
@@ -127,8 +139,8 @@ class BuyBidFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 103) {
-            requireActivity().finish()
-            startActivity(requireActivity().intent)
+            const.finish()
+            startActivity(const.intent)
         }
     }
 

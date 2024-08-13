@@ -3,11 +3,16 @@ package com.bidwinko
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.Menu
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.Animation.AnimationListener
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bidwinko.BottomNavigationViewHelper.disableShiftMode
+import com.bidwinko.databinding.ActivityMainBinding
 import com.bidwinko.screens.activity.ShareEarnActivity
 import com.bidwinko.screens.fragments.AuctionFragment
 import com.bidwinko.screens.fragments.BuyBidFragment
@@ -15,23 +20,26 @@ import com.bidwinko.screens.fragments.MenuFragment
 import com.bidwinko.screens.fragments.MyProfileFragment
 import com.bidwinko.screens.fragments.WinnerFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
     private var mBottomNavigationView: BottomNavigationView? = null
-    var fab: FloatingActionButton? = null
+    private lateinit var binding: ActivityMainBinding
+
+    //    var fab: FloatingActionButton? = null
+    private var indicator = "auction"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        fab = findViewById<View>(R.id.fab) as FloatingActionButton
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+//        fab = findViewById<View>(R.id.fab) as FloatingActionButton
         setupBottomNavigation()
         if (savedInstanceState == null) {
             loadHomeFragment()
         }
-        fab!!.setOnClickListener { //                Toast.makeText(MainActivity.this, "click me", Toast.LENGTH_SHORT).show();
-            val intentshare = Intent(this@MainActivity, ShareEarnActivity::class.java)
-            startActivity(intentshare)
-        }
+//        fab!!.setOnClickListener { //                Toast.makeText(MainActivity.this, "click me", Toast.LENGTH_SHORT).show();
+//            val intentshare = Intent(this@MainActivity, ShareEarnActivity::class.java)
+//            startActivity(intentshare)
+//        }
     }
 
     fun setupBottomNavigation() {
@@ -40,32 +48,144 @@ class MainActivity : AppCompatActivity() {
         mBottomNavigationView!!.setOnNavigationItemSelectedListener(BottomNavigationView.OnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.action_home -> {
+                    Log.e("mainactivity", "$indicator")
+                    hideIndicator("auction")
+                    binding.auctionIndicator.visibility = View.VISIBLE
+                    val anim = AnimationUtils.loadAnimation(this,R.anim.slideup)
+                    binding.auctionIndicator.animation = anim
                     loadHomeFragment()
                     return@OnNavigationItemSelectedListener true
                 }
 
                 R.id.action_buy_bid -> {
+                    Log.e("mainactivity", "$indicator")
+                    hideIndicator("buy")
+                    binding.buybidIndicator.visibility = View.VISIBLE
+                    val anim = AnimationUtils.loadAnimation(this,R.anim.slideup)
+                    binding.buybidIndicator.animation = anim
                     loadBuyBidFragment()
                     return@OnNavigationItemSelectedListener true
                 }
 
                 R.id.action_winner -> {
+                    Log.e("mainactivity", "$indicator")
+                    hideIndicator("winner")
+                    binding.winnerIndicator.visibility = View.VISIBLE
+                    val anim = AnimationUtils.loadAnimation(this,R.anim.slideup)
+                    binding.winnerIndicator.animation = anim
                     loadWinnerFragment()
                     return@OnNavigationItemSelectedListener true
                 }
 
                 R.id.action_myprofile -> {
+                    Log.e("mainactivity", "$indicator")
+                    hideIndicator("profile")
+                    binding.profileIndicator.visibility = View.VISIBLE
+                    val anim = AnimationUtils.loadAnimation(this,R.anim.slideup)
+                    binding.profileIndicator.animation = anim
                     loadProfileFragment()
                     return@OnNavigationItemSelectedListener true
                 }
 
                 R.id.action_menu -> {
+
+                    Log.e("mainactivity", "$indicator")
+                    hideIndicator("menu")
+                    binding.menuIndicator.visibility = View.VISIBLE
+                    val anim = AnimationUtils.loadAnimation(this,R.anim.slideup)
+                    binding.menuIndicator.animation = anim
                     loadMenuFragment()
                     return@OnNavigationItemSelectedListener true
                 }
             }
             false
         })
+    }
+
+    private fun hideIndicator(value: String) {
+        val anim = AnimationUtils.loadAnimation(this,R.anim.slidedown)
+        if (indicator.equals("auction")) {
+            binding.auctionIndicator.startAnimation(anim)
+            anim.setAnimationListener(object : AnimationListener{
+                override fun onAnimationStart(animation: Animation?) {
+                    
+                }
+                override fun onAnimationEnd(animation: Animation?) {
+                    binding.auctionIndicator.visibility = View.INVISIBLE
+                }
+
+                override fun onAnimationRepeat(animation: Animation?) {
+                    
+                }
+
+            })
+
+            }
+            if (indicator.equals("buy")) {
+                binding.buybidIndicator.startAnimation(anim)
+                anim.setAnimationListener(object : AnimationListener{
+                    override fun onAnimationStart(animation: Animation?) {
+
+                    }
+                    override fun onAnimationEnd(animation: Animation?) {
+                        binding.buybidIndicator.visibility = View.INVISIBLE
+                    }
+
+                    override fun onAnimationRepeat(animation: Animation?) {
+
+                    }
+
+                })
+                }
+                if (indicator.equals("menu")) {
+                    binding.menuIndicator.startAnimation(anim)
+                    anim.setAnimationListener(object : AnimationListener{
+                        override fun onAnimationStart(animation: Animation?) {
+
+                        }
+                        override fun onAnimationEnd(animation: Animation?) {
+                            binding.menuIndicator.visibility = View.INVISIBLE
+                        }
+
+                        override fun onAnimationRepeat(animation: Animation?) {
+
+                        }
+
+                    })
+                    }
+                    if (indicator.equals("winner")) {
+                        binding.winnerIndicator.startAnimation(anim)
+                        anim.setAnimationListener(object : AnimationListener{
+                            override fun onAnimationStart(animation: Animation?) {
+
+                            }
+                            override fun onAnimationEnd(animation: Animation?) {
+                                binding.winnerIndicator.visibility = View.INVISIBLE
+                            }
+
+                            override fun onAnimationRepeat(animation: Animation?) {
+
+                            }
+
+                        })
+                        }
+                        if (indicator.equals("profile")) {
+                            binding.profileIndicator.startAnimation(anim)
+                            anim.setAnimationListener(object : AnimationListener{
+                                override fun onAnimationStart(animation: Animation?) {
+
+                                }
+                                override fun onAnimationEnd(animation: Animation?) {
+                                    binding.profileIndicator.visibility = View.INVISIBLE
+                                }
+
+                                override fun onAnimationRepeat(animation: Animation?) {
+
+                                }
+
+                            })
+                            }
+                            indicator = value
     }
 
     fun setupBottomNavigationFrom(id: Int) {

@@ -1,5 +1,6 @@
 package com.bidwinko.screens.fragments
 
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
@@ -19,6 +20,7 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import com.bidwinko.BuildConfig
 import com.bidwinko.MainActivity
 import com.bidwinko.R
@@ -30,13 +32,21 @@ class MenuFragment : Fragment(), View.OnClickListener {
     var versionCode = 0
     var versionName: String? = null
     lateinit var binding : MenuFragmentBinding
+
+    private lateinit var const: FragmentActivity
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is FragmentActivity) {
+            const = context
+        }
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = MenuFragmentBinding.inflate(layoutInflater)
-        requireActivity().findViewById<TextView>(R.id.title).text = getString(R.string.menu)
+        const.findViewById<TextView>(R.id.title).text = getString(R.string.menu)
         versionCode = BuildConfig.VERSION_CODE
         versionName = BuildConfig.VERSION_NAME
 
@@ -79,32 +89,32 @@ class MenuFragment : Fragment(), View.OnClickListener {
             }
 
             R.id.termcondition -> {
-                val urlcondition = "http://192.168.1.31:5000/terms.html"
+                val urlcondition = "http://192.168.1.30:5000/terms.html"
                 openTab(urlcondition)
              }
 
             R.id.privacy -> {
-                val url = "http://192.168.1.31:5000/privacy.html"
+                val url = "http://192.168.1.00:5000/privacy.html"
                 openTab(url)
              }
 
             R.id.aboutus -> {
-                val urlaboutus = "http://192.168.1.31:5000/about.html"
+                val urlaboutus = "http://192.168.1.30:5000/about.html"
                 openTab(urlaboutus)
             }
 
             R.id.contactus -> {
-                val urlcontactus = "http://192.168.1.31:5000/contact-us.html"
+                val urlcontactus = "http://192.168.1.30:5000/contact-us.html"
                 openTab(urlcontactus)
             }
 
             R.id.returnrefund -> {
-                val urlreturnrefund = "http://192.168.1.31:5000/refund.html"
+                val urlreturnrefund = "http://192.168.1.30:5000/refund.html"
                 openTab(urlreturnrefund)
             }
 
             R.id.workflow -> {
-                val urlworkflow = "http://192.168.1.31:5000/how_it_works.html"
+                val urlworkflow = "http://192.168.1.30:5000/how_it_works.html"
                 openTab(urlworkflow)
             }
         }
@@ -118,7 +128,7 @@ class MenuFragment : Fragment(), View.OnClickListener {
             // since CustomTabsIntent.Builder().setToolBarColor() is deprecated
 
             val params = CustomTabColorSchemeParams.Builder()
-            params.setToolbarColor(ContextCompat.getColor(requireContext(), R.color.black))
+            params.setToolbarColor(ContextCompat.getColor(const, R.color.black))
             builder.setDefaultColorSchemeParams(params.build())
             // shows the title of web-page in toolbar
             builder.setShowTitle(true)
@@ -137,7 +147,7 @@ class MenuFragment : Fragment(), View.OnClickListener {
             //  builder.setExitAnimations(this, android.R.anim.exit_in_anim, android.R.anim.exit_out_anim)
             val customBuilder = builder.build()
             customBuilder.intent.setPackage("com.android.chrome")
-            customBuilder.launchUrl(requireContext(), Uri.parse(url))
+            customBuilder.launchUrl(const, Uri.parse(url))
         }
         catch (e:Exception)
         {
