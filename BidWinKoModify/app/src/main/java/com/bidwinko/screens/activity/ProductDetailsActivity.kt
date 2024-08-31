@@ -32,9 +32,13 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.bidwinko.R
 import com.bidwinko.components.Countdown.CountDown
+import com.bidwinko.components.CustomDialog.CustomDialog
+import com.bidwinko.components.CustomDialog.OnDialogActionListener
 import com.bidwinko.databinding.ProductDetailsBinding
 import com.bidwinko.model.RequestModels.ProductDetailRequest
 import com.bidwinko.utilies.Constants
@@ -44,6 +48,9 @@ import com.bidwinko.utilies.convertDpToPx
 import com.bidwinko.viewModel.mainViewModel
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class ProductDetailsActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -130,6 +137,10 @@ class ProductDetailsActivity : AppCompatActivity(), View.OnClickListener {
         bidofferId?.let { GetProductDetail(bidId = it) }
 
 
+         binding.productdetailRefresh.setOnRefreshListener {
+             bidofferId?.let { GetProductDetail(bidId = it) }
+         }
+
         if(type.equals("upcomming"))
         {
             val leftPadding = convertDpToPx(0f,this)
@@ -174,7 +185,7 @@ class ProductDetailsActivity : AppCompatActivity(), View.OnClickListener {
         }
 
         binding.productimage.setOnClickListener {
-            val anim = AnimationUtils.loadAnimation(this, R.anim.fast_fade_out)
+            val anim = AnimationUtils.loadAnimation(this, R.anim.fadeout)
             binding.otherimage.startAnimation(anim)
             anim.setAnimationListener(object : Animation.AnimationListener {
                 override fun onAnimationStart(animation: Animation) {}
@@ -186,8 +197,6 @@ class ProductDetailsActivity : AppCompatActivity(), View.OnClickListener {
                 override fun onAnimationRepeat(animation: Animation) {}
             })
         }
-
-
 
         binding.sv.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
             // Check if the user is scrolling up or down
@@ -257,8 +266,11 @@ class ProductDetailsActivity : AppCompatActivity(), View.OnClickListener {
 
         viewmodel.GetProductDetail(productDetailRequest).observe(this@ProductDetailsActivity) {
             dismissProgressDialog()
+            binding.productdetailRefresh.isRefreshing = false
             if (it.status == 200) {
                 Glide.with(this).load(it.bidDetails.productImage.get(0)).into(binding.productimage)
+                SessionManager(this).InitializeValue(Constants.TOTAL_BIDS,it.totalBids)
+                binding.noOfBid.text = it.totalBids
                 image1 = it.bidDetails.productImage.get(0)
                 binding.profilePeopleNo.text = " "
                 if (it.bidDetails.productImage.size >= 2) {
@@ -295,9 +307,6 @@ class ProductDetailsActivity : AppCompatActivity(), View.OnClickListener {
                     Glide.with(this).load(it.bidDetails.productImage.get(3))
                         .into(binding.productimage4)
                 }
-
-
-                binding.noOfBid.text = SessionManager(this).GetValue(Constants.TOTAL_BIDS)
                 binding.productname.text = it.bidDetails.productName
                 binding.productprice.text = it.bidDetails.productPrice
                 binding.features.text = it.bidDetails.productKeyFeature
@@ -313,25 +322,60 @@ class ProductDetailsActivity : AppCompatActivity(), View.OnClickListener {
                         seekBar = binding.progressBar
                     )
                 }else{
-                     val millisUntilFinished = it.bidDetails.productStartTime
-                    val days = millisUntilFinished / (1000 * 60 * 60 * 24)
-                    val hours = (millisUntilFinished / (1000 * 60 * 60)) % 24
-                    val minutes = (millisUntilFinished / (1000 * 60)) % 60
-                    val seconds = (millisUntilFinished / 1000) % 60
 
-                    val parts = mutableListOf<String>()
-                    if (days > 0) parts.add("${days}d")
-                    if (hours > 0 || days > 0) parts.add("${hours}h")
-                    if (minutes > 0 || hours > 0 || days > 0) parts.add("${minutes}m")
-                    if(days == 0) {
-                        if (seconds > 0 || minutes > 0 || hours > 0 || days > 0) parts.add("${seconds}s")
-                    }
-                    val countdown = parts.joinToString(":")
-                    binding.transactiontime.setText(countdown)
+                    val date = Date(it.bidDetails.productStartTime.toLong() * 1000)
+
+                    val format = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                    val formattedDate = format.format(date)
+
+//                     val millisUntilFinished = it.bidDetails.productStartTime
+//                    val days = millisUntilFinished / (1000 * 60 * 60 * 24)
+//                    val hours = (millisUntilFinished / (1000 * 60 * 60)) % 24
+//                    val minutes = (millisUntilFinished / (1000 * 60)) % 60
+//                    val seconds = (millisUntilFinished / 1000) % 60
+//
+//                    val parts = mutableListOf<String>()
+//                    if (days > 0) parts.add("${days}d")
+//                    if (hours > 0 || days > 0) parts.add("${hours}h")
+//                    if (minutes > 0 || hours > 0 || days > 0) parts.add("${minutes}m")
+//                    if(days == 0) {
+//                        if (seconds > 0 || minutes > 0 || hours > 0 || days > 0) parts.add("${seconds}s")
+//                    }
+//                    val countdown = parts.joinToString(":")
+                    binding.transactiontime.text = formattedDate
                 }
 
             } else {
-                Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
+                val padding = PaddingValues(
+                    start = 78.dp,
+                    top = 78.dp,
+                    end = 78.dp,
+                    bottom = 78.dp
+                )
+                val NoDataFoundDialog = CustomDialog(
+                    context = this,
+                    Title1 = "Something Went Wrong !",
+                    Title2 = "Restart This App Or Try Again Later",
+                    cancelable = true,
+                    Error = " Error : ${it.message}",
+                    animationID = R.raw.api_wrong,
+                    padding = padding,
+                    repeat = false,
+                    onDialogActionListener = object : OnDialogActionListener {
+                        override fun onPositiveButtonClick(dialog: CustomDialog) {
+
+                        }
+
+                        override fun onNegativeButtonClick(dialog: CustomDialog) {
+
+                        }
+
+                        override fun onCancel(dialog: CustomDialog) {
+
+                        }
+
+                    }
+                )
             }
         }
     }

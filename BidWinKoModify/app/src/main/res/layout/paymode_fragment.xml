@@ -74,7 +74,7 @@
                     android:layout_marginTop="@dimen/_20sdp"
                     android:fontFamily="@font/lato_regular"
                     android:gravity="center_horizontal"
-                    android:text="Here Is your link ,\n You can opy it."
+                    android:text="Here Is your link ,\n You can copy it."
                     android:textColor="#0B7C27"
                     android:textSize="@dimen/_13sdp" />
 

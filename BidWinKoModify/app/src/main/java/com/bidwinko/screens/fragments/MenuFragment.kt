@@ -89,32 +89,32 @@ class MenuFragment : Fragment(), View.OnClickListener {
             }
 
             R.id.termcondition -> {
-                val urlcondition = "http://192.168.1.30:5000/terms.html"
+                val urlcondition = "http://www.bidwin.co.in/terms.html"
                 openTab(urlcondition)
              }
 
             R.id.privacy -> {
-                val url = "http://192.168.1.00:5000/privacy.html"
+                val url = "http://www.bidwin.co.in/privacy.html"
                 openTab(url)
              }
 
             R.id.aboutus -> {
-                val urlaboutus = "http://192.168.1.30:5000/about.html"
+                val urlaboutus = "http://www.bidwin.co.in/about.html"
                 openTab(urlaboutus)
             }
 
             R.id.contactus -> {
-                val urlcontactus = "http://192.168.1.30:5000/contact-us.html"
+                val urlcontactus = "http://www.bidwin.co.in/contact-us.html"
                 openTab(urlcontactus)
             }
 
             R.id.returnrefund -> {
-                val urlreturnrefund = "http://192.168.1.30:5000/refund.html"
+                val urlreturnrefund = "http://www.bidwin.co.in/refund.html"
                 openTab(urlreturnrefund)
             }
 
             R.id.workflow -> {
-                val urlworkflow = "http://192.168.1.30:5000/how_it_works.html"
+                val urlworkflow = "http://www.bidwin.co.in/how_it_works.html"
                 openTab(urlworkflow)
             }
         }

@@ -1,11 +1,8 @@
 package com.bidwinko.screens.fragments
 
 import android.animation.Animator
-import android.animation.Animator.AnimatorListener
-import android.app.ProgressDialog
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,18 +17,11 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import com.bidwinko.R
 import com.bidwinko.adapter.WinnerListAdapter
 import com.bidwinko.databinding.FragmentWinnerBinding
-import com.bidwinko.API.APIService
-import com.bidwinko.model.ResponseModels.winnerDetail
-import com.bidwinko.model.ResponseModels.winners_Response_Model
-import com.bidwinko.API.Retrofit
 import com.bidwinko.model.RequestModels.CommonRequest
+import com.bidwinko.model.ResponseModels.winnerDetail
 import com.bidwinko.utilies.Constants
 import com.bidwinko.utilies.SessionManager
 import com.bidwinko.viewModel.mainViewModel
-import kotlinx.coroutines.MainScope
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 
 private lateinit var const: FragmentActivity
@@ -57,6 +47,13 @@ class WinnerFragment : Fragment() {
         val view = binding?.root
         viewModel = mainViewModel(const)
         const.findViewById<TextView>(R.id.title).setText(R.string.winner)
+        binding.winnerRefresh.setOnRefreshListener {
+            binding.shimmer.startShimmer()
+            binding.shimmer.visibility = View.VISIBLE
+            binding.bidRecyclerView.visibility = View.GONE
+            winnerDetailArrayList.clear()
+            fetchWinnerList()
+        }
         setupAnimations()
         fetchWinnerList()
 
@@ -151,7 +148,7 @@ class WinnerFragment : Fragment() {
 //                binding?.trophyAnimation1?.playAnimation()
 //                binding?.trophyAnimation3?.playAnimation()
 
-                val fadeout = AnimationUtils.loadAnimation(const,R.anim.fadeout)
+                val fadeout = AnimationUtils.loadAnimation(const,R.anim.fast_fade_out)
                 
                 binding.trophyAnimation1.startAnimation(fadeout)
                 binding.trophyAnimation2.startAnimation(fadeout)
@@ -190,12 +187,15 @@ class WinnerFragment : Fragment() {
         )
 
         viewModel.GetWinnerList(request).observe(const){
-            binding.shimmer.startShimmer()
+            binding.winnerRefresh.isRefreshing = false
+            binding.shimmer.stopShimmer()
             binding.shimmer.visibility = View.GONE
             if(it.status == 200)
             {
+
                 winnerDetailArrayList =it.winner_details as ArrayList<winnerDetail>
                 if(!winnerDetailArrayList.isNullOrEmpty()) {
+                    binding.bidRecyclerView.visibility = View.VISIBLE
                     mAdapter = WinnerListAdapter(winnerDetailArrayList, const)
                     binding?.bidRecyclerView?.apply {
                         itemAnimator = DefaultItemAnimator()

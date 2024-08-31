@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+ xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/scrollview"
+    android:id="@+id/home_refresh"
+    app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#F6F5F5">
+
 
         <com.facebook.shimmer.ShimmerFrameLayout
             android:id="@+id/shimmer1"
@@ -23,7 +31,6 @@
             android:backgroundTint="@color/white"
             android:id="@+id/latest_dealslider"
             android:layout_width="match_parent"
-            android:layout_marginVertical="@dimen/_5sdp"
             android:layout_height="@dimen/_150sdp" />
 
         <LinearLayout
@@ -132,12 +139,13 @@
                         android:paddingVertical="@dimen/_10sdp"
                         android:text="Live"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/_12ssp" />
+                        android:textSize="@dimen/_11ssp" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/upcoming_btn"
                     android:layout_width="0dp"
+                    android:alpha="0.7"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center_horizontal"
@@ -153,7 +161,7 @@
                         android:paddingVertical="@dimen/_10sdp"
                         android:text="Upcoming"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/_12ssp" />
+                        android:textSize="@dimen/_11ssp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -161,6 +169,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:alpha="0.7"
                     android:gravity="center_horizontal"
                     app:cardElevation="@dimen/_5sdp">
 
@@ -174,7 +183,7 @@
                         android:paddingVertical="@dimen/_10sdp"
                         android:text="Closed"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/_12ssp" />
+                        android:textSize="@dimen/_11ssp" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -619,7 +628,7 @@
                                 android:layout_marginTop="@dimen/_15sdp"
                                 android:fontFamily="@font/lato_regular"
                                 android:gravity="center_horizontal"
-                                android:text="Scroll and select a range \n between 0 to 99"
+                                android:text="Scroll and select a range \n between 0 to 100"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/_12ssp" />
 
@@ -686,7 +695,7 @@
                                 android:layout_marginTop="@dimen/_15sdp"
                                 android:fontFamily="@font/lato_regular"
                                 android:gravity="center_horizontal"
-                                android:text="Choosing A Bid Is Easy. \n BidBetween 0.01 to 99.99 "
+                                android:text="Choosing A Bid Is Easy. \n BidBetween 0.0 to 100.99 "
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/_12ssp" />
 
@@ -835,7 +844,9 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_60sdp"
             android:backgroundTint="@color/transparent"/>
+
     </RelativeLayout>
 
-
 </androidx.core.widget.NestedScrollView>
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

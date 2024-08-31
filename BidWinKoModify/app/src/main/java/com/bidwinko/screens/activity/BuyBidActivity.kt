@@ -51,7 +51,12 @@ class BuyBidActivity : AppCompatActivity() {
         unlimitedBid = findViewById(R.id.card_unlimited_bid)
         binding.bidbalance.text = SessionManager(this).GetValue(Constants.TOTAL_BIDS)
 
-
+        binding.buybidrefresh.setOnRefreshListener {
+            binding.shimmer.root.startShimmer()
+            binding.shimmer.root.visibility = View.VISIBLE
+            binding.bidRecyclerView.visibility = View.GONE
+            getData()
+        }
         binding.cardUnlimitedBid.setOnClickListener {
             val intentbuybid = Intent(this, ReferActivity::class.java)
             startActivity(intentbuybid)
@@ -86,7 +91,10 @@ class BuyBidActivity : AppCompatActivity() {
             versionCode = SessionManager(this).GetValue(Constants.VERSION_CODE)
         )
         mainViewModel(this).GetBidsPacakage(request).observe(this){
+            binding.buybidrefresh.isRefreshing = false
             if(it.status == 200){
+                SessionManager(this).InitializeValue(Constants.TOTAL_BIDS,it.totalBids)
+                binding.bidbalance.text = SessionManager(this).GetValue(Constants.TOTAL_BIDS)
                     mAdapter = BuyBidPlanAdapter(it.bidPlans as ArrayList<BidPlan>, this@BuyBidActivity)
                 binding.bidRecyclerView.setAdapter(mAdapter)
                 binding.shimmer.root.stopShimmer()

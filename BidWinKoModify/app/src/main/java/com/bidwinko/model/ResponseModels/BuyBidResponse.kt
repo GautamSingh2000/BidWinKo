@@ -3,7 +3,8 @@ package com.bidwinko.model.ResponseModels
 data class BuyBidResponse(
     val bidPlans: List<BidPlan>,
     val message: String,
-    val status: Int
+    val status: Int,
+    val totalBids : String
 )
 data class BidPlan(
     val categoryId: Int,

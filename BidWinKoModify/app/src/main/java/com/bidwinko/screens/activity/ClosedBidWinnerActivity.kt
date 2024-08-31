@@ -12,10 +12,14 @@ import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.ui.unit.dp
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bidwinko.R
 import com.bidwinko.adapter.CLosedBidWinnerAdapter
+import com.bidwinko.components.CustomDialog.CustomDialog
+import com.bidwinko.components.CustomDialog.OnDialogActionListener
 import com.bidwinko.components.NoDataFound.NoDataFound
 import com.bidwinko.databinding.ActivityClosedBidWinnerBinding
 import com.bidwinko.model.RequestModels.ClosedBidWinnerRequest
@@ -57,6 +61,12 @@ class ClosedBidWinnerActivity : AppCompatActivity() {
             productID = intent.getIntExtra("bidofferId", -1).toString()
         }
 
+        binding.CloseddetailRefresh.setOnRefreshListener {
+            binding.shimmer.root.visibility = View.VISIBLE
+            binding.shimmer.root.startShimmer()
+            binding.wiinerRv.visibility =View.GONE
+            GetData()
+        }
        Log.e("closebidActi","$productID id ")
         if(!productID.equals(""))
         {
@@ -151,6 +161,10 @@ class ClosedBidWinnerActivity : AppCompatActivity() {
         
         val mainViewModel = mainViewModel(this)
         mainViewModel.GetClosedWinnersList(request).observe(this){
+            binding.CloseddetailRefresh.isRefreshing = false
+            binding.shimmer.root.visibility = View.GONE
+            binding.shimmer.root.stopShimmer()
+            binding.wiinerRv.visibility =View.VISIBLE
             if(it.status == 200){
                 Glide.with(this).load(it.productDetail.productImage.get(0)).into(binding.productimage)
                 image1 = it.productDetail.productImage.get(0)
@@ -219,7 +233,36 @@ class ClosedBidWinnerActivity : AppCompatActivity() {
 
                 }
             }else{
-                
+                val padding = PaddingValues(
+                    start = 78.dp,
+                    top = 78.dp,
+                    end = 78.dp,
+                    bottom = 78.dp
+                )
+                 val NoDataFoundDialog = CustomDialog(
+                    context = this,
+                    Title1 = "Something Went Wrong !",
+                    Title2 = "Restart This App Or Try Again Later",
+                    cancelable = true,
+                    Error = " Error : ${it.message}",
+                    animationID = R.raw.api_wrong,
+                    padding = padding,
+                    repeat = false,
+                    onDialogActionListener = object : OnDialogActionListener {
+                        override fun onPositiveButtonClick(dialog: CustomDialog) {
+
+                        }
+
+                        override fun onNegativeButtonClick(dialog: CustomDialog) {
+
+                        }
+
+                        override fun onCancel(dialog: CustomDialog) {
+
+                        }
+
+                    }
+                )
             }
         }
     }

@@ -1,22 +1,26 @@
 package com.bidwinko.screens.fragments
 
-//import com.bidwinko.adapter.LiveBidProductsGridAdapter
+import android.Manifest
 import android.animation.Animator
 import android.animation.Animator.AnimatorListener
 import android.animation.LayoutTransition
 import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -33,6 +37,9 @@ import com.bidwinko.utilies.Constants
 import com.bidwinko.utilies.SessionManager
 import com.bidwinko.viewModel.mainViewModel
 
+
+private const val CHANNEL_ID = "notification_channel_id"
+
 private lateinit var viewpager2: ViewPager2
 private lateinit var pageChangeListener: ViewPager2.OnPageChangeCallback
 private val params = LinearLayout.LayoutParams(
@@ -48,6 +55,7 @@ private lateinit var update: Runnable
 lateinit var binding: FragmentHomeBinding
 
 private lateinit var const: FragmentActivity
+
 class AuctionFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -55,6 +63,15 @@ class AuctionFragment : Fragment() {
             const = context
         }
     }
+
+    private val requestNotificationPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+            if (isGranted) {
+                Toast.makeText(context, "Notification permission granted", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(context, "Notification permission denied", Toast.LENGTH_SHORT).show()
+            }
+        }
 
     private lateinit var viewmodel: mainViewModel
     var LiveBidList = ArrayList<HomeList>()
@@ -70,6 +87,37 @@ class AuctionFragment : Fragment() {
         const.findViewById<TextView>(R.id.title).setText(R.string.current_auction)
         viewmodel = mainViewModel(const)
         binding = FragmentHomeBinding.inflate(layoutInflater)
+
+
+        handleNotificationPermission()
+
+        binding.homeRefresh.setOnRefreshListener {
+
+            binding.liveBtn.alpha  = 1f
+            binding.upcomingBtn.alpha  = 0.7f
+            binding.closeBtn.alpha  = 0.7f
+
+            binding.liveBtnText.setTextColor(const.getColor(R.color.black))
+            binding.liveBtnText.background =
+                const.getDrawable(R.drawable.white_rounded_bg)
+
+            binding.upcomingBtnText.setTextColor(const.getColor(R.color.white))
+            binding.upcomingBtnText.background =
+                const.getDrawable(R.drawable.white_holo_bg)
+
+            binding.closeBtnText.setTextColor(const.getColor(R.color.white))
+            binding.closeBtnText.background = const.getDrawable(R.drawable.white_holo_bg)
+
+            CardSelected = "Live"
+            val homeRequest = CommonRequest(
+                userId = SessionManager(const).GetValue(Constants.USER_ID),
+                securityToken = SessionManager(const).GetValue(Constants.SECURITY_TOKEN),
+                versionName = SessionManager(const).GetValue(Constants.VERSION_NAME),
+                versionCode = SessionManager(const).GetValue(Constants.VERSION_CODE)
+            )
+            GetLiveData(homeRequest)
+
+        }
 
         binding.anim.let {
             it.playAnimation()
@@ -92,21 +140,8 @@ class AuctionFragment : Fragment() {
 
         binding.upcomingBtn.setOnClickListener {
 
-            binding.shimmer.startShimmer()
-            binding.shimmer.visibility = View.VISIBLE
-            binding.bidRecyclerView.visibility = View.GONE
-
+            it.alpha = 1f
             CardSelected = "Upcoming"
-            binding.upcomingBtnText.setTextColor(const.getColor(R.color.black))
-            binding.upcomingBtnText.background =
-                const.getDrawable(R.drawable.white_rounded_bg)
-
-            binding.liveBtnText.setTextColor(const.getColor(R.color.white))
-            binding.liveBtnText.background = const.getDrawable(R.drawable.white_holo_bg)
-
-            binding.closeBtnText.setTextColor(const.getColor(R.color.white))
-            binding.closeBtnText.background = const.getDrawable(R.drawable.white_holo_bg)
-
             val homeRequest = CommonRequest(
                 userId = SessionManager(const).GetValue(Constants.USER_ID).toString(),
                 securityToken = SessionManager(const).GetValue(Constants.SECURITY_TOKEN),
@@ -121,21 +156,6 @@ class AuctionFragment : Fragment() {
 
         binding.liveBtn.setOnClickListener {
             CardSelected = "Live"
-            binding.shimmer.startShimmer()
-            binding.shimmer.visibility = View.VISIBLE
-            binding.bidRecyclerView.visibility = View.GONE
-
-            LiveBidList.clear()
-            binding.liveBtnText.setTextColor(const.getColor(R.color.black))
-            binding.liveBtnText.background =
-                const.getDrawable(R.drawable.white_rounded_bg)
-
-            binding.upcomingBtnText.setTextColor(const.getColor(R.color.white))
-            binding.upcomingBtnText.background =
-                const.getDrawable(R.drawable.white_holo_bg)
-
-            binding.closeBtnText.setTextColor(const.getColor(R.color.white))
-            binding.closeBtnText.background = const.getDrawable(R.drawable.white_holo_bg)
 
             val homeRequest = CommonRequest(
                 userId = SessionManager(const).GetValue(Constants.USER_ID).toString(),
@@ -143,26 +163,12 @@ class AuctionFragment : Fragment() {
                 versionName = SessionManager(const).GetValue(Constants.VERSION_NAME),
                 versionCode = SessionManager(const).GetValue(Constants.VERSION_CODE)
             )
-
+            it.alpha  = 1f
             GetLiveData(homeRequest)
         }
 
         binding.closeBtn.setOnClickListener {
             CardSelected = "Closed"
-            binding.shimmer.startShimmer()
-            binding.shimmer.visibility = View.VISIBLE
-            binding.bidRecyclerView.visibility = View.GONE
-            ClosedBidList.clear()
-            binding.closeBtnText.setTextColor(const.getColor(R.color.black))
-            binding.closeBtnText.background =
-                const.getDrawable(R.drawable.white_rounded_bg)
-
-            binding.upcomingBtnText.setTextColor(const.getColor(R.color.white))
-            binding.upcomingBtnText.background =
-                const.getDrawable(R.drawable.white_holo_bg)
-
-            binding.liveBtnText.setTextColor(const.getColor(R.color.white))
-            binding.liveBtnText.background = const.getDrawable(R.drawable.white_holo_bg)
 
             val homeRequest = CommonRequest(
                 userId = SessionManager(const).GetValue(Constants.USER_ID).toString(),
@@ -196,12 +202,12 @@ class AuctionFragment : Fragment() {
 
                 binding.howToBidBtn.setCardBackgroundColor(resources.getColor(R.color.gray_4))
                 binding.biddingsteps.visibility = View.VISIBLE
-//                binding.scrollview.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-//                    override fun onGlobalLayout() {
-//                        binding.scrollview.viewTreeObserver.removeOnGlobalLayoutListener(this)
-//                        binding.scrollview.smoothScrollTo(0, binding.step1Ll.bottom)
-//                    }
-//                })
+                binding.scrollview.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+                    override fun onGlobalLayout() {
+                        binding.scrollview.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                        binding.scrollview.smoothScrollTo(0, binding.step1Ll.bottom)
+                    }
+                })
             }
         }
 
@@ -233,6 +239,7 @@ class AuctionFragment : Fragment() {
     }
 
     private fun setBannerData(bannerlist: List<AppBanner>) {
+        banner_list.clear()
         for (banner in bannerlist) {
             banner_list.add(ImageItem(banner.id.toString(), banner.image))
         }
@@ -412,6 +419,21 @@ class AuctionFragment : Fragment() {
     }
 
     private fun GetUpcommingData(homeRequest: CommonRequest) {
+        binding.bidRecyclerView.visibility = View.GONE
+        binding.shimmer.startShimmer()
+        binding.shimmer.visibility = View.VISIBLE
+        binding.upcomingBtnText.setTextColor(const.getColor(R.color.black))
+        binding.upcomingBtnText.background =
+            const.getDrawable(R.drawable.white_rounded_bg)
+
+        binding.liveBtnText.setTextColor(const.getColor(R.color.white))
+        binding.liveBtn.alpha = 0.7f
+        binding.liveBtnText.background = const.getDrawable(R.drawable.white_holo_bg)
+
+        binding.closeBtnText.setTextColor(const.getColor(R.color.white))
+        binding.closeBtn.alpha = 0.7f
+        binding.closeBtnText.background = const.getDrawable(R.drawable.white_holo_bg)
+
 
         UpcommingBidList.clear()
         viewmodel.GetupcomingBidsList(homeRequest).observe(const) {
@@ -437,6 +459,7 @@ class AuctionFragment : Fragment() {
 
                     binding.shimmer.stopShimmer()
                     binding.shimmer.visibility = View.GONE
+                    binding.homeRefresh.isRefreshing = false
 
                 } else {
                     binding.relax.visibility = View.GONE
@@ -459,8 +482,12 @@ class AuctionFragment : Fragment() {
                         }
 
                     })
+
+                    binding.homeRefresh.isRefreshing = false
                 }
             } else {
+
+                binding.homeRefresh.isRefreshing = false
                 Log.e(tag, "GetUpcommingData apis error ${it.message}")
             }
         }
@@ -468,7 +495,27 @@ class AuctionFragment : Fragment() {
 
     private fun GetCompletedData(homeRequest: CommonRequest) {
 
+        binding.bidRecyclerView.visibility = View.GONE
+        binding.shimmer.startShimmer()
+        binding.shimmer.visibility = View.VISIBLE
+        ClosedBidList.clear()
+
+        binding.closeBtnText.setTextColor(const.getColor(R.color.black))
+        binding.closeBtn.alpha = 1f
+        binding.closeBtnText.background =
+            const.getDrawable(R.drawable.white_rounded_bg)
+
+        binding.upcomingBtnText.setTextColor(const.getColor(R.color.white))
+        binding.upcomingBtnText.background =
+            const.getDrawable(R.drawable.white_holo_bg)
+        binding.upcomingBtn.alpha = 0.7f
+
+        binding.liveBtnText.setTextColor(const.getColor(R.color.white))
+        binding.liveBtn.alpha = 0.7f
+        binding.liveBtnText.background = const.getDrawable(R.drawable.white_holo_bg)
+
         viewmodel.GetcompletedBidsList(homeRequest).observe(const) {
+            binding.homeRefresh.isRefreshing = false
             if (it.status == 200) {
                 ClosedBidList = it.offers as ArrayList<HomeList>
                 Log.e("Auction", "${ClosedBidList.size}   ClosedBidList.size")
@@ -520,7 +567,27 @@ class AuctionFragment : Fragment() {
 
     private fun GetLiveData(homeRequest: CommonRequest) {
 
+        binding.bidRecyclerView.visibility = View.GONE
+        binding.shimmer.startShimmer()
+        binding.shimmer.visibility = View.VISIBLE
+
+        LiveBidList.clear()
+
+        binding.liveBtnText.setTextColor(const.getColor(R.color.black))
+        binding.liveBtnText.background =
+            const.getDrawable(R.drawable.white_rounded_bg)
+
+        binding.upcomingBtnText.setTextColor(const.getColor(R.color.white))
+        binding.upcomingBtnText.background =
+            const.getDrawable(R.drawable.white_holo_bg)
+        binding.upcomingBtn.alpha= 0.7f
+
+        binding.closeBtnText.setTextColor(const.getColor(R.color.white))
+        binding.closeBtnText.background = const.getDrawable(R.drawable.white_holo_bg)
+        binding.closeBtn.alpha= 0.7f
         viewmodel.GetLiveData(homeRequest).observe(const) {
+
+            binding.homeRefresh.isRefreshing = false
             if (it.status == 200) {
                 LiveBidList = it.offers as ArrayList<HomeList>
                 Log.e("Auction", "${LiveBidList.size}   LiveBidList.size")
@@ -560,6 +627,55 @@ class AuctionFragment : Fragment() {
         @JvmStatic
         fun newInstance(): AuctionFragment {
             return AuctionFragment()
+        }
+    }
+    private fun handleNotificationPermission() {
+        when {
+            // Android 13 and above
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> {
+                requestNotificationPermission()
+            }
+
+            // Android 9 and 10 (API Level 28 and 29)
+            Build.VERSION.SDK_INT in Build.VERSION_CODES.P..Build.VERSION_CODES.Q -> {
+                // No additional permission required for notifications
+                // You can show notifications directly
+                // Permission granted, show the notification
+//                Toast.makeText(const,"Notification Permission Granted!!",Toast.LENGTH_SHORT).show()
+            }
+
+            // Android versions below 9 (API Level < 28)
+            Build.VERSION.SDK_INT < Build.VERSION_CODES.P -> {
+                // No additional permission required for notifications
+                // You can show notifications directly
+                // Permission granted, show the notification
+//                Toast.makeText(const,"Notification Permission Granted!!",Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+    private fun requestNotificationPermission() {
+        // Check if the permission is already granted
+        if (ContextCompat.checkSelfPermission(
+                const,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            // Permission already granted, show the notification
+        } else {
+            // Request the notification permission
+            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
+    }
+
+    // Register the permission callback
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            // Permission granted, show the notification
+            Toast.makeText(const, "Notification Permission Granted!!", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(const, "Notification Permission Denied!!", Toast.LENGTH_SHORT).show()
         }
     }
 

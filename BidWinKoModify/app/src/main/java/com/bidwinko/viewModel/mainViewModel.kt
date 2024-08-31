@@ -84,7 +84,7 @@ class mainViewModel(val context: Context) : ViewModel() {
                         context = context,
                         Title1 = "Something Went Wrong !",
                         Title2 = "Restart This App Or Try Again Later",
-                        cancelable = false,
+                        cancelable = true,
                         Error = " Error : ${response.message()}",
                         animationID = R.raw.api_wrong,
                         padding = padding,

@@ -2,12 +2,15 @@ package com.bidwinko.screens.activity
 
 import android.animation.Animator
 import android.animation.Animator.AnimatorListener
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.os.Vibrator
 import android.util.Log
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.Animation.AnimationListener
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -36,9 +39,10 @@ class SelectBidActivity : AppCompatActivity(), UpperRangeBidAdapter.UpperBidRang
     var pre_selected_bid = ArrayList<String>()
     var canceled_bid = ArrayList<String>()
     var bidsAvailable = 0
-    var upperRvPosition = 0
+    var progressDialog: ProgressDialog? = null
     val lowerSelectedBidList = ArrayList<String>()
     private  var lowerListAdapter : LoweRangeBidAdapter? = null
+    private  var upperListAdapter : UpperRangeBidAdapter? = null
     private lateinit var binding: ActivitySelectBidBinding
     var itemclick = "0"
     lateinit var bidId: String
@@ -47,8 +51,10 @@ class SelectBidActivity : AppCompatActivity(), UpperRangeBidAdapter.UpperBidRang
         binding = ActivitySelectBidBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
-//        lowerSelectedBidList.add("-1")
         binding.bidsAvailable.text = "${SessionManager(this).GetValue(Constants.TOTAL_BIDS)} Bids"
+
+        binding.upShimmer.startShimmer()
+        binding.lowShimmer.startShimmer()
         bidsAvailable = SessionManager(this).GetValue(Constants.TOTAL_BIDS).toInt()
         bidId = intent.getStringExtra("bidId").toString()
         getInitialUpperRange()
@@ -122,28 +128,7 @@ class SelectBidActivity : AppCompatActivity(), UpperRangeBidAdapter.UpperBidRang
         }
 
         binding.resetBtn.setOnClickListener {
-            val anim = AnimationUtils.loadAnimation(this, R.anim.fast_rotate_clock_wise)
-            binding.resetBtn.startAnimation(anim)
-            bidsAvailable = SessionManager(this).GetValue(Constants.TOTAL_BIDS).toInt()
-            binding.bidsAvailable.text = "$bidsAvailable Bid"
-            lowerSelectedBidList.clear()
-            lowerListAdapter = null
-            val numbers = generateLowerValues(0)
-            lowerListAdapter = LoweRangeBidAdapter(
-                context = this,
-                clickable = true,
-                list = numbers,
-                pre_selected_bids = pre_selected_bid,
-                canceled_bids = canceled_bid,
-                mListener = this
-            )
-            binding.allbidRv.adapter = lowerListAdapter
-            binding.rangerv.smoothScrollToPosition(0)
-            lowerListAdapter?.notifyDataSetChanged()
-
-            binding.placeBid.backgroundTintList =
-                ContextCompat.getColorStateList(this, R.color.littledarkgray)
-            binding.placeBid.setTextColor(ContextCompat.getColor(this, R.color.white))
+            Reset()
         }
 
         binding.placeBid.setOnClickListener {
@@ -164,13 +149,16 @@ class SelectBidActivity : AppCompatActivity(), UpperRangeBidAdapter.UpperBidRang
                     padding = padding,
                     onDialogActionListener = object : OnDialogActionListener {
                         override fun onPositiveButtonClick(dialog: CustomDialog) {
+                            Log.e("selectbid","preed yes button")
                             PlaceBid()
                         }
 
                         override fun onNegativeButtonClick(dialog: CustomDialog) {
+                            Log.e("selectbid","preed -ve button")
                         }
 
                         override fun onCancel(dialog: CustomDialog) {
+                            Log.e("selectbid","preedno yes button")
                         }
                     }
                 )
@@ -184,7 +172,69 @@ class SelectBidActivity : AppCompatActivity(), UpperRangeBidAdapter.UpperBidRang
         }
     }
 
-  private fun getUserBid()  {
+    private fun Reset() {
+        binding.upShimmer.stopShimmer()
+        binding.lowShimmer.stopShimmer()
+        binding.upShimmer.visibility = View.VISIBLE
+        binding.lowShimmer.visibility = View.VISIBLE
+        binding.rangerv.visibility = View.GONE
+        binding.allbidRv.visibility = View.GONE
+
+        lowerSelectedBidList.clear()
+
+        binding.bidsAvailable.text = "${SessionManager(this).GetValue(Constants.TOTAL_BIDS)} Bids"
+        bidsAvailable = SessionManager(this).GetValue(Constants.TOTAL_BIDS).toInt()
+
+        val anim = AnimationUtils.loadAnimation(this, R.anim.fast_rotate_clock_wise)
+        binding.resetBtn.startAnimation(anim)
+        anim.setAnimationListener(object : AnimationListener{
+            override fun onAnimationStart(animation: Animation?) {
+
+            }
+
+            override fun onAnimationEnd(animation: Animation?) {
+                val numbers = generateLowerValues(0)
+                lowerListAdapter = null
+                lowerListAdapter = LoweRangeBidAdapter(
+                    context = this@SelectBidActivity,
+                    clickable = true,
+                    list = numbers,
+                    pre_selected_bids = pre_selected_bid,
+                    canceled_bids = canceled_bid,
+                    mListener = this@SelectBidActivity
+                )
+                binding.allbidRv.adapter = lowerListAdapter
+                lowerListAdapter?.notifyDataSetChanged()
+
+
+                upperListAdapter = null
+                upperlist.clear()
+                getInitialUpperRange()
+                upperListAdapter = UpperRangeBidAdapter(this@SelectBidActivity, upperlist, this@SelectBidActivity)
+                binding.rangerv.adapter = upperListAdapter
+                binding.rangerv.smoothScrollToPosition(0)
+                upperListAdapter?.notifyDataSetChanged()
+
+                binding.placeBid.backgroundTintList =
+                    ContextCompat.getColorStateList(this@SelectBidActivity, R.color.littledarkgray)
+                binding.placeBid.setTextColor(ContextCompat.getColor(this@SelectBidActivity, R.color.white))
+
+                binding.upShimmer.stopShimmer()
+                binding.lowShimmer.stopShimmer()
+                binding.upShimmer.visibility = View.GONE
+                binding.lowShimmer.visibility = View.GONE
+                binding.rangerv.visibility = View.VISIBLE
+                binding.allbidRv.visibility = View.VISIBLE
+            }
+
+            override fun onAnimationRepeat(animation: Animation?) {
+
+            }
+
+        })
+    }
+
+    private fun getUserBid()  {
         val mainViewModel = mainViewModel(this)
         val request = ProductDetailRequest(
             bidId = bidId,
@@ -201,7 +251,8 @@ class SelectBidActivity : AppCompatActivity(), UpperRangeBidAdapter.UpperBidRang
                 Log.e("selectedbid", "${canceled_bid.size} size of canceled bids")
                 Log.e("selectedbid", "${pre_selected_bid.size} size of pre_selected_bid")
 
-                binding.rangerv.adapter = UpperRangeBidAdapter(this, upperlist, this)
+                upperListAdapter = UpperRangeBidAdapter(this, upperlist, this)
+                binding.rangerv.adapter = upperListAdapter
 
                 lowerListAdapter = LoweRangeBidAdapter(
                     context = this,
@@ -212,11 +263,28 @@ class SelectBidActivity : AppCompatActivity(), UpperRangeBidAdapter.UpperBidRang
                     mListener = this
                 )
                 binding.allbidRv.adapter = lowerListAdapter
+
+                binding.upShimmer.stopShimmer()
+                binding.lowShimmer.stopShimmer()
+                binding.upShimmer.visibility = View.GONE
+                binding.lowShimmer.visibility = View.GONE
+               binding.rangerv.visibility = View.VISIBLE
+               binding.allbidRv.visibility = View.VISIBLE
             }
         }
     }
 
     private fun PlaceBid() {
+        Log.e("selectbid","PlaceBid APi on")
+        if(!this.isFinishing)
+        {
+            progressDialog = ProgressDialog(this)
+            progressDialog!!.setMessage(getString(R.string.loadingwait))
+            progressDialog!!.show()
+            progressDialog!!.setCancelable(false)
+
+        }
+
         val placeBidRequest = PlaceBidRequest(
             bidId = bidId,
             bids = lowerSelectedBidList,
@@ -228,6 +296,7 @@ class SelectBidActivity : AppCompatActivity(), UpperRangeBidAdapter.UpperBidRang
 
         val mainViewModel = mainViewModel(this)
         mainViewModel.PlaceBid(placeBidRequest).observe(this) {
+            dismissProgressDialog()
             if (it.status == 200) {
                 SessionManager(this).InitializeValue(Constants.TOTAL_BIDS,it.remainingBids)
                 binding.party.let {
@@ -339,6 +408,12 @@ class SelectBidActivity : AppCompatActivity(), UpperRangeBidAdapter.UpperBidRang
         )
 
         lowerListAdapter?.notifyDataSetChanged()
+    }
+
+    private fun dismissProgressDialog() {
+        if (progressDialog != null && progressDialog!!.isShowing) {
+            progressDialog!!.dismiss()
+        }
     }
 
 }

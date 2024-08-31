@@ -95,7 +95,7 @@
             android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="18 Bids Free"
+            android:text="5 Bids Free"
             android:fontFamily="@font/lato_bold"
             android:textColor="@color/white"
             android:textSize="@dimen/_13ssp"

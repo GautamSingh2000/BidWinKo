@@ -35,7 +35,7 @@
         android:background="@drawable/pink_blue_white_gradient"
         android:paddingHorizontal="@dimen/_7sdp"
         android:paddingVertical="@dimen/_1sdp"
-        android:text="40% OFF"
+        android:text=" - - % OFF"
         android:textColor="@color/white"
         android:textSize="@dimen/_10ssp" />
 </com.facebook.shimmer.ShimmerFrameLayout>
@@ -51,7 +51,7 @@
             android:id="@+id/no_of_bid"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="40  Bids"
+            android:text="--  Bids"
             android:layout_centerVertical="true"
             android:textColor="@color/black"
             android:textSize="@dimen/_13ssp"
@@ -72,7 +72,7 @@
                 android:id="@+id/expiry_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Expire in 15 days"
+                android:text="Expire in - - days"
                 android:paddingVertical="@dimen/_5sdp"
                 android:paddingHorizontal="@dimen/_7sdp"
                 android:textSize="@dimen/_9ssp"
@@ -81,7 +81,7 @@
 
         <TextView
             android:id="@+id/amount_tv"
-            android:text="150"
+            android:text="  -  -  "
             android:drawableStart="@drawable/rupeee"
             android:paddingVertical="@dimen/_8sdp"
             android:paddingHorizontal="@dimen/_15sdp"

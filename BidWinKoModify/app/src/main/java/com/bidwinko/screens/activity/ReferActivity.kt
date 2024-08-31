@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ShareCompat
@@ -30,38 +31,68 @@ class ReferActivity : AppCompatActivity() {
         val link = SessionManager(this).GetValue(Constants.APP_URL)
 
         binding.copy.setOnClickListener {
-            val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-            val textToCopy = link // Replace with the text you want to copy
+            if(link.isNullOrEmpty() || link.isNullOrBlank() || link.equals("null"))
+            {
+                Toast.makeText(this,"Link not provided",Toast.LENGTH_SHORT).show()
+            }else {
+                val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+                val textToCopy = link // Replace with the text you want to copy
 
-            val clip = ClipData.newPlainText("Copied Text", textToCopy)
-            clipboard.setPrimaryClip(clip)
+                val clip = ClipData.newPlainText("Copied Text", textToCopy)
+                clipboard.setPrimaryClip(clip)
 
-            Toast.makeText(this, "Text copied to clipboard", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Text copied to clipboard", Toast.LENGTH_SHORT).show()
+            }
         }
 
         binding.insta.setOnClickListener {
-            shareLink("com.instagram.android", link, "Instagram app not found")
+            if(link.isNullOrEmpty() || link.isNullOrBlank() || link.equals("null"))
+            {
+                Toast.makeText(this,"Link not provided",Toast.LENGTH_SHORT).show()
+            }else {
+                shareLink("com.instagram.android", link, "Instagram app not found")
+            }
         }
 
         binding.facebook.setOnClickListener {
-            shareLink("com.facebook.katana", link, "Facebook app not found")
+            if(link.isNullOrEmpty() || link.isNullOrBlank() || link.equals("null"))
+            {
+                Toast.makeText(this,"Link not provided",Toast.LENGTH_SHORT).show()
+            }else {
+                shareLink("com.facebook.katana", link, "Facebook app not found")
+            }
         }
 
         binding.teligram.setOnClickListener {
-            shareLink("org.telegram.messenger", link, "Telegram app not found")
+            if(link.isNullOrEmpty() || link.isNullOrBlank() || link.equals("null"))
+            {
+                Toast.makeText(this,"Link not provided",Toast.LENGTH_SHORT).show()
+            }else {
+                shareLink("org.telegram.messenger", link, "Telegram app not found")
+            }
         }
 
         binding.whatsapp.setOnClickListener {
-            shareLink("com.whatsapp", link, "WhatsApp app not found")
+            if(link.isNullOrEmpty() || link.isNullOrBlank() || link.equals("null"))
+            {
+                Toast.makeText(this,"Link not provided",Toast.LENGTH_SHORT).show()
+            }else {
+                shareLink("com.whatsapp", link, "WhatsApp app not found")
+            }
         }
 
         binding.other.setOnClickListener {
-            // Replace with the copied link
-            val intent = Intent(Intent.ACTION_SEND)
-            intent.type = "text/plain"
-            intent.putExtra(Intent.EXTRA_TEXT, link)
-            val chooserIntent = Intent.createChooser(intent, "Share with")
-            startActivity(chooserIntent)
+            if(link.isNullOrEmpty() || link.isNullOrBlank() || link.equals("null"))
+            {
+                Toast.makeText(this,"Link not provided",Toast.LENGTH_SHORT).show()
+            }else {
+                // Replace with the copied link
+                val intent = Intent(Intent.ACTION_SEND)
+                intent.type = "text/plain"
+                intent.putExtra(Intent.EXTRA_TEXT, link)
+                val chooserIntent = Intent.createChooser(intent, "Share with")
+                startActivity(chooserIntent)
+            }
         }
 
 
@@ -78,6 +109,7 @@ class ReferActivity : AppCompatActivity() {
 
             startActivity(intent)
         } else {
+            Log.e("refreceActivity",notFoundMessage)
             Toast.makeText(this, notFoundMessage, Toast.LENGTH_SHORT).show()
         }
     }
@@ -90,6 +122,7 @@ class ReferActivity : AppCompatActivity() {
             packageManager.getPackageInfo(packageName, 0)
             true
         } catch (e: PackageManager.NameNotFoundException) {
+            Log.e("refreceActivity",e.message.toString())
             false
         }
     }

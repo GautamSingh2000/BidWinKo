@@ -19,7 +19,6 @@ import com.bidwinko.databinding.BuybidFragmentBinding
 import com.bidwinko.model.RequestModels.CommonRequest
 import com.bidwinko.model.ResponseModels.BidPlan
 import com.bidwinko.screens.activity.ReferActivity
-import com.bidwinko.screens.activity.ShareEarnActivity
 import com.bidwinko.utilies.Constants
 import com.bidwinko.utilies.SessionManager
 import com.bidwinko.viewModel.mainViewModel
@@ -75,11 +74,20 @@ class BuyBidFragment : Fragment() {
             })
         }
         binding.bidbalance.text = SessionManager(const).GetValue(Constants.TOTAL_BIDS)
+
         getBuyBids()
+
         unlimitedBid!!.setOnClickListener(View.OnClickListener { //				Toast.makeText(getActivity(),"Feature Coming Soon..",Toast.LENGTH_SHORT).show();
             val intent = Intent(activity, ReferActivity::class.java)
             startActivity(intent)
         })
+
+        binding.buybidrefresh.setOnRefreshListener {
+            binding.shimmer.root.startShimmer()
+            binding.shimmer.root.visibility = View.VISIBLE
+            binding.bidRecyclerView.visibility = View.GONE
+            getBuyBids()
+        }
         return binding.root
     }
 
@@ -91,7 +99,10 @@ class BuyBidFragment : Fragment() {
             versionCode = SessionManager(const).GetValue(Constants.VERSION_CODE)
         )
         mainViewModel(const).GetBidsPacakage(request).observe(const) {
+            binding.buybidrefresh.isRefreshing = false
             if (it.status == 200) {
+                SessionManager(const).InitializeValue(Constants.TOTAL_BIDS,it.totalBids)
+                binding.bidbalance.text = SessionManager(const).GetValue(Constants.TOTAL_BIDS)
                 if (it.bidPlans.size > 0) {
                     mAdapter =
                         BuyBidPlanAdapter(it.bidPlans as ArrayList<BidPlan>, const)

@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">BidWinKo</string>
+    <string name="app_name">BidWin</string>
     <string name="order_bidwinko">BDWK</string>
-    <string name="app_namebidwin">BidWinKoApp</string>
+    <string name="app_namebidwin">BidWinApp</string>
     <string name="text_home">Home</string>
     <string name="text_buybid">Buy Bid</string>
     <string name="text_winner">Winner</string>

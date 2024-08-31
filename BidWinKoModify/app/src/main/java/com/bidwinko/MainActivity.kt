@@ -13,7 +13,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bidwinko.BottomNavigationViewHelper.disableShiftMode
 import com.bidwinko.databinding.ActivityMainBinding
-import com.bidwinko.screens.activity.ShareEarnActivity
 import com.bidwinko.screens.fragments.AuctionFragment
 import com.bidwinko.screens.fragments.BuyBidFragment
 import com.bidwinko.screens.fragments.MenuFragment
@@ -24,82 +23,71 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 class MainActivity : AppCompatActivity() {
     private var mBottomNavigationView: BottomNavigationView? = null
     private lateinit var binding: ActivityMainBinding
-
     //    var fab: FloatingActionButton? = null
     private var indicator = "auction"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-//        fab = findViewById<View>(R.id.fab) as FloatingActionButton
         setupBottomNavigation()
         if (savedInstanceState == null) {
             loadHomeFragment()
         }
-//        fab!!.setOnClickListener { //                Toast.makeText(MainActivity.this, "click me", Toast.LENGTH_SHORT).show();
-//            val intentshare = Intent(this@MainActivity, ShareEarnActivity::class.java)
-//            startActivity(intentshare)
-//        }
     }
 
     fun setupBottomNavigation() {
         mBottomNavigationView = findViewById<View>(R.id.bottom_navigation) as BottomNavigationView
         disableShiftMode(mBottomNavigationView!!)
-        mBottomNavigationView!!.setOnNavigationItemSelectedListener(BottomNavigationView.OnNavigationItemSelectedListener { item ->
+        mBottomNavigationView?.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.action_home -> {
                     Log.e("mainactivity", "$indicator")
                     hideIndicator("auction")
                     binding.auctionIndicator.visibility = View.VISIBLE
-                    val anim = AnimationUtils.loadAnimation(this,R.anim.slideup)
+                    val anim = AnimationUtils.loadAnimation(this, R.anim.slideup)
                     binding.auctionIndicator.animation = anim
                     loadHomeFragment()
-                    return@OnNavigationItemSelectedListener true
+                    true
                 }
-
                 R.id.action_buy_bid -> {
                     Log.e("mainactivity", "$indicator")
                     hideIndicator("buy")
                     binding.buybidIndicator.visibility = View.VISIBLE
-                    val anim = AnimationUtils.loadAnimation(this,R.anim.slideup)
+                    val anim = AnimationUtils.loadAnimation(this, R.anim.slideup)
                     binding.buybidIndicator.animation = anim
                     loadBuyBidFragment()
-                    return@OnNavigationItemSelectedListener true
+                    true
                 }
-
                 R.id.action_winner -> {
                     Log.e("mainactivity", "$indicator")
                     hideIndicator("winner")
                     binding.winnerIndicator.visibility = View.VISIBLE
-                    val anim = AnimationUtils.loadAnimation(this,R.anim.slideup)
+                    val anim = AnimationUtils.loadAnimation(this, R.anim.slideup)
                     binding.winnerIndicator.animation = anim
                     loadWinnerFragment()
-                    return@OnNavigationItemSelectedListener true
+                    true
                 }
-
                 R.id.action_myprofile -> {
                     Log.e("mainactivity", "$indicator")
                     hideIndicator("profile")
                     binding.profileIndicator.visibility = View.VISIBLE
-                    val anim = AnimationUtils.loadAnimation(this,R.anim.slideup)
+                    val anim = AnimationUtils.loadAnimation(this, R.anim.slideup)
                     binding.profileIndicator.animation = anim
                     loadProfileFragment()
-                    return@OnNavigationItemSelectedListener true
+                    true
                 }
-
                 R.id.action_menu -> {
-
                     Log.e("mainactivity", "$indicator")
                     hideIndicator("menu")
                     binding.menuIndicator.visibility = View.VISIBLE
-                    val anim = AnimationUtils.loadAnimation(this,R.anim.slideup)
+                    val anim = AnimationUtils.loadAnimation(this, R.anim.slideup)
                     binding.menuIndicator.animation = anim
                     loadMenuFragment()
-                    return@OnNavigationItemSelectedListener true
+                    true
                 }
+                else -> false
             }
-            false
-        })
+        }
     }
 
     private fun hideIndicator(value: String) {
@@ -229,33 +217,6 @@ class MainActivity : AppCompatActivity() {
         ft.replace(R.id.fragment_frame, fragment)
         ft.commit()
     }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val menuInflater = menuInflater
-        menuInflater.inflate(R.menu.dashboard, menu)
-        val action_share = menu.findItem(R.id.action_share)
-        action_share.setOnMenuItemClickListener {
-            val intent = Intent(this@MainActivity, ShareEarnActivity::class.java)
-            startActivity(intent)
-            false
-        }
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    //    @Override
-    //    public boolean onOptionsItemSelected(MenuItem item) {
-    //
-    //        int id = item.getItemId();
-    //        if (id == R.id.action_share) {
-    //            MenuFragment fragment = MenuFragment.newInstance();
-    //            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-    //            ft.replace(R.id.fragment_frame, fragment);
-    //            ft.commit();
-    //
-    //        }
-    //
-    //        return true;
-    //    }
     var doubleBackToExitPressedOnce = false
     override fun onBackPressed() {
         if (doubleBackToExitPressedOnce) {

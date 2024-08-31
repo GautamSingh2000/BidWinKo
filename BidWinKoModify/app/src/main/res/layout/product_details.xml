@@ -1,38 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:app="http://schemas.android.com/tools"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    android:id="@+id/productdetail_refresh"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<RelativeLayout
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:ignore="NamespaceTypo">
-<!--    <LinearLayout-->
-<!--        android:id="@+id/appbar"-->
-<!--        android:background="@color/black"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="@dimen/_40sdp">-->
-<!--        <ImageButton-->
-<!--            android:id="@+id/back_btn"-->
-<!--            android:layout_width="@dimen/_30sdp"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:backgroundTint="@color/transparent"-->
-<!--            android:src="@drawable/ic_arrow_back"/>-->
-<!--        <TextView-->
-<!--            android:layout_marginStart="@dimen/_10sdp"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:text="@string/productdetails"-->
-<!--            android:textColor="@color/white"-->
-<!--            android:gravity="center_vertical"-->
-<!--            android:fontFamily="@font/lato_regular"-->
-<!--            android:textSize="@dimen/_15ssp"/>-->
-<!--    </LinearLayout>-->
+    android:layout_height="match_parent">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/sv"
         android:scrollbars="none"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:orientation="vertical"
@@ -49,6 +33,7 @@
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <ImageView
                         android:id="@+id/productimage"
                         android:layout_width="match_parent"
@@ -60,21 +45,19 @@
                         android:id="@+id/otherimage"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginEnd="@dimen/_20sdp"
+                        android:layout_marginEnd="@dimen/_10sdp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
                         <androidx.cardview.widget.CardView
-                            android:id="@+id/cv2"
                             android:visibility="gone"
-                            android:layout_height="50dp"
+                            android:id="@+id/cv2"
                             android:layout_width="60dp"
+                            android:layout_height="50dp"
                             android:layout_marginTop="@dimen/_5sdp"
-                            android:layout_marginHorizontal="@dimen/_2sdp"
-                            android:layout_marginBottom="@dimen/_2sdp"
-                            card_view:cardBackgroundColor="@color/white"
-                            card_view:cardCornerRadius="@dimen/_7sdp">
+                            app:cardBackgroundColor="@color/white"
+                            app:cardCornerRadius="@dimen/_7sdp">
 
                             <ImageView
                                 android:id="@+id/productimage2"
@@ -87,35 +70,33 @@
                         <androidx.cardview.widget.CardView
                             android:id="@+id/cv3"
                             android:visibility="gone"
-                            android:layout_height="50dp"
                             android:layout_width="60dp"
-                            android:layout_marginTop="@dimen/_2sdp"
-                            android:layout_marginHorizontal="@dimen/_2sdp"
-                            android:layout_marginBottom="@dimen/_2sdp"
-                            card_view:cardBackgroundColor="@color/white"
-                            card_view:cardCornerRadius="@dimen/_7sdp">
+                            android:layout_height="50dp"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            app:cardBackgroundColor="@color/white"
+                            app:cardCornerRadius="@dimen/_7sdp">
+
                             <ImageView
                                 android:id="@+id/productimage3"
-                                android:layout_height="match_parent"
                                 android:layout_width="match_parent"
+                                android:layout_height="match_parent"
                                 android:scaleType="centerCrop"
                                 android:src="@drawable/placeholder" />
                         </androidx.cardview.widget.CardView>
 
                         <androidx.cardview.widget.CardView
-                            android:visibility="gone"
                             android:id="@+id/cv4"
-                            android:layout_height="50dp"
+                            android:visibility="gone"
                             android:layout_width="60dp"
-                            android:layout_marginTop="@dimen/_2sdp"
-                            android:layout_marginHorizontal="@dimen/_2sdp"
-                            android:layout_marginBottom="@dimen/_2sdp"
-                            card_view:cardBackgroundColor="@color/white"
-                            card_view:cardCornerRadius="@dimen/_7sdp">
+                            android:layout_height="50dp"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            app:cardBackgroundColor="@color/white"
+                            app:cardCornerRadius="@dimen/_7sdp">
+
                             <ImageView
                                 android:id="@+id/productimage4"
-                                android:layout_height="match_parent"
                                 android:layout_width="match_parent"
+                                android:layout_height="match_parent"
                                 android:scaleType="centerCrop"
                                 android:src="@drawable/placeholder" />
                         </androidx.cardview.widget.CardView>
@@ -183,25 +164,27 @@
                         android:orientation="horizontal">
                         <com.google.android.material.imageview.ShapeableImageView
                             android:id="@+id/profileimage1"
-                            android:layout_marginEnd="-18dp"
+                            android:layout_marginEnd="-15dp"
                             android:layout_centerInParent="true"
                             android:layout_width="@dimen/_25sdp"
                             android:layout_height="@dimen/_25sdp"
-                          
+
                             app:shapeAppearanceOverlay="@style/CircularImage"
                             />
                         <com.google.android.material.imageview.ShapeableImageView
                             android:id="@+id/profileimage2"
-                            android:layout_marginEnd="-18dp"
+                            android:layout_marginEnd="-15dp"
                             android:layout_centerInParent="true"
                             android:layout_width="@dimen/_25sdp"
+
                             android:layout_height="@dimen/_25sdp"
                           
                             app:shapeAppearanceOverlay="@style/CircularImage"
                             />
                         <com.google.android.material.imageview.ShapeableImageView
                             android:id="@+id/profileimage3"
-                            android:layout_marginEnd="-18dp"
+                            android:layout_marginEnd="-15dp"
+
                             android:layout_centerInParent="true"
                             android:layout_width="@dimen/_25sdp"
                             android:layout_height="@dimen/_25sdp"
@@ -211,6 +194,7 @@
                         <com.google.android.material.imageview.ShapeableImageView
                             android:id="@+id/profileimage4"
                             android:layout_centerInParent="true"
+
                             android:layout_marginEnd="@dimen/_3sdp"
                             android:layout_width="@dimen/_25sdp"
                             android:layout_height="@dimen/_25sdp"
@@ -299,7 +283,7 @@
                         <TextView
                             android:textStyle="normal"
                             android:id="@+id/bidwork"
-                            android:text="@string/howbidworks"
+                            android:text="How to bid"
                             android:textSize="@dimen/_12ssp"
                             android:fontFamily="@font/lato_bold"
                             android:visibility="visible"
@@ -386,12 +370,8 @@
                         android:textColor="#838181"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
-            <View
-                android:backgroundTint="@color/transparent"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_50sdp"/>
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/place_bid"
@@ -410,3 +390,4 @@
         android:layout_marginBottom="@dimen/_10sdp"
         android:textAllCaps="false"/>
 </RelativeLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

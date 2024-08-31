@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageView
 import android.widget.SeekBar
 import androidx.appcompat.widget.AppCompatSeekBar
 import com.airbnb.lottie.LottieAnimationView
@@ -16,7 +17,7 @@ import com.bidwinko.R
 class CustomSeekBar : AppCompatSeekBar {
 
     private var mThumbView: View? = null
-    private var thumbAnim: LottieAnimationView? = null
+    private var thumbAnim: ImageView? = null
 
     constructor(context: Context) : super(context) {
         init(context)
@@ -39,25 +40,6 @@ class CustomSeekBar : AppCompatSeekBar {
         // Set the initial drawable from the custom thumb view
         setThumb(getDrawableFromView(mThumbView!!))
 
-        // Set a listener to listen for progress changes
-        setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                if (fromUser) {
-                    // Start the animation whenever the progress changes by user interaction
-                    thumbAnim?.playAnimation()
-                }
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                // Start the animation when the user starts touching the SeekBar
-                thumbAnim?.playAnimation()
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                // Optionally, stop the animation when the user stops touching the SeekBar
-                // thumbAnim?.pauseAnimation()
-            }
-        })
     }
 
     private fun getDrawableFromView(view: View): Drawable {

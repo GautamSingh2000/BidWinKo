@@ -46,6 +46,22 @@ class MyProfileFragment : Fragment(), View.OnClickListener {
         binding = MyprofileFragmentBinding.inflate(layoutInflater)
         const.findViewById<TextView>(R.id.title).text = getString(R.string.myprofile)
 
+        binding.profileRefresh.setOnRefreshListener {
+            binding.submitUserinfo.isCheckable = false
+            binding.etUsername.isEnabled = false
+            binding.etUsermobile.isEnabled = false
+            binding.etShipaddress.isEnabled = false
+            binding.etUseremail.isEnabled = false
+            getUserDetails()
+            binding.submitUserinfo.setBackgroundColor(
+                ContextCompat.getColor(
+                    const,
+                    R.color.gray
+                )
+            )
+            binding.submitUserinfo.setTextColor(ContextCompat.getColor(const, R.color.gray_4))
+        }
+
         binding.submitUserinfo.isCheckable = false
         binding.etUsername.isEnabled = false
         binding.etUsermobile.isEnabled = false
@@ -104,8 +120,6 @@ class MyProfileFragment : Fragment(), View.OnClickListener {
         binding.submitUserinfo.setOnClickListener {
             if (binding.submitUserinfo.isCheckable) {
                 UpdateUserDetails()
-
-
             }
         }
         return binding.root
@@ -129,8 +143,8 @@ class MyProfileFragment : Fragment(), View.OnClickListener {
         )
 
         mainViewModel(const).GetProfileResponse(request).observe(const) {
+            binding.profileRefresh.isRefreshing = false
             progressDialog?.dismiss()
-
             if (it.status == 200) {
                 if (it.userImage.equals("") || it.userImage.isNullOrEmpty()) {
                     Toast.makeText(const, "Something Went Wrong !!", Toast.LENGTH_SHORT)

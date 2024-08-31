@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import com.airbnb.lottie.LottieDrawable
@@ -84,15 +85,16 @@ class LiveBidProductsListAdapter(
             "upcomming" -> {
                 val leftPadding = convertDpToPx(2f)
                 val topPadding = convertDpToPx(11f)
-                val rightPadding = convertDpToPx(0f)
+                val rightPadding = convertDpToPx(5f)
                 val bottomPadding = convertDpToPx(11f)
                 holder.ribbon_tag.text = "Upcoming"
+                holder.ribbon_tag.setTextColor(context.getColor(R.color.black))
                 holder.liveanim.setPadding(leftPadding, topPadding, rightPadding, bottomPadding)
                 holder.bitbtn.background = context.getDrawable(R.drawable.simple_gray_box)
                 holder.liveanim.setAnimation(R.raw.clock)
                 holder.ribbon.imageTintList = context.getColorStateList(R.color.yellow)
-                holder.ribbon_tag.visibility = View.GONE
-                val date = Date(data.startDate * 100)
+                val date = Date(data.startDate * 1000)
+
                 val format = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
                 val formattedDate = format.format(date)
                 holder.Timer.text = formattedDate

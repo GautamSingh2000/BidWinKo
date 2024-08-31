@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+
+<androidx.cardview.widget.CardView
     android:id="@+id/root"
+    android:layout_margin="@dimen/_10sdp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="@dimen/_10sdp"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content">
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
         android:visibility="gone"
@@ -37,8 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:cardBackgroundColor="#EFEFEF"
-        app:cardElevation="@dimen/_13sdp"
-        app:cardCornerRadius="0dp">
+        app:cardElevation="@dimen/_13sdp">
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -106,15 +110,21 @@
                     android:textSize="@dimen/_10ssp"/>
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_below="@id/textll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
             <Button
                 android:visibility="gone"
                 android:layout_below="@id/textll"
                 android:background="@color/transparent"
                 android:id="@+id/positive"
                 android:layout_marginVertical="@dimen/_5sdp"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="@dimen/_70sdp"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="@dimen/_20sdp"
                 android:layout_height="wrap_content"
                 android:text="Positive"
                 android:textSize="@dimen/_10ssp"
@@ -124,15 +134,17 @@
                 android:visibility="gone"
                 android:id="@+id/negative"
                 android:background="@color/transparent"
-                android:layout_below="@id/textll"
                 android:layout_marginVertical="@dimen/_5sdp"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="@dimen/_70sdp"
                 android:textSize="@dimen/_10ssp"
                 android:text="Negative"
                 android:textColor="@color/btn_bid_color"/>
+
+            </LinearLayout>
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
